@@ -48,6 +48,14 @@ ClassicEditor.create( document.querySelector( '#content-editor' ), {
                     uploadUrl: uploadApi,
                 },
                 table: {
+	tableProperties: {
+		defaultProperties: {
+			borderStyle: 'dashed',
+			borderColor: 'hsl(0, 0%, 90%)',
+			borderWidth: '3px',
+			alignment: 'left'
+		}
+	},
                     contentToolbar: [
                         'tableColumn',
                         'tableRow',

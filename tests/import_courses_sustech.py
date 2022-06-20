@@ -98,9 +98,18 @@ def load_courses(insert=True):
             # join_type=c['classType']['nameZh'] if c['classType'] else None,
             join_type=c['rwlxmc'] if c['rwlxmc'] else None, #文理通识/专业任务 ustc这边是"课堂类型"：（计划/预科/通识/体育啥的）
             course_major=c['kkyxmc'],  # 'xx系'
+
             # teaching_type=c['skfs'] if c['skfs'] else None #"理论+实践"
             teaching_type=c['skyymc']  # '英文'
         )
+
+        # 课程简介
+        if ("course_desc_zh" in c):
+            if c['course_desc_zh']:
+                course_kcbh[code]['description'] = c['course_desc_zh']
+            if c['course_desc_en']:
+                course_kcbh[code]['description_eng'] = c['course_desc_en']
+
 
         if c['zxs']:
             course_kcbh[code]['hours'] = int(float(c['zxs']))
@@ -161,7 +170,7 @@ def load_courses(insert=True):
 
             course = Course()
             course.name = course_name
-            # course.course_code = c['kcdm'], # "CS102A",放在courses这个表里
+            course.course_code = c['kcdm'], # "CS102A",放在courses这个表里
             course.teachers = []
             db.session.add(course)
 

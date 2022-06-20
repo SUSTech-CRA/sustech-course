@@ -82,10 +82,27 @@
 <!--          {% endif %}-->
         </div>
 
+
+  	{% if course.description %}
+	<div class="ud-pd-md">
+	  <div class="solid ud-pd-sm inline-h3">
+            <span class="blue h3">课程简介（教工部数据）</span>
+	  </div>
+          <div>
+	  {{ course.description }} <br><br>
+         {% if course.description_eng %}
+            {{ course.description_eng }}
+         {% endif %}
+          </div>
+
+	</div>
+	{% endif %}
+
+
 	{% if course.introduction %}
 	<div class="ud-pd-md">
 	  <div class="solid ud-pd-sm inline-h3">
-            <span class="blue h3">简介</span>
+            <span class="blue h3">课程信息（同学贡献数据）</span>
 	  </div>
           <div>
 	  {{ course.introduction|safe }}
@@ -93,7 +110,7 @@
           <p class="text-muted pull-right small">
              {% if user.is_authenticated %}
              <span class="glyphicon glyphicon-pencil grey left-pd-sm" aria-hidden="true" ></span>
-             <a href="{{ url_for('course.edit_course', course_id=course.id) }}">编辑课程简介</a>
+             <a href="{{ url_for('course.edit_course', course_id=course.id) }}">编辑课程信息</a>
              {% endif %}
              {% if course.last_edit_time %}
              <span class="glyphicon glyphicon-time grey left-pd-sm" aria-hidden="true" ></span>
