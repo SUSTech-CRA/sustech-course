@@ -16,7 +16,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 
 app = Flask(__name__)
-app.config.from_object('config.default')
+# 复制 default.py 为 myconf.py
+app.config.from_object('config.myconf')
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # 允许使用HTTP进行OAuth
 
 toolbar = DebugToolbarExtension(app)
