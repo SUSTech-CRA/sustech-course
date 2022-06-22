@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, render_template, flash, abort, jsonify, make_response
+from flask import Blueprint, request, redirect, url_for, render_template, flash, abort, jsonify, make_response, session
 from flask_login import login_user, login_required, current_user, logout_user
 
 from app.models import User, RevokedToken as RT, Course, CourseRate, Teacher, Review, Notification, follow_course, follow_user, SearchLog, CourseTerm
@@ -13,8 +13,11 @@ from app import db
 from app import app
 from .course import deptlist
 import re
+import requests
+from oauthlib import oauth2
 
 home = Blueprint('home',__name__)
+OAUTH = app.config['OAUTH']
 
 def gen_index_url():
     if 'DEBUG' in app.config and app.config['DEBUG']:
@@ -104,6 +107,50 @@ def signin():
         return jsonify(status=404, msg=error)
     else:
         return render_template('signin.html',form=form, error=error, title='登录')
+
+@app.route("/login/oauth/", methods=["GET"])
+def oauth():
+    """ 当用户点击该链接时，把用户重定向到OAuth2登录页面。 """
+    client = oauth2.WebApplicationClient(OAUTH["client_id"])
+    state = client.state_generator()    # 生成随机的state参数，用于防止CSRF攻击
+    auth_url = client.prepare_request_uri(OAUTH["auth_url"],
+                                          OAUTH["redirect_uri"],
+                                          OAUTH["scope"],
+                                          state)  # 构造完整的auth_url，接下来要让用户重定向到它
+    session["oauth_state"] = state
+    return redirect(auth_url)
+
+
+@app.route("/login/oauth/callback/", methods=["GET"])
+def oauth_callback():
+    """ 用户在同意授权之后，会被重定向回到这个URL。 """
+    # 解析得到code
+    client = oauth2.WebApplicationClient(OAUTH["client_id"])
+    code = client.parse_request_uri_response(request.url, session["oauth_state"]).get("code")
+
+    # 获取token
+    d = {
+        'grant_type' : 'authorization_code',
+        'client_id' : OAUTH["client_id"],
+        'client_secret' :OAUTH["client_secret"],
+        'code': code,
+        'redirect_uri': OAUTH["redirect_uri"],
+    }
+    r = requests.post(OAUTH["token_url"], data=d)
+    access_token = r.json().get("access_token")
+
+    # 查询用户名并储存
+    headers = {'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': f'Bearer {access_token}'
+    }
+    r = requests.get(OAUTH["api_url"], headers=headers)
+    data = r.json()
+    session["given_name"] = data.get("given_name")
+    session["family_name"] = data.get("family_name")
+    session["email"] = data.get("email")
+    session["access_token"] = access_token  # 以后存到用户表中
+
+    return redirect("/")
 
 
 # 3rdparty signin should have url format: https://${icourse_site_url}/signin-3rdparty/?from_app=${from_app}&next_url=${next_url}&challenge=${challenge}

@@ -24,3 +24,6 @@ wtforms==3.0.1
 pillow==9.0.1
 MarkupSafe==2.0.1
 pdfkit
+oauthlib
+requests
+autopep8
