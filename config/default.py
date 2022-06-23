@@ -59,7 +59,7 @@ OAUTH = {  # 配置参数，如果没有设置正确，OAuth流程就会失败
     "client_id":  '',
     "client_secret": '',
     "redirect_uri": '',
-    "scope": "profile",  # 表示OAuth请求授权的范围
+    "scope": 'profile',  # 表示OAuth请求授权的范围
     "auth_url": '',
     "token_url": '',
     "api_url": ''
