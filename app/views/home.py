@@ -108,7 +108,7 @@ def signin():
     else:
         return render_template('signin.html',form=form, error=error, title='登录')
 
-@app.route("/login/oauth/", methods=["GET"])
+@home.route("/login/oauth/", methods=["GET"])
 def oauth():
     """ 当用户点击该链接时，把用户重定向到OAuth2登录页面。 """
     client = oauth2.WebApplicationClient(OAUTH["client_id"])
@@ -121,7 +121,7 @@ def oauth():
     return redirect(auth_url)
 
 
-@app.route("/login/oauth/callback/", methods=["GET"])
+@home.route("/login/oauth/callback/", methods=["GET"])
 def oauth_callback():
     """ 用户在同意授权之后，会被重定向回到这个URL。 """
     # 解析得到code

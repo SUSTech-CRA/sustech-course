@@ -113,7 +113,8 @@
             </label>
             <a class="float-right" href="{{ url_for('home.forgot_password') }}">忘记密码</a>
           </div>
-          <button class="btn btn-lg btn-blue btn-block" type="submit">登录</button>
+          <button type="submit" class="btn btn-lg btn-blue btn-block">登录</button>
+          <a class="btn btn-sm btn-grey btn-block" href="{{ url_for('home.oauth') }}">Log in via SUSTech CRA SSO / CAS</a>
         </form>
       </div>
     </div>
