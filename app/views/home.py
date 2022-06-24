@@ -153,12 +153,13 @@ def oauth_callback():
     session["family_name"] = data.get("family_name")
     session["full_name"] = data.get("name")
     session["email"] = data.get("email")
+    email = email = session["email"]
     session["access_token"] = access_token  # 以后存到用户表中
+    # print(User.query.filter_by(email=session["email"]).first())
 
     #检查用户是否已经注册
     if (not User.query.filter_by(email=session["email"]).first()): #没注册会进入if逻辑
         username = fake.name().replace(" ", "_")
-        email = email=session["email"]
         user = User(username=username, email=email, password=str(uuid.uuid4().hex)) # random password
         email_suffix = email.split('@')[-1]
         if email_suffix == 'mail.sustech.edu.cn':
@@ -169,8 +170,9 @@ def oauth_callback():
         user.confirm()
         login_user(user)
     else:
-        user = User.query.filter_by(email=session["email"])
-        login_user(user) # 根据邮箱登录用户
+        # print("found existed user!")
+        user = User.query.filter_by(email=email).first_or_404()
+        login_user(user)  # 根据邮箱登录用户
     return redirect("/")
 
 
