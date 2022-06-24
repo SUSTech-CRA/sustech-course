@@ -3,6 +3,6 @@ __pycache__
 .*
 *~
 data
-config/default.py
+config/myconf.py
 migrations
 uploads/
