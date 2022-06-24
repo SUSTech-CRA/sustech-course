@@ -85,7 +85,7 @@ def load_courses(insert=True):
         code = c['kcdm']  # CS001
         semester = "2021-2022"  # manual add?
         # https://github.com/jingning42/ustc-course/blob/66c68a9615d4f658c51d5273b7869d02ee5ddd3d/app/models/course.py#L85
-        term = '20213'  # manual add 20211学期> 2021-2022秋季
+        term = '20221'  # manual add 20211学期> 2021-2022秋季
         course_kcbh[code] = dict(
             kcid=c['kcid'],  #"2FCC66B429FA494A8F902D739570FCC3"
             # kcid=abs(hash(c['kcid'])) % (10 ** 8),  # "55932488" #需要做个hash，似乎不影响实际使用，
@@ -110,6 +110,8 @@ def load_courses(insert=True):
             if c['course_desc_en']:
                 course_kcbh[code]['description_eng'] = c['course_desc_en']
 
+        # 课程代码
+        course_kcbh[code]['course_code'] = c['kcdm']
 
         if c['zxs']:
             course_kcbh[code]['hours'] = int(float(c['zxs']))
@@ -170,7 +172,6 @@ def load_courses(insert=True):
 
             course = Course()
             course.name = course_name
-            course.course_code = c['kcdm'], # "CS102A",放在courses这个表里
             course.teachers = []
             db.session.add(course)
 

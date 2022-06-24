@@ -414,9 +414,10 @@ def search():
         return fuzzy_match(teacher_match(q, keywords[1]), keywords[0])
 
     def ordering(query_obj, keywords):
-        ordering_field = 'anon_2_anon_3_anon_4_anon_5_'
+        # ordering_field = 'anon_2_anon_3_anon_4_anon_5_'
+        ordering_field = 'anon_2_anon_3_anon_4_'
         if len(keywords) >= 3:
-            for count in range(6, len(keywords) + 3):
+            for count in range(5, len(keywords) + 3):
                 ordering_field += 'anon_' + str(count) + '_'
         ordering_field += '_meta'
         return query_obj.join(CourseRate).order_by(text(ordering_field), Course.QUERY_ORDER())
@@ -430,8 +431,8 @@ def search():
         union_courses = (teacher_match(course_query_with_meta(1), keyword)
                          .union(exact_match(course_query_with_meta(2), keyword))
                          .union(include_match(course_query_with_meta(3), keyword))
-                         .union(include_match_code(course_query_with_meta(4), keyword))
                          .union(fuzzy_match(course_query_with_meta(5), keyword)))
+                       # .union(include_match_code(course_query_with_meta(4), keyword))
         if union_keywords:
             union_keywords = union_keywords.union(union_courses)
         else:
