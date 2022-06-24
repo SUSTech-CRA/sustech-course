@@ -15,9 +15,12 @@ from .course import deptlist
 import re
 import requests
 from oauthlib import oauth2
+import uuid
+import faker
 
 home = Blueprint('home',__name__)
 OAUTH = app.config['OAUTH']
+fake = faker.Faker()
 
 def gen_index_url():
     if 'DEBUG' in app.config and app.config['DEBUG']:
@@ -145,11 +148,29 @@ def oauth_callback():
     }
     r = requests.get(OAUTH["api_url"], headers=headers)
     data = r.json()
+    session["preferred_username"] =  fake.name()
     session["given_name"] = data.get("given_name")
     session["family_name"] = data.get("family_name")
+    session["full_name"] = data.get("name")
     session["email"] = data.get("email")
     session["access_token"] = access_token  # 以后存到用户表中
 
+    #检查用户是否已经注册
+    if (not User.query.filter_by(email=session["email"]).first()): #没注册会进入if逻辑
+        username = fake.name().replace(" ", "_")
+        email = email=session["email"]
+        user = User(username=username, email=email, password=str(uuid.uuid4().hex)) # random password
+        email_suffix = email.split('@')[-1]
+        if email_suffix == 'mail.sustech.edu.cn':
+            user.identity = 'Student'
+        elif email_suffix == 'sustech.edu.cn':
+            user.identity = 'Teacher'
+        user.save()
+        user.confirm()
+        login_user(user)
+    else:
+        user = User.query.filter_by(email=session["email"])
+        login_user(user) # 根据邮箱登录用户
     return redirect("/")
 
 

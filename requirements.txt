@@ -27,3 +27,4 @@ pdfkit
 oauthlib
 requests
 autopep8
+faker
