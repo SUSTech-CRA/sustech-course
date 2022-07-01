@@ -12,7 +12,9 @@ class ReviewForm(FlaskForm):
     gain = IntegerField('gain',validators=[InputRequired(),NumberRange(1,3)])
     rate = IntegerField('rate',validators=[InputRequired(),NumberRange(1,10)])
     content = TextAreaField('content',validators=[InputRequired()])
-    is_mobile = IntegerField('is_mobile')
+    is_anonymous = BooleanField('is_anonymous', default=False)
+    is_visible_to_login_only = BooleanField('is_visible_to_login_only', default=False)
+    is_mobile = IntegerField('is_mobile', default=False)
     is_ajax = BooleanField('is_ajax', default=False)
 
 class ReviewCommentForm(FlaskForm):
