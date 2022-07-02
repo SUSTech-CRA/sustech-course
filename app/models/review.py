@@ -38,7 +38,7 @@ class Review(db.Model):
     term = db.Column(db.String(10), index=True)
 
     is_anonymous = db.Column(db.Boolean, default=False)
-    is_visible_to_login_only = db.Column(db.Boolean, default=False)
+    only_visible_to_student = db.Column(db.Boolean, default=False)
     is_hidden = db.Column(db.Boolean, default=False)
     is_blocked = db.Column(db.Boolean, default=False)
     filter_rule = db.Column(db.Text())
@@ -228,6 +228,11 @@ class ReviewHistory(db.Model):
     author_id = db.Column(db.Integer)
     course_id = db.Column(db.Integer)
     term = db.Column(db.String(10))
+
+    is_anonymous = db.Column(db.Boolean, default=False)
+    only_visible_to_student = db.Column(db.Boolean, default=False)
+    is_hidden = db.Column(db.Boolean, default=False)
+    is_blocked = db.Column(db.Boolean, default=False)
 
     review_id = db.Column(db.Integer)
     operation_time = db.Column(db.DateTime, default=datetime.utcnow)
