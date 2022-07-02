@@ -24,6 +24,10 @@ def record_review_history(review, operation, commit=True):
     history.term = review.term
     history.publish_time = review.publish_time
     history.update_time = review.update_time
+    history.is_anonymous = review.is_anonymous
+    history.is_visible_to_login_only = review.is_visible_to_login_only
+    history.is_hidden = review.is_hidden
+    history.is_blocked = review.is_blocked
 
     history.review_id = review.id
     history.operation = operation
@@ -73,18 +77,11 @@ def new_review(course_id):
             review.content, mentioned_users = editor_parse_at(review.content)
             review.content = sanitize(review.content)
 
-            if review.is_hidden or review.is_blocked:
-                users_to_notify = []
-                mentioned_users = []
-            else:
-                users_to_notify = course.followers
-                if not review.is_anonymous:
-                    users_to_notify = set(users_to_notify + current_user.followers)
-
             if is_new:
                 review.add()
-                for user in users_to_notify:
+                for user in set(current_user.followers + course.followers):
                     user.notify('review', review, ref_display_class='Course')
+                # users can only receive @ notifications for new reviews
                 for user in mentioned_users:
                     user.notify('mention', review)
                 record_review_history(review, 'create')
@@ -96,10 +93,8 @@ def new_review(course_id):
                 else:
                     review.update_time = datetime.utcnow()
                     review.update_course_rate(old_review)
-                    for user in users_to_notify:
+                    for user in set(current_user.followers + course.followers):
                         user.notify('update-review', review, ref_display_class='Course')
-                    for user in mentioned_users:
-                        user.notify('mention', review)
                 record_review_history(review, 'update')
 
             next_url = url_for('course.view_course', course_id=course_id, _external=True) + '#review-' + str(review.id)
