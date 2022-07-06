@@ -192,10 +192,19 @@ def editor_parse_at(text):
     if not text.endswith('\n'):
         text = text + '\n' # the parse function will not work with @somebody
     mentioned_users = []
-    matches = re.finditer('@([^@<>"\':\s]+)', text)
-    if not matches:
-        return text, set(mentioned_users)
-    for username in set([match.group(1) for match in matches]):
+
+    # @user_name text...
+    non_space_matches = re.finditer('@([^@<>"\':\s]+)', text)
+    non_space_usernames = [match.group(1) for match in non_space_matches]
+    # @user name text...
+    space_matches = re.finditer('@([^@<>"\':]+)', text)
+    space_usernames = [match.group(1) for match in space_matches]
+    # @username其他中文字符
+    connected_matches = re.finditer('@([a-zA-Z0-9_.-]+)', text)
+    connected_usernames = [match.group(1) for match in connected_matches]
+
+    all_matches = set(non_space_usernames + space_usernames + connected_usernames)
+    for username in all_matches:
         user = User.query.filter_by(username=username).first()
         if user:
             url = url_for('user.view_profile', user_id=user.id)
@@ -338,14 +347,18 @@ def my_urlize(text, trim_url_limit=None, nofollow=False, target=None):
     return u''.join(words)
 
 RESERVED_USERNAME = set(['管理员', 'admin', 'root',
-    'Administrator', 'example', 'test'])
+    'administrator', 'example', 'test', '匿名', 'anonymous'])
 
 def validate_username(username, check_db=True):
-    if re.search('[@&<>"\'\s]', username):
+    username = username.lower()
+    if re.search('[@&<>"\':\s]', username):
         return ('此用户名含有非法字符，不能注册！')
     if username in RESERVED_USERNAME:
         return ('此用户名已被保留，不能注册！')
-    if check_db and User.query.filter_by(username=username).first():
+    for reserved_name in RESERVED_USERNAME:
+        if username.find(reserved_name) != -1:
+            return ('此用户名含有被保留的关键词，不能注册！')
+    if check_db and User.query.filter_by(username=username).count() != 0:
         return ('此用户名已被他人使用！')
     return 'OK'
 
