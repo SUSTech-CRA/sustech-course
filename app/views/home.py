@@ -474,7 +474,7 @@ def search():
         return q.join(Course.teachers).filter(Teacher.name.like('%' + keyword + '%'))
 
     def exact_match(q, keyword):
-        return q.filter(Course.name == keyword or Course.course_code == keyword)
+        return q.filter(Course.name == keyword)
 
     def include_match(q, keyword):
         fuzzy_keyword = keyword.replace('%', '')
