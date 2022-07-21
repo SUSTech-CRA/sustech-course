@@ -173,7 +173,7 @@ def oauth_callback():
         # print("found existed user!")
         user = User.query.filter_by(email=email).first_or_404()
         login_user(user)  # 根据邮箱登录用户
-    return redirect("/")
+    return redirect_to_index()
 
 
 # 3rdparty signin should have url format: https://${icourse_site_url}/signin-3rdparty/?from_app=${from_app}&next_url=${next_url}&challenge=${challenge}
