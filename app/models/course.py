@@ -163,6 +163,7 @@ class Course(db.Model):
 
     course_code = db.Column(db.String(80), index=True) #CS102A
 
+
     introduction = db.Column(db.Text) # 老师提交的课程简介
     admin_announcement = db.Column(db.Text)
     homepage = db.Column(db.Text) # 课程主页
@@ -309,13 +310,16 @@ class Course(db.Model):
     def REVERSE_QUERY_ORDER(self=None):
         return Course._QUERY_ORDER()
 
-    def normalized_rate(self, avg_rate=None, avg_rate_count=None):
+    def compute_normalized_rate(self, rate_total, review_count, avg_rate=None, avg_rate_count=None):
         if avg_rate is None:
             avg_rate = db.session.query(db.func.avg(Review.rate)).first()[0]
         if avg_rate_count is None:
             avg_rate_count = db.session.query(db.func.count(Review.id) / db.func.count(db.func.distinct(Review.course_id))).first()[0]
-        normalized_rate = (self.rate._rate_total + avg_rate * avg_rate_count) / (self.rate.review_count + avg_rate_count)
+        normalized_rate = (rate_total + avg_rate * avg_rate_count) / (review_count + avg_rate_count)
         return normalized_rate
+
+    def normalized_rate(self, avg_rate=None, avg_rate_count=None):
+        return self.compute_normalized_rate(self.rate._rate_total, self.rate.review_count, avg_rate, avg_rate_count)
 
     @property
     def related_courses(self):
@@ -621,22 +625,17 @@ class Course(db.Model):
         return self.latest_term.end_week
     # end of property from latest_term
 
-    def update_rate(self, old_review, new_review):
+    def update_rate(self, commit_db=True):
         course_rate = self.course_rate
-        # blocked and hidden reviews are not considered in course rating
-        if old_review and not old_review.is_blocked and not old_review.is_hidden:
-            course_rate.subtract(old_review.difficulty,
-                                 old_review.homework,
-                                 old_review.grading,
-                                 old_review.gain,
-                                 old_review.rate)
-        if new_review and not new_review.is_blocked and not new_review.is_hidden:
-            course_rate.add(new_review.difficulty,
-                            new_review.homework,
-                            new_review.grading,
-                            new_review.gain,
-                            new_review.rate)
-        db.session.commit()
+        reviews = self.reviews.filter(Review.is_hidden == False).filter(Review.is_blocked == False).all()
+
+        course_rate.review_count = len(reviews)
+        course_rate._difficulty_total = sum([review.difficulty for review in reviews])
+        course_rate._homework_total = sum([review.homework for review in reviews])
+        course_rate._grading_total = sum([review.grading for review in reviews])
+        course_rate._gain_total = sum([review.gain for review in reviews])
+        course_rate._rate_total = sum([review.rate for review in reviews])
+        course_rate.save(commit_db)
 
 
 class CourseRate(db.Model):
@@ -714,10 +713,11 @@ class CourseRate(db.Model):
         else:
             self._rate_average = None
 
-    def save(self):
+    def save(self, commit_db=True):
         self._update_average()
         db.session.add(self)
-        db.session.commit()
+        if commit_db:
+            db.session.commit()
 
     def add(self,difficulty,homework,grading,gain,rate):
         if self.review_count == 0:

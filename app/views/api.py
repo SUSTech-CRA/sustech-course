@@ -118,11 +118,9 @@ def block_review():
         review = Review.query.with_for_update().get(review_id)
         if review:
             if current_user.is_admin:
-                # substract rating for blocked reviews
-                review.course.update_rate(review, None)
-
                 ok,message = review.block()
                 if ok:
+                    review.course.update_rate()
                     review.author.notify('block-review', review)
                     send_block_review_email(review)
                     record_review_history(review, 'block')
@@ -144,9 +142,7 @@ def unblock_review():
             if current_user.is_admin:
                 ok,message = review.unblock()
                 if ok:
-                    # resume rating for unblocked reviews
-                    review.course.update_rate(None, review)
-
+                    review.course.update_rate()
                     review.author.notify('unblock-review', review)
                     send_unblock_review_email(review)
                     record_review_history(review, 'unblock')
@@ -166,11 +162,9 @@ def hide_review():
         review = Review.query.with_for_update().get(review_id)
         if review:
             if current_user.is_authenticated and current_user == review.author:
-                # subtract rating for hidden reviews
-                review.course.update_rate(review, None)
-
                 ok,message = review.hide()
                 if ok:
+                    review.course.update_rate()
                     record_review_history(review, 'hide')
                 return jsonify(ok=ok,message=message)
             else:
@@ -190,9 +184,7 @@ def unhide_review():
             if current_user.is_authenticated and current_user == review.author:
                 ok,message = review.unhide()
                 if ok:
-                    # resume rating for unhiddden reviews
-                    review.course.update_rate(None, review)
-
+                    review.course.update_rate()
                     record_review_history(review, 'unhide')
                 return jsonify(ok=ok,message=message)
             else:
@@ -235,18 +227,11 @@ def unfollow_user():
 
 def generic_upload(file, type):
     ok,message = handle_upload(file, type)
-    upload_success_json = {}
-    upload_success_json['uploaded']= 'true'
-
-
-
     script_head = '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(2,'
     script_tail = ');</script>'
     if ok:
         url = '/uploads/' + type + 's/' + message
-        upload_success_json['url'] = url
-        # return script_head + '"' + url + '"' + script_tail
-        return upload_success_json
+        return script_head + '"' + url + '"' + script_tail
     else:
         return script_head + '""' + ',' + '"' + message + '"' + script_tail
 
