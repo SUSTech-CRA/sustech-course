@@ -115,6 +115,9 @@ def signin():
                 error = _('用户名或密码错误！')
         else:
             error = _('用户名或密码错误！')
+    elif request.method == 'POST':
+        error = '表单验证错误：' + str(form.errors)
+
     #TODO: log the form errors
     if request.args.get('ajax'):
         return jsonify(status=404, msg=error)
