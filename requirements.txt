@@ -1,6 +1,7 @@
 Flask==1.1.4
 Flask-WTF==1.0.0
 Flask-SQLAlchemy==2.5.1
+SQLAlchemy==1.4.31
 Flask-login==0.5.0
 itsdangerous==1.1.0
 flask-mail==0.9.1
