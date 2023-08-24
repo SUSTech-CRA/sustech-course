@@ -6,6 +6,8 @@ from app.forms import ReviewForm, CourseForm
 from app import db
 from app.utils import sanitize
 from sqlalchemy import or_, func
+import json
+import os
 
 course = Blueprint('course',__name__)
 
@@ -136,6 +138,9 @@ def view_course(course_id):
             user=current_user, sort_by=ordering, term=term, rating=rating, sort_dict=sort_dict,
             review_num=review_num, _anchor='my_anchor',
             title=course.name_with_teachers_short,
+            latest_score = course.latest_score,
+            score_type_pf = course.score_type_pf,
+            score_semester = course.score_semester,
             description=str(course.rate.average_rate) + ' 分，' + str(course.rate.review_count) + ' 人评价')
 
 

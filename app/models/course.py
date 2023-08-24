@@ -182,6 +182,13 @@ class Course(db.Model):
     forum_threads = db.relationship('ForumThread', backref='course', order_by='desc(ForumThread.update_time)', lazy='dynamic')
     shares = db.relationship('Share', backref='course', order_by='desc(Share.upvote_count), desc(Share.id)', lazy='dynamic')
 
+    # add latest score TEXT
+    latest_score = db.Column(db.Text)
+    # add score_type BOOLEAN
+    score_type_pf = db.Column(db.Boolean, default=False)
+    # add score_semester TEXT
+    score_semester = db.Column(db.Integer, default=0)
+
     #followers : backref to User
     #upvote_users: backref to User
     #downvote_users: backref to User
