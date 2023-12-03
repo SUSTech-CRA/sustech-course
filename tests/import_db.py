@@ -611,6 +611,21 @@ def load_grad_join_course():
 
 
 # we have merge now, do not drop existing data
+with app.app_context():
+    load_depts_sustech()
+    # db.create_all()
+    # load_depts()
+    # load_classes()
+    # load_majors()
+    # load_titles()
+    # load_teachers()
+    # load_courses()
+    # load_students()
+    # load_course_locations()
+    # load_join_course()
+    # load_grad_students()
+    # load_grad_join_course()
+
 # db.create_all()
 # load_depts()
 # load_classes()
@@ -623,4 +638,3 @@ def load_grad_join_course():
 # load_join_course()
 # load_grad_students()
 # load_grad_join_course()
-load_depts_sustech()
