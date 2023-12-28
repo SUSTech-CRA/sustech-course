@@ -111,12 +111,18 @@
                                 <span class="blue h3">课程简介（教工部数据）</span>
                             </div>
                             <div>
-                                {{ course.description }} <br><br>
+                                {{ course.description }}
                                 {% if course.description_eng %}
-                                    {{ course.description_eng }}
+                                <br><br>
+                                <button class="btn btn-custom" type="button" data-toggle="collapse" data-target="#engDescCollapse">
+                                    <b>展开英文描述 Expand English Description</b>
+                                </button>
+                                <br>
+                                <div id="engDescCollapse" class="collapse">
+                                        {{ course.description_eng }}
+                                </div>
                                 {% endif %}
                             </div>
-
                         </div>
                     {% endif %}
 

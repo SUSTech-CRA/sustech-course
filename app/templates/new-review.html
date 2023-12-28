@@ -54,6 +54,7 @@
 
       <div class="container-md desktop">
         <h4 class="grey">说几句吧！</h4>
+        <p class="grey"> （编辑框支持Markdown语法，插入公式请用$$）</p>
         <div class="ud-pd-sm">
           <textarea id="content-editor" name="content">{% if review.content %}{{ review.content|safe }}{% endif %}</textarea>
         </div>
@@ -61,6 +62,7 @@
 
       <div class="mobile">
         <h4 class="grey">说几句吧！</h4>
+        <p class="grey"> （编辑框支持Markdown语法，插入公式请用$$）</p>
         <div class="ud-pd-sm">
           <input type="hidden" name="is_mobile" value="1">
           <textarea type="text" class="form-control" rows="8" name="content">{% if review.content %}{{ review.content_text }}{% endif %}</textarea>

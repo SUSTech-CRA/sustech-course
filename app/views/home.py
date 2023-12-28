@@ -54,7 +54,7 @@ def latest_reviews():
 
 @home.route('/feed.xml')
 def latest_reviews_rss():
-    reviews_paged = gen_ordered_reviews_query().paginate(page=1, per_page=50)
+    reviews_paged = gen_ordered_reviews_query().paginate(page=1, per_page=100)
     rss_content = render_template('feed.xml', reviews=reviews_paged)
     response = make_response(rss_content)
     response.headers['Content-Type'] = 'application/rss+xml'
