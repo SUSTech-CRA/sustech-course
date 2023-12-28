@@ -436,8 +436,8 @@ a.nounderline:active { text-decoration: none; }
   background: #337ab7 !important;
 }
 
- 确保下拉菜单有足够的空间展开
-.nav-item.dropdown {
-    position: static;
-}
+/* 确保下拉菜单有足够的空间展开*/
+/*.nav-item.dropdown {*/
+/*    position: static;*/
+/*}*/
 
