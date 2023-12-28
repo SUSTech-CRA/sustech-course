@@ -22,11 +22,11 @@
                         <div class="ud-pd-sm blue">
                             {% for star in range(0,5) %}
                                 {% if course.rate.average_rate >= 1.5 + star * 2 %}
-                                    <span class="fa fa-star glyphicon-lg" aria-hidden="true"></span>
+                                    <span class="fa-sharp fa-solid fa-star" aria-hidden="true"></span>
                                 {% elif course.rate.average_rate >= 0.5 + star * 2 %}
-                                    <span class="fa fa-star-half glyphicon-lg" aria-hidden="true"></span>
+                                    <span class="fa-sharp fa-regular fa-star-half-stroke" aria-hidden="true"></span>
                                 {% else %}
-                                    <span class="fa fa-star-empty glyphicon-lg" aria-hidden="true"></span>
+                                    <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
                                 {% endif %}
                             {% endfor %}
                             <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span
@@ -35,7 +35,7 @@
                     {% else %}
                         <div class="ud-pd-sm blue">
                             {% for star in range(0,5) %}
-                                <span class="fa fa-star-empty glyphicon-lg" aria-hidden="true"></span>
+                                <span class="fa-sharp fa-regular fa-star glyphicon-lg" aria-hidden="true"></span>
                             {% endfor %}
                             <span class="rl-pd-sm h4"><span class="text-muted px12">(暂无评价)</span>
                         </div>
@@ -85,17 +85,17 @@
                                 class="count"></span>)</small></button>
 
                         <button class="btn btn-white btn-flat btn-upvote btn-do"><span
-                                class="fa fa-thumbs-up" aria-hidden="true"></span> 推荐 <small>(<span
+                                class="fa-regular fa-thumbs-up" aria-hidden="true"></span> 推荐 <small>(<span
                                 class="count"></span>)</small></button>
                         <button class="btn btn-blue btn-flat btn-upvote btn-undo"><span
-                                class="fa fa-thumbs-up" aria-hidden="true"></span> 已推荐 <small>(<span
+                                class="fa-regular fa-thumbs-up" aria-hidden="true"></span> 已推荐 <small>(<span
                                 class="count"></span>)</small></button>
 
                         <button class="btn btn-white btn-flat btn-downvote btn-do"><span
-                                class="fa fa-thumbs-down" aria-hidden="true"></span> 不推荐 <small>(<span
+                                class="fa-regular fa-thumbs-down" aria-hidden="true"></span> 不推荐 <small>(<span
                                 class="count"></span>)</small></button>
                         <button class="btn btn-blue btn-flat btn-downvote btn-undo"><span
-                                class="fa fa-thumbs-down" aria-hidden="true"></span> 取消不推荐
+                                class="fa-regular fa-thumbs-down" aria-hidden="true"></span> 取消不推荐
                             <small>(<span class="count"></span>)</small></button>
 
                         <!--          {% if current_user.is_student %}-->
@@ -340,13 +340,13 @@
 
                                                 {% for star in range(0,5) %}
                                                     {% if review.rate >= 1.5 + star * 2 %}
-                                                        <span class="fa fa-star"
+                                                        <span class="fa-sharp fa-solid fa-star"
                                                               aria-hidden="true"></span>
                                                     {% elif review.rate >= 0.5 + star * 2 %}
-                                                        <span class="fa fa-star-half"
+                                                        <span class="fa-sharp fa-regular fa-star-half-stroke"
                                                               aria-hidden="true"></span>
                                                     {% else %}
-                                                        <span class="fa fa-star-empty"
+                                                        <span class="fa-sharp fa-regular fa-star"
                                                               aria-hidden="true"></span>
                                                     {% endif %}
                                                 {% endfor %}
@@ -409,7 +409,7 @@
                                                     <a class="nounderline" data-bs-toggle="modal" data-bs-target="#signin"
                                                        href="#">
                                                 {% endif %}
-                                                <span class="fa fa-thumbs-up {{ 'blue' if review.is_upvoted() else 'grey' }} left-pd-lg"
+                                                <span class="fa-regular fa-thumbs-up {{ 'blue' if review.is_upvoted() else 'grey' }} left-pd-lg"
                                                       aria-hidden="true"></span>
                                                 <span id="review-upvote-count-{{ review.id }}">{{ review.upvote_count }}</span>
                                                 </a>
@@ -434,7 +434,7 @@
                                                     {% if review.author == user or user.is_admin %}
                                                         <a class="nounderline"
                                                            href="javascript: delete_review({{ review.id }}, {{ '1' if review.author != user else '0' }})">
-                <span class="fa fa-trash grey left-pd-md small" aria-hidden="true"></span>
+                <span class="fa-light fa-trash-can grey left-pd-md small" aria-hidden="true"></span>
                 删除
               </a>
                                                     {% endif %}
@@ -461,7 +461,7 @@
                                             {% if review.author == current_user and review.upvote_users|length > 0 %}
                                                 <div class="bm-pd-md" id="review-upvotes-{{ review.id }}">
                                                     <p style="line-break: loose;">
-                                                        <span class="fa fa-thumbs-up blue"
+                                                        <span class="fa-regular fa-thumbs-up blue"
                                                               aria-hidden="true"></span>
                                                         {% for upvote_user in review.upvote_users %}
                                                             {% if upvote_user != review.upvote_users[0] %}、{% endif %}

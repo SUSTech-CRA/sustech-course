@@ -19,6 +19,11 @@
             <li class="nav-item"><a class="nav-link" href="https://nces.cra.moe/community-rules/" target="_blank">社区规范</a></li>
           </ul>
 
+            <form class="d-flex" action="{{ url_for('home.search_reviews') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
+              <input class="form-control me-2" type="search" name="q" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
+              <button class="btn fa fa-search" type="submit"></button>
+            </form>
+
           {% if current_user.is_authenticated %}
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
@@ -36,11 +41,6 @@
           {% else %}
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signin">登录</button>
           {% endif %}
-
-            <form class="d-flex" action="{{ url_for('home.search_reviews') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
-              <input class="form-control me-2" type="search" name="q" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
-              <button class="btn btn-outline-success" type="submit">搜索</button>
-            </form>
 
         </div>
       </div>

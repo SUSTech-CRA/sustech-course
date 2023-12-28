@@ -35,7 +35,7 @@
               {% else %}
               <a class="nounderline" data-bs-toggle="modal" data-bs-target="#signin" href="#">
               {% endif %}
-                <span class="fa fa-thumbs-up {{ 'blue' if review.is_upvoted() else 'grey' }} left-pd-lg" aria-hidden="true" ></span>
+                <span class="fa-regular fa-thumbs-up {{ 'blue' if review.is_upvoted() else 'grey' }} left-pd-lg" aria-hidden="true" ></span>
                 <span id="review-upvote-count-{{review.id}}">{{ review.upvote_count }}</span>
               </a>
 
