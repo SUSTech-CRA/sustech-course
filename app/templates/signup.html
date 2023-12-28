@@ -17,8 +17,8 @@
         <label for="reginput-email" class="col-sm-2 control-label">南科大邮箱</label>
         <div class="col-sm-4">
           <input type="email" id="reginput-email" name="email" class="form-control" placeholder="sid@mail.sustech.edu.cn or tid@sustech.edu.cn" onchange="regverify('email')">
-          <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
+          <span class="fa fa-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
+          <span class="fa fa-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
           <span class="help-block" style="display:none"></span>
           {% if form.errors.get('email') %}
             {% for info in form.errors.get('email') %}
@@ -34,8 +34,8 @@
         <label for="reginput-username" class="col-sm-2 control-label">用户名</label>
         <div class="col-sm-4">
           <input type="text" id="reginput-username" name="username" class="form-control" placeholder="Username" onchange="regverify('username')">
-          <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
+          <span class="fa fa-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
+          <span class="fa fa-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
           <span class="help-block" style="display:none"></span>
           {% if form.errors.get('username') %}
             {% for info in form.errors.get('username') %}
@@ -52,8 +52,8 @@
         <label for="reginput-password" class="col-sm-2 control-label">密码</label>
         <div class="col-sm-4">
           <input type="password" name="password" class="form-control" id="reginput-password" placeholder="Password" onchange="checkPassword()">
-          <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
+          <span class="fa fa-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
+          <span class="fa fa-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
           <span class="help-block" style="display:none"></span>
           {% if form.errors.get('password') %}
             {% for info in form.errors.get('password') %}
@@ -67,8 +67,8 @@
         <label for="reginput-confirm-password" class="col-sm-2 control-label">确认密码</label>
         <div class="col-sm-4">
           <input type="password" class="form-control" name="confirm_password" id="reginput-confirm-password" placeholder="Confirm Password" onchange="checkConfirmPassword()">
-          <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
+          <span class="fa fa-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
+          <span class="fa fa-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
           <span class="help-block" style="display:none"></span>
         </div>
       </div>

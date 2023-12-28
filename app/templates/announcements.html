@@ -28,11 +28,11 @@
           {% if current_user.is_admin %}
           <span class="pull-right">
             <a class="nounderline" href="{{ url_for('admin.edit_announcement', announcement_id=announcement.id) }}">
-              <span class="glyphicon glyphicon-pencil grey left-pd-sm small" aria-hidden="true" ></span>
+              <span class="fa fa-pencil grey left-pd-sm small" aria-hidden="true" ></span>
               编辑
             </a>
             <a class="nounderline" href="javascript: delete_announcement({{ announcement.id }})">
-              <span class="glyphicon glyphicon-trash grey left-pd-md small" aria-hidden="true"></span>
+              <span class="fa fa-trash grey left-pd-md small" aria-hidden="true"></span>
               删除
             </a>
           </span>

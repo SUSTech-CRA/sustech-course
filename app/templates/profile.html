@@ -99,7 +99,7 @@
 {#        <p class="text-muted">还没有学过的课程呢。</p>#}
 {#        {% endif %}#}
 {#        {% if not current_user.is_authenticated %}#}
-{#        <p class="text-muted">为保护隐私，您需要 <a data-toggle="modal" data-target="#signin">登录</a> 才能查看已学课程。</p>#}
+{#        <p class="text-muted">为保护隐私，您需要 <a data-bs-toggle="modal" data-bs-target="#signin">登录</a> 才能查看已学课程。</p>#}
 {#        {% else %}#}
 {#        {% for course_class in user.classes_joined[0:6] %}#}
 {#        {% if course_class.course_id %}#}
@@ -137,7 +137,7 @@
           <li class="ud-pd-sm" style="overflow:hidden">博客：
             {% if user.homepage and user.homepage != 'http://' %}
             <a href="{{ user.homepage }}">
-              <span class="glyphicon glyphicon-link" aria-hidden="true"></span> {{ user.homepage }}
+              <span class="fa fa-link" aria-hidden="true"></span> {{ user.homepage }}
             </a>
             {% else %}
             暂无
@@ -145,8 +145,8 @@
           </li>
 	  {% if user != current_user  %}
           <div id="action-btn-group" class="ud-pd-sm">
-            <button style="display:none" onclick="follow_user({{ user.id }})" class="btn btn-white btn-flat btn-follow"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span> 关注</button>
-            <button style="display:none" onclick="unfollow_user({{ user.id }})" class="btn btn-blue btn-flat btn-unfollow"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> 已关注</button>
+            <button style="display:none" onclick="follow_user({{ user.id }})" class="btn btn-white btn-flat btn-follow"><span class="fa fa-heart-empty" aria-hidden="true"></span> 关注</button>
+            <button style="display:none" onclick="unfollow_user({{ user.id }})" class="btn btn-blue btn-flat btn-unfollow"><span class="fa fa-heart" aria-hidden="true"></span> 已关注</button>
           </div>
 	  {% endif %}
         </ul>

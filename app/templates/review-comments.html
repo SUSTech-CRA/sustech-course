@@ -6,11 +6,11 @@
                   <span>{{ comment.content|content_filter|safe|urlize(nofollow=true) }}</span>
                   <span class="text-muted small float-right">
                     {% if user.is_authenticated %}
-                    <span class="glyphicon glyphicon-share-alt grey left-pd-md" aria-hidden="true"></span>
+                    <span class="fa fa-share-alt grey left-pd-md" aria-hidden="true"></span>
                     <a href="javascript: reply_comment({{review.id}}, '{{ comment.author.username }}');">回复</a>
                     {% endif %}
                     {% if user == comment.author or user.is_admin %}
-                    <span class="glyphicon glyphicon-trash grey left-pd-md" aria-hidden="true"></span>
+                    <span class="fa fa-trash grey left-pd-md" aria-hidden="true"></span>
                     <a href="javascript: delete_comment({{review.id}}, {{comment.id}});">删除</a>
                     {% endif %}
                     <span class="localtime" style="display: none;">{{ comment.publish_time|utctime }}</span>
@@ -21,7 +21,7 @@
               <textarea type="text" class="form-control" rows="2" id="review-comment-input-{{ review.id }}" placeholder="你的评论" autocomplete="off"></textarea>
               <div class="ud-pd-sm"><button class="btn btn-sm btn-white float-right" onclick="submit_comment({{review.id}});">评论</button></div>
               {% else %}
-              <p>立即<a href="#" data-toggle="modal" data-target="#signin">登录</a>，说说你的看法</p>
+              <p>立即<a href="#" data-bs-toggle="modal" data-bs-target="#signin">登录</a>，说说你的看法</p>
               {% endif %}
             </div>
           </div>

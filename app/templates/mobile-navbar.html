@@ -55,17 +55,17 @@
 	<a class="float-right mobile" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程</a>
 	{% elif this_module and this_module=='home.follow_reviews' and follow_type=='course' %}
 	<a class="btn btn-white float-right desktop" href="{{ url_for('home.follow_reviews', follow_type='user') }}">
-	   <span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span> 关注的人
+	   <span class="glyphicon fa fa-arrow-right" aria-hidden="true"></span> 关注的人
 	</a>
 	<a class="float-right mobile" href="{{ url_for('home.follow_reviews', follow_type='user') }}">
-	   <span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span> 关注的人
+	   <span class="glyphicon fa fa-arrow-right" aria-hidden="true"></span> 关注的人
 	</a>
 	{% elif this_module and this_module=='home.follow_reviews' and follow_type=='user' %}
 	<a class="btn btn-white float-right desktop" href="{{ url_for('home.follow_reviews', follow_type='course') }}">
-	   <span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span> 关注的课程
+	   <span class="glyphicon fa fa-arrow-right" aria-hidden="true"></span> 关注的课程
 	</a>
 	<a class="float-right mobile" href="{{ url_for('home.follow_reviews', follow_type='course') }}">
-	   <span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span> 关注的课程
+	   <span class="glyphicon fa fa-arrow-right" aria-hidden="true"></span> 关注的课程
 	</a>
 	{% endif %}
       </div>

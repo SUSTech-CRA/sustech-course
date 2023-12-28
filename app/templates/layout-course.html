@@ -11,7 +11,7 @@
 
     <title>{{ course.name }} ({{ course.courseries }}) - NCES</title>
 
-    <link href="https://code.bdstatic.com/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/style.css?ver=20180122" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-FBM6EFBDSN"></script>
@@ -35,16 +35,16 @@
 
 <body>
   <div id="wrap">
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         {% if current_user.is_authenticated %}
-        <button type="button" class="mobile btn btn-default navbar-btn pull-right right-mg-md" style="outline:none" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <button type="button" class="mobile btn btn-primary navbar-btn pull-right right-mg-md" style="outline:none" data-bs-toggle="collapse" data-bs-toggle="#navbar" aria-expanded="false" aria-controls="navbar">
           {{ current_user.username }} <span class="caret"></span>
         </button>
         {% else %}
-        <button type="button" class="mobile btn btn-default navbar-btn pull-right right-mg-md" style="outline:none" data-toggle="modal" data-target="#signin">登录</button>
+        <button type="button" class="mobile btn btn-primary navbar-btn pull-right right-mg-md" style="outline:none" data-bs-toggle="modal" data-bs-target="#signin" >登录</button>
         {% endif %}
         <a class="navbar-brand" href="{{ url_for('home.index') }}">Niuwa Curriculum Evaluation System</a>
       </div>
@@ -69,7 +69,7 @@
             <input type="text" name="q" class="form-control" id="search" placeholder="搜索课程、老师、点评" style="width: 235px" value="{{ keyword or '' }}">
           </div>
           <span class="desktop-wide">
-            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search grey"></span></button>
+            <button type="submit" class="btn btn-primary"><span class="fa fa-search grey"></span></button>
           </span>
         </form>
 
@@ -104,7 +104,7 @@
             </ul>
           </li>
           {% else %}
-          <li><button type="button" class="btn btn-default navbar-btn left-mg-md" data-toggle="modal" data-target="#signin">登录</button></li>
+          <li><button type="button" class="btn btn-primary navbar-btn left-mg-md" data-bs-toggle="modal" data-bs-target="#signin">登录</button></li>
           {% endif %}
         </ul>
 
@@ -133,7 +133,7 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <div class="form-signin-heading">
             <span class="h2">请登录</span>
-            <a class="btn btn-default float-right" href="/signup">注册</a>
+            <a class="btn btn-primary float-right" href="/signup">注册</a>
           </div>
           <div id="signin-alert" role="alert" class="display: none"></div>
           <label for="inputEmail" class="sr-only">用户名</label>
@@ -182,7 +182,9 @@
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://code.bdstatic.com/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script><!-- 在您的HTML头部添加 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+
   <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
 <!--  <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML"></script>-->
   {% include 'common-scripts.html' %}
