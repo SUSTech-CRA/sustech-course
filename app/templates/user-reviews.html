@@ -18,10 +18,10 @@
             <a href="{{ url_for('course.view_course', course_id=course.id) }}">{{ course.name }}（{{ course.teacher.name or _('未知') }}）</a>
             <span class="small grey align-bottom left-pd-sm">学期：{{ review.term|term_display }}</span>
 	        {% if current_user == user and review.is_anonymous %}
-	        <span class="label label-success">匿名</span>
+	        <span class="badge rounded-pill bg-success">匿名</span>
 	        {% endif %}
 	        {% if current_user == user and review.only_visible_to_student %}
-	        <span class="label label-success">仅登录学生可见</span>
+	        <span class="badge rounded-pill bg-success">仅登录学生可见</span>
 	        {% endif %}
             <span class="text-muted small float-right desktop localtime" style="display: none;">{{ review.update_time|utctime }}</span>
           </div>
