@@ -225,16 +225,32 @@ def unfollow_user():
     else:
         return jsonify(ok=False, message='User does not exist')
 
-def generic_upload(file, type):
-    ok,message = handle_upload(file, type)
-    script_head = '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(2,'
-    script_tail = ');</script>'
+# def generic_upload(file, type):
+#     ok,message = handle_upload(file, type)
+#     script_head = '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(2,'
+#     script_tail = ');</script>'
+#     if ok:
+#         url = '/uploads/' + type + 's/' + message
+#         return script_head + '"' + url + '"' + script_tail
+#     else:
+#         return script_head + '""' + ',' + '"' + message + '"' + script_tail
+def generic_upload(file, type): # adapt ckeditor5
+    ok, message = handle_upload(file, type)
     if ok:
+        # 上传成功，返回图片的 URL
         url = '/uploads/' + type + 's/' + message
-        return script_head + '"' + url + '"' + script_tail
+        return jsonify({
+            "uploaded": 1,
+            "url": url
+        })
     else:
-        return script_head + '""' + ',' + '"' + message + '"' + script_tail
-
+        # 上传失败，返回错误信息
+        return jsonify({
+            "uploaded": 0,
+            "error": {
+                "message": message
+            }
+        })
 @api.route('/upload/image',methods=['POST'])
 @login_required
 @app.csrf.exempt

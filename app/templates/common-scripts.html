@@ -58,6 +58,13 @@
  updateLocalTime();
 
 
- new ClipboardJS('.review-links');
- $('.review-links').tooltip();
+// Initialize ClipboardJS
+new ClipboardJS('.review-links');
+
+// Initialize Bootstrap 5 tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('.review-links'));
+tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+  new bootstrap.Tooltip(tooltipTriggerEl)
+});
+
 </script>

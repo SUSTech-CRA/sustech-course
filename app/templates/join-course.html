@@ -18,10 +18,10 @@
         {% if course_class.course.teachers %}（{{ course_class.course.teacher_names_display|name_display_short }}）{% endif %}
         </a>
         {% if user != current_user and course_class.course.reviewed_by(user) %}
-        <span class="label label-success">TA已点评</span>
+        <span class="badge rounded-pill bg-success">TA已点评</span>
         {% endif %}
         {% if course_class.course.reviewed_by(current_user) %}
-        <span class="label label-success">我已点评</span>
+        <span class="badge rounded-pill bg-success">我已点评</span>
         {% endif %}
         <span class="small grey align-bottom  float-right">{{ course_class.term|term_display }}</span>
       </div>

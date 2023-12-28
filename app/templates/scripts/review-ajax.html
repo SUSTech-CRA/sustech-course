@@ -214,5 +214,12 @@
      $(this).html(replace_text)
  })
 
- $('.teacher-review-label').tooltip()
+// Find all elements with the class 'teacher-review-label'
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('.teacher-review-label'));
+
+// Initialize tooltips for these elements
+tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+  new bootstrap.Tooltip(tooltipTriggerEl);
+});
+
 </script>

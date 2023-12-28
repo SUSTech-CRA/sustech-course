@@ -51,7 +51,7 @@
 	    <textarea class="form-control content-editor" name="admin_announcement" rows="5">{{ course.admin_announcement or ''|safe }}</textarea>
 	  </div>
 	  {% endif %}
-          <button type="submit" class="btn btn-sm btn-default">提交</button>
+          <button type="submit" class="btn btn-sm btn-primary">提交</button>
         </form>
 
       </div>
@@ -72,7 +72,7 @@
           <p>{{ teacher.dept.name }}</p>
           <p>教师主页：
             {% if teacher.homepage and teacher.homepage != 'http://' %}
-            <a href="{{ teacher.homepage }}" target="_blank"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> 戳这里</a>
+            <a href="{{ teacher.homepage }}" target="_blank"><span class="fa fa-link" aria-hidden="true"></span> 戳这里</a>
             {% else %}暂无{% endif %}
           </p>
         </div>
@@ -90,7 +90,7 @@
           <form method="post" enctype="multipart/form-data" action="{{ url_for('course.add_teacher', course_id=course.id) }}" target="_blank">
             {{ form.csrf_token }}
             <input class="form-control" type="text" name="teacher_id" placeholder="教师ID，即教师页面URL的最后一个数字">
-            <button type="submit" class="btn btn-sm btn-default">添加教师</button>
+            <button type="submit" class="btn btn-sm btn-primary">添加教师</button>
           </form>
         </div>
         {% endif %}
