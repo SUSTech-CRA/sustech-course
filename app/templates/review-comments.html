@@ -10,7 +10,7 @@
           <a href="javascript: reply_comment({{review.id}}, '{{ comment.author.username }}');">回复</a>
         {% endif %}
         {% if user == comment.author or user.is_admin %}
-          <span class="fa-light fa-trash-can grey left-pd-md" aria-hidden="true"></span>
+          <span class="fa-solid fa-trash-can grey left-pd-md" aria-hidden="true"></span>
           <a href="javascript: delete_comment({{review.id}}, {{comment.id}});">删除</a>
         {% endif %}
         <span class="localtime" style="display: none;">{{ comment.publish_time|utctime }}</span>

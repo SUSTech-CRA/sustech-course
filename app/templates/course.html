@@ -435,7 +435,7 @@
                                                     {% if review.author == user or user.is_admin %}
                                                         <a class="nounderline"
                                                            href="javascript: delete_review({{ review.id }}, {{ '1' if review.author != user else '0' }})">
-                <span class="fa-light fa-trash-can grey left-pd-md small" aria-hidden="true"></span>
+                <span class="fa-solid fa-trash-can grey left-pd-md small" aria-hidden="true"></span>
                 删除
               </a>
                                                     {% endif %}

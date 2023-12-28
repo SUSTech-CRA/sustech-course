@@ -11,10 +11,10 @@
 
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item" {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}class="active"{% endif %}><a class="nav-link" href="{{ url_for('home.latest_reviews') }}">点评</a></li>
-            <li class="nav-item" {% if this_module and (this_module=='course.index' or this_module=='home.search') %}class="active"{% endif %}><a class="nav-link" href="{{ url_for('course.index') }}">课程</a></li>
+            <li class="nav-item" ><a class="nav-link {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}active{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a></li>
+            <li class="nav-item" ><a class="nav-link {% if this_module and (this_module=='course.index' or this_module=='home.search') %}active{% endif %}" href="{{ url_for('course.index') }}">课程</a></li>
             {% if current_user.is_authenticated %}
-            <li class="nav-item" {% if this_module and this_module=='home.follow_reviews' %}class="active"{% endif %}><a class="nav-link" href="{{ url_for('home.follow_reviews') }}">关注</a></li>
+            <li class="nav-item" ><a class="nav-link {% if this_module and this_module=='home.follow_reviews' %}active{% endif %}" href="{{ url_for('home.follow_reviews') }}">关注</a></li>
             {% endif %}
             <li class="nav-item"><a class="nav-link" href="https://nces.cra.moe/community-rules/" target="_blank">社区规范</a></li>
           </ul>
@@ -28,7 +28,7 @@
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ current_user.username }}
+                <i class="fa-solid fa-user"></i>  {{ current_user.username }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" href="{{ url_for('user.view_profile', user_id=current_user.id) }}">个人主页</a></li>
@@ -39,7 +39,7 @@
             </li>
           </ul>
           {% else %}
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signin">登录</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
           {% endif %}
 
         </div>
@@ -67,8 +67,8 @@
             </label>
             <a class="float-right" href="{{ url_for('home.forgot_password') }}">忘记密码</a>
           </div>
-          <button type="submit" class="btn btn-lg btn-blue btn-block">登录</button>
-          <a class="btn btn-sm btn-grey btn-block" href="{{ url_for('home.oauth') }}">CRA SSO/ SUSTech CAS 登录/注册</a>
+          <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
+          <a class="btn btn-sm btn-secondary btn-block" href="{{ url_for('home.oauth') }}">CRA SSO/ SUSTech CAS 登录/注册</a>
         </form>
       </div>
     </div>
