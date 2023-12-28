@@ -41,10 +41,10 @@
                         </div>
                     {% endif %}
                     <ul class="text-muted list-inline list-unstyled ud-pd-sm">
-                        <li class="right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
-                        <li class="right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
-                        <li class="right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
-                        <li class="right-mg-md">收获大小：{{ course.rate.gain or '你猜' }}</li>
+                        <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
+                        <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
+                        <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
+                        <li class="list-inline-item right-mg-md">收获大小：{{ course.rate.gain or '你猜' }}</li>
                     </ul>
 
                     <table class="table table-condensed no-border">
@@ -114,17 +114,18 @@
                                 {{ course.description }}
                                 {% if course.description_eng %}
                                 <br><br>
-                                <button class="btn btn-custom" type="button" data-toggle="collapse" data-target="#engDescCollapse">
+                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#engDescCollapse">
                                     <b>展开英文描述 Expand English Description</b>
                                 </button>
                                 <br>
                                 <div id="engDescCollapse" class="collapse">
-                                        {{ course.description_eng }}
+                                    {{ course.description_eng }}
                                 </div>
                                 {% endif %}
                             </div>
                         </div>
                     {% endif %}
+
 
 
                     {% if course.introduction %}
@@ -374,11 +375,11 @@
                                             </div>
                                             {% include 'review-hidden.html' %}
 
-                                            <ul class="text-muted list-inline list-unstyled top-pd-sm desktop">
-                                                <li class="right-mg-md">课程难度：{{ review.difficulty_display }}</li>
-                                                <li class="right-mg-md">作业多少：{{ review.homework_display }}</li>
-                                                <li class="right-mg-md">给分好坏：{{ review.grading_display }}</li>
-                                                <li class="right-mg-md">收获大小：{{ review.gain_display }}</li>
+                                            <ul class="text-muted list-inline top-pd-sm desktop">
+                                                <li class="list-inline-item right-mg-md">课程难度：{{ review.difficulty_display }}</li>
+                                                <li class="list-inline-item right-mg-md">作业多少：{{ review.homework_display }}</li>
+                                                <li class="list-inline-item right-mg-md">给分好坏：{{ review.grading_display }}</li>
+                                                <li class="list-inline-item right-mg-md">收获大小：{{ review.gain_display }}</li>
                                             </ul>
                                             <ul class="text-muted list-inline list-unstyled top-pd-sm mobile">
                                                 <li>难度：{{ review.difficulty_display }}</li>

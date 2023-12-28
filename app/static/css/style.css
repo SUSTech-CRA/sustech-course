@@ -182,7 +182,13 @@ p { line-height: 25px; word-wrap: break-word; }
 .blue { color: #337ab7; }
 .grey { color: #999; }
 .dark-grey { color: #666; }
+a {
+    color: #337AB7;
+}
 
+a:hover, a:focus {
+    filter: brightness(80%);
+}
 
 .shadow { box-shadow: 3px 3px 2px #ddd; }
 
@@ -415,4 +421,17 @@ a.nounderline:active { text-decoration: none; }
 }
 #gotop span:hover {
     color: #ffffff;
+}
+
+/*remove underline*/
+.ud-pd-md a {
+    text-decoration: none;
+}
+.ud-pd-sm a {
+    text-decoration: none;
+}
+
+/*pagination*/
+.page-item.active .page-link {
+  background: #337ab7 !important;
 }
