@@ -1,0 +1,38 @@
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<script>
+        // Initialize TOAST UI Editor with WYSIWYG mode and custom image upload
+        const editor = new toastui.Editor({
+            el: document.querySelector('#content-editor'),
+            height: '500px',
+            initialEditType: 'wysiwyg',
+            previewStyle: 'vertical',
+            initialValue: document.querySelector('#content-editor').value,
+            hooks: {
+                addImageBlobHook: async (blob, callback) => {
+                    // Create form data
+                    const formData = new FormData();
+                    formData.append('file', blob);
+
+                    try {
+                        // Send request to your image upload API
+                        const response = await fetch('/api/upload/image', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const result = await response.json();
+
+                        if (result.uploaded) {
+                            // If upload is successful, insert the image URL to the editor
+                            callback(result.url, 'alt text');
+                        } else {
+                            // Handle upload failure
+                            alert(result.error.message);
+                        }
+                    } catch (error) {
+                        console.error('Image upload failed', error);
+                    }
+                }
+            }
+        });
+</script>

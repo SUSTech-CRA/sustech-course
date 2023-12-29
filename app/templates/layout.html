@@ -9,7 +9,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div id="navbar" class="collapse navbar-collapse">
+        <div id="navbar" class="collapse navbar-collapse align-items-center">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item" ><a class="nav-link {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}active{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a></li>
             <li class="nav-item" ><a class="nav-link {% if this_module and (this_module=='course.index' or this_module=='home.search') %}active{% endif %}" href="{{ url_for('course.index') }}">课程</a></li>
@@ -19,27 +19,29 @@
             <li class="nav-item"><a class="nav-link" href="https://nces.cra.moe/community-rules/" target="_blank">社区规范</a></li>
           </ul>
 
-            <form class="d-flex" action="{{ url_for('home.search_reviews') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
-              <input class="form-control me-2" type="search" name="q" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
-              <button class="btn fa fa-search" type="submit"></button>
+            <form class="d-flex me-lg-1 " action="{{ url_for('home.search_reviews') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" id="search" placeholder="搜索课程、老师、点评" aria-describedby="search-button" style="width: 235px" value="{{ keyword or '' }}">
+                    <button type="submit" class="btn btn-secondary" id="search-button"><i class="fa fa-search"></i></button>
+                </div>
             </form>
 
           {% if current_user.is_authenticated %}
-          <ul class="navbar-nav">
+          <ul class="navbar-nav my-1 mx-0">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-user"></i>  {{ current_user.username }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li><a class="dropdown-item" href="{{ url_for('user.view_profile', user_id=current_user.id) }}">个人主页</a></li>
-                <li><a class="dropdown-item" href="{{ url_for('user.account_settings') }}">设置</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('user.view_profile', user_id=current_user.id) }}"><i class="fa-solid fa-house"></i> 个人主页</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('user.account_settings') }}"><i class="fa-solid fa-gear"></i> 设置</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{{ url_for('home.logout') }}">退出</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('home.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> 退出</a></li>
               </ul>
             </li>
           </ul>
           {% else %}
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
+          <button type="button" class="btn btn-blue btn-primary my-1 mx-0" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
           {% endif %}
 
         </div>
@@ -54,7 +56,7 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <div class="form-signin-heading">
             <span class="h2">请登录</span>
-            <a class="btn btn-primary float-right" href="/signup">注册</a>
+            <a class="btn btn-outline-primary float-right" href="/signup">注册</a>
           </div>
           <div id="signin-alert" role="alert" class="display: none"></div>
           <label for="inputEmail" class="sr-only">用户名</label>
@@ -67,8 +69,15 @@
             </label>
             <a class="float-right" href="{{ url_for('home.forgot_password') }}">忘记密码</a>
           </div>
-          <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
-          <a class="btn btn-sm btn-secondary btn-block" href="{{ url_for('home.oauth') }}">CRA SSO/ SUSTech CAS 登录/注册</a>
+        <div class="d-grid gap-1">
+            <button type="submit" class="btn btn-blue btn-lg btn-primary">
+                <i class="fa-solid fa-right-to-bracket"></i> 邮箱登录
+            </button>
+            <a class="btn btn-secondary" href="{{ url_for('home.oauth') }}">
+                CRA SSO / SUSTech CAS 登录/注册
+            </a>
+        </div>
+
         </form>
       </div>
     </div>
