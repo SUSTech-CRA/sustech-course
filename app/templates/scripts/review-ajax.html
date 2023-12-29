@@ -1,17 +1,17 @@
 <script>
- function show_review_comments(review_id)
- {
-   if (document.getElementById('review-'+ review_id +'-comments').style.display=="block") {
-       document.getElementById('review-'+ review_id +'-comments').style.display="none";
-       $('#review-comment-count-' + review_id).parent().find('span.glyphicon').addClass('grey');
-       $('#review-comment-count-' + review_id).parent().find('span.glyphicon').removeClass('blue');
-     }
-   else {
-       document.getElementById('review-'+ review_id +'-comments').style.display="block";
-       $('#review-comment-count-' + review_id).parent().find('span.glyphicon').addClass('blue');
-       $('#review-comment-count-' + review_id).parent().find('span.glyphicon').removeClass('grey');
-   }
- }
+ // function show_review_comments(review_id)
+ //{
+ //  if (document.getElementById('review-'+ review_id +'-comments').style.display=="block") {
+ //      document.getElementById('review-'+ review_id +'-comments').style.display="none";
+ //      $('#review-comment-count-' + review_id).parent().find('span.glyphicon').addClass('grey');
+ //      $('#review-comment-count-' + review_id).parent().find('span.glyphicon').removeClass('blue');
+ //    }
+ //  else {
+ //      document.getElementById('review-'+ review_id +'-comments').style.display="block";
+ //      $('#review-comment-count-' + review_id).parent().find('span.glyphicon').addClass('blue');
+ //      $('#review-comment-count-' + review_id).parent().find('span.glyphicon').removeClass('grey');
+ //  }
+// }
 
  function get_upvote_review_elem(review_id)
  {

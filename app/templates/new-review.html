@@ -52,20 +52,11 @@
         </div>
       </div>
 
-      <div class="container-md desktop">
+      <div class="container-md" style="width:100%">
         <h4 class="grey">说几句吧！</h4>
-        <p class="grey"> （编辑框支持Markdown语法，插入公式请用$$）</p>
+        <p class="grey">（编辑框支持Markdown语法，插入公式请用$$）</p>
         <div class="ud-pd-sm">
           <textarea id="content-editor" name="content">{% if review.content %}{{ review.content|safe }}{% endif %}</textarea>
-        </div>
-      </div>
-
-      <div class="mobile">
-        <h4 class="grey">说几句吧！</h4>
-        <p class="grey"> （编辑框支持Markdown语法，插入公式请用$$）</p>
-        <div class="ud-pd-sm">
-          <input type="hidden" name="is_mobile" value="1">
-          <textarea type="text" class="form-control" rows="8" name="content">{% if review.content %}{{ review.content_text }}{% endif %}</textarea>
         </div>
       </div>
 
@@ -83,12 +74,12 @@
         <label for="only_visible_to_student">仅登录学生用户可见</label>
       </div>
 
-      <div class="container-md desktop">
-        <button type="submit" class="btn btn-blue btn-flat float-right shadow">发布</button>
+      <div class="container-md" style="width:100%">
+        <button type="submit" class="btn btn-blue float-right"><i class="fa-solid fa-paper-plane"></i> 发布</button>
       </div>
-      <div class="container mobile">
-        <button type="submit" class="btn btn-blue float-right">发布</button>
-      </div>
+{#      <div class="container mobile">#}
+{#        <button type="submit" class="btn btn-blue float-right">发布</button>#}
+{#      </div>#}
 
       <div class="ud-pd-lg"></div>
 
@@ -107,6 +98,26 @@ function submit_review() {
         obj[item.name] = item.value;
         return obj;
     }, {});
+    data['content'] = editor.getData();
+
+    // 土法去除ckeditor自动添加的width和height属性
+    htmlContent = data['content'];
+    // 创建一个新的DOM解析器
+    var parser = new DOMParser();
+    // 将HTML字符串解析为文档对象
+    var doc = parser.parseFromString(htmlContent, 'text/html');
+    // 获取所有的img标签
+    var images = doc.getElementsByTagName('img');
+    // 遍历所有img标签，移除width和height属性
+    for (var i = 0; i < images.length; i++) {
+        images[i].removeAttribute('width');
+        images[i].removeAttribute('height');
+    }
+    // 将更新后的HTML内容转换回字符串
+    var updatedHtmlContent = doc.body.innerHTML;
+    // 更新data['content']
+    data['content'] = updatedHtmlContent;
+
     data['rate'] = Math.round(data['rate'] * 2);
     data['is_ajax'] = true;
     console.log(url);
@@ -175,7 +186,7 @@ $(function(){
             alert('请评分！');
             return;
         }
-        var content_html = $('textarea[name=content]').val();
+        var content_html = editor.getData();
         var content_text = content_html.replace(/(<([^>]+)>)/ig, "");
         if (content_text.trim().length < 10) {
             alert('点评内容太短啦！');

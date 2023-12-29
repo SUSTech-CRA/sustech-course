@@ -72,8 +72,8 @@ def new_review(course_id):
                 abort(404)
 
             form.populate_obj(review)
-            if form.is_mobile.data:
-                review.content = markdown.markdown(review.content)
+            # if form.is_mobile.data:
+            #     review.content = markdown.markdown(review.content)
             review.content, mentioned_users = editor_parse_at(review.content)
             review.content = sanitize(review.content)
 
