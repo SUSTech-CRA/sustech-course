@@ -506,3 +506,8 @@ blockquote::after {
 /*.review table tr:nth-child(even) {*/
 /*  background-color: #f9f9f9; !* 偶数行背景色 *!*/
 /*}*/
+
+/*navbar color*/
+.navbar-brand {
+    color: #337ab7;
+}

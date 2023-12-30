@@ -4,33 +4,45 @@
   <div id="wrap">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand" href="{{ url_for('home.index') }}">Niuwa Curriculum Evaluation System</a>
+        <a class="navbar-brand" href="{{ url_for('home.index') }}">
+          <i class="fa-solid fa-pencil"></i> Niuwa Curriculum Evaluation System
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div id="navbar" class="collapse navbar-collapse align-items-center">
+        <div id="navbar" class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item" ><a class="nav-link {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}active{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a></li>
-            <li class="nav-item" ><a class="nav-link {% if this_module and (this_module=='course.index' or this_module=='home.search') %}active{% endif %}" href="{{ url_for('course.index') }}">课程</a></li>
+            <li class="nav-item">
+              <a class="nav-link {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}active{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if this_module and (this_module=='course.index' or this_module=='home.search') %}active{% endif %}" href="{{ url_for('course.index') }}">课程</a>
+            </li>
             {% if current_user.is_authenticated %}
-            <li class="nav-item" ><a class="nav-link {% if this_module and this_module=='home.follow_reviews' %}active{% endif %}" href="{{ url_for('home.follow_reviews') }}">关注</a></li>
+            <li class="nav-item">
+              <a class="nav-link {% if this_module and this_module=='home.follow_reviews' %}active{% endif %}" href="{{ url_for('home.follow_reviews') }}">关注</a>
+            </li>
             {% endif %}
-            <li class="nav-item"><a class="nav-link" href="https://nces.cra.moe/community-rules/" target="_blank">社区规范</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://nces.cra.moe/community-rules/" target="_blank">社区规范</a>
+            </li>
           </ul>
 
-            <form class="d-flex me-lg-1 " action="{{ url_for('home.search_reviews') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" id="search" placeholder="搜索课程、老师、点评" aria-describedby="search-button" style="width: 235px" value="{{ keyword or '' }}">
-                    <button type="submit" class="btn btn-secondary" id="search-button"><i class="fa fa-search"></i></button>
-                </div>
-            </form>
+          <form class="d-flex mx-2" style="max-width: 500px;" action="{{ url_for('home.search_reviews') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
+            <div class="input-group w-100">
+              <input type="text" name="q" class="form-control" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
+              <button type="submit" class="btn btn-secondary" id="search-button">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </form>
 
           {% if current_user.is_authenticated %}
-          <ul class="navbar-nav my-1 mx-0">
+          <ul class="navbar-nav">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-solid fa-user"></i>  {{ current_user.username }}
+              <a class="nav-link dropdown-toggle mt-2 mt-lg-0" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user"></i> {{ current_user.username }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" href="{{ url_for('user.view_profile', user_id=current_user.id) }}"><i class="fa-solid fa-house"></i> 个人主页</a></li>
@@ -41,12 +53,12 @@
             </li>
           </ul>
           {% else %}
-          <button type="button" class="btn btn-blue btn-primary my-1 mx-0" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
+          <button type="button" class="btn btn-primary mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
           {% endif %}
-
         </div>
       </div>
     </nav>
+
 
   {% if not current_user.is_authenticated %}
   <div class="modal fade" id="signin" tabindex="-1" role="dialog" aria-hidden="true">
