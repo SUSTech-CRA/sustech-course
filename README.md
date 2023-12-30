@@ -2,6 +2,13 @@
 
 USTC 评课社区是使用 Python 3 + Flask + SQLAlchemy 开发的 Web 系统。
 
+## sustech-course对代码的主要修改
+
+- 适配sustech tis（课程，教师导入）
+- 尽可能从cdn加载js/css
+- 适配CKEditor5
+- 适配bootstrap5（WIP）
+
 ## 安装
 
 安装此系统前，请首先安装：
