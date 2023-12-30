@@ -168,83 +168,97 @@
                             </div>
                             <div>
                                     <div id="plotly-div"></div>
-                                    <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/plotly.js/2.25.2/plotly-basic.min.js"></script>
+                                    <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/plotly.js/2.27.1/plotly-basic.min.js" async></script>
                                     <script>
-                                        // 你的数据
-                                        var data = {
-                                                "scores": [{{ course.latest_score }}]
+                                        // listen for the document loaded event, then call loadPlotly()
+                                        // 检测 Plotly 是否加载完毕
+                                        function loadPlotly() {
+                                            if(window.Plotly) {
+                                                // 这里是你的绘图代码
+                                                drawPlot();
+                                            } else {
+                                                setTimeout(loadPlotly, 50); // 每隔50毫秒检查一次
                                             }
-                                        ;
+                                        }
 
-                                        // 标签和颜色
-                                        var labels = ["F", "D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+"];
-                                        var colors = ["#808080", "#A93226", "#C0392B", "#E74C3C", "#F39C12", "#F4D03F", "#F7DC6F", "#3498DB", "#5DADE2", "#85C1E9", "#7DCEA0", "#58D68D", "#2ECC71"];
+                                        loadPlotly(); // 启动检查流程
 
-                                        //revsere labal (A+ at left, F at right)
-                                        labels.reverse();
-                                        colors.reverse();
-                                        data.scores.reverse();
+                                        function drawPlot() {
+                                                                                    // 你的数据
+                                            var data = {
+                                                    "scores": [{{ course.latest_score }}]
+                                                }
+                                            ;
 
-                                        // 构建图表数据
-                                        var plotData = labels.map((label, index) => {
-                                            return {
-                                                type: 'bar',
-                                                x: [data.scores[index]],
-                                                y: ['Grades'],
-                                                orientation: 'h',
-                                                text: [(data.scores[index] / data.scores.reduce((a, b) => a + b, 0) * 100).toFixed(0)],
-                                                textposition: 'inside',
-                                                hoverinfo: 'none',
-                                                name: label,
-                                                marker: {
-                                                    color: colors[index]
+                                            // 标签和颜色
+                                            var labels = ["F", "D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+"];
+                                            var colors = ["#808080", "#A93226", "#C0392B", "#E74C3C", "#F39C12", "#F4D03F", "#F7DC6F", "#3498DB", "#5DADE2", "#85C1E9", "#7DCEA0", "#58D68D", "#2ECC71"];
+
+                                            //revsere labal (A+ at left, F at right)
+                                            labels.reverse();
+                                            colors.reverse();
+                                            data.scores.reverse();
+
+                                            // 构建图表数据
+                                            var plotData = labels.map((label, index) => {
+                                                return {
+                                                    type: 'bar',
+                                                    x: [data.scores[index]],
+                                                    y: ['Grades'],
+                                                    orientation: 'h',
+                                                    text: [(data.scores[index] / data.scores.reduce((a, b) => a + b, 0) * 100).toFixed(0)],
+                                                    textposition: 'inside',
+                                                    hoverinfo: 'none',
+                                                    name: label,
+                                                    marker: {
+                                                        color: colors[index]
+                                                    }
+                                                };
+                                            });
+
+                                            // 图表设置
+                                            var layout = {
+                                                barmode: 'stack',
+                                                xaxis: {
+                                                    showgrid: false,
+                                                    zeroline: false,
+                                                    showline: false,
+                                                    showticklabels: false
+                                                },
+                                                yaxis: {
+                                                    showgrid: false,
+                                                    zeroline: false,
+                                                    showline: false,
+                                                    showticklabels: false
+                                                },
+                                                showlegend: true,
+                                                legend: {
+                                                    x: 0.5,
+                                                    y: -0.2,
+                                                    xanchor: 'center',
+                                                    yanchor: 'top',
+                                                    orientation: 'h',
+                                                    traceorder: 'normal'
+                                                },
+                                                height: 120,  // Increase the height to accommodate the legend below
+                                                autosize: true,  // Enable autosize for responsiveness
+                                                margin: {
+                                                    l: 0,
+                                                    r: 0,
+                                                    b: 0,  // Increase the bottom margin to accommodate the legend
+                                                    t: 0
                                                 }
                                             };
-                                        });
 
-                                        // 图表设置
-                                        var layout = {
-                                            barmode: 'stack',
-                                            xaxis: {
-                                                showgrid: false,
-                                                zeroline: false,
-                                                showline: false,
-                                                showticklabels: false
-                                            },
-                                            yaxis: {
-                                                showgrid: false,
-                                                zeroline: false,
-                                                showline: false,
-                                                showticklabels: false
-                                            },
-                                            showlegend: true,
-                                            legend: {
-                                                x: 0.5,
-                                                y: -0.2,
-                                                xanchor: 'center',
-                                                yanchor: 'top',
-                                                orientation: 'h',
-                                                traceorder: 'normal'
-                                            },
-                                            height: 120,  // Increase the height to accommodate the legend below
-                                            autosize: true,  // Enable autosize for responsiveness
-                                            margin: {
-                                                l: 0,
-                                                r: 0,
-                                                b: 0,  // Increase the bottom margin to accommodate the legend
-                                                t: 0
+                                            // 绘制图表
+                                            var plotly_config ={
+                                                responsive: true,
+                                                displayModeBar: false,
+                                                staticPlot: true
                                             }
-                                        };
-
-                                        // 绘制图表
-                                        var plotly_config ={
-                                            responsive: true,
-                                            displayModeBar: false,
-                                            staticPlot: true
+                                            Plotly.newPlot('plotly-div', plotData, layout, plotly_config);
                                         }
-                                        Plotly.newPlot('plotly-div', plotData, layout, plotly_config);
                                     </script>
-
                             </div>
 
                         </div>

@@ -13,9 +13,13 @@ from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
 from datetime import datetime
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_minify import minify
 
 
 app = Flask(__name__)
+# minify app (may need to turn off when debug)
+minify(app=app, html=True, js=True, cssless=True)
+
 # 复制 default.py 为 myconf.py
 app.config.from_object('config.sustech')
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # 允许使用HTTP进行OAuth

@@ -25,6 +25,7 @@ click==7.1.2
 wtforms==3.0.1
 pillow==9.0.1
 MarkupSafe==2.0.1
+Flask-Minify==0.42
 pdfkit
 oauthlib
 requests
