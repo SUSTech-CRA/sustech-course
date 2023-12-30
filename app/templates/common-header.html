@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {#  if have course, show course#}
     {% if course %}
-    <meta name="description" property="og:description" content="{{ course.name_with_teachers_short }}">
+    <meta name="description" property="og:description" content="Review of {{ course.name_with_teachers_short }} on Niuwa Curriculum Evaluation System">
     {% else %}
     <meta name="description" property="og:description" content="评课是为了更好地选课！">
     {% endif %}
@@ -15,7 +15,8 @@
     <link rel="icon" href="/static/image/favicon.ico">
     <link href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/style.css?ver=20231225" rel="stylesheet">
-    <title>Niuwa Curriculum Evaluation System</title>
+    <meta property="og:title" content="{% if course %}NCES - {{ course.name_with_teachers_short }}{% else %}Niuwa Curriculum Evaluation System{% endif %}" />
+    <title>{% if course %}NCES - {{ course.name_with_teachers_short }}{% else %}Niuwa Curriculum Evaluation System{% endif %}</title>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-FBM6EFBDSN"></script>
     <script>

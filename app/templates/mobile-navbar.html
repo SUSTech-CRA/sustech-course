@@ -3,9 +3,12 @@
 {% else %}
 <form class="ud-pd-sm d-block d-md-none" action="{{ url_for('home.search') }}" method="get">
 {% endif %}
-  <div class="mb-1">
-    <input type="text" name="q" class="form-control" placeholder="搜索你感兴趣的课程或评论，按Enter搜索" value="{{ keyword or '' }}">
-  </div>
+<div class="mb-1 input-group">
+    <input type="text" name="q" class="form-control" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
+    <button type="submit" class="btn btn-secondary" id="search-button">
+        <i class="fa fa-search"></i>
+    </button>
+</div>
 </form>
 
 {% if this_module and this_module!='home.search' and this_module!='home.search_reviews' %}
@@ -62,10 +65,10 @@
 
   {% if this_module and this_module=='home.search' %}
   <a class="btn btn-white float-end d-none d-md-inline-block" href="{{ url_for('home.search_reviews', q=keyword) }}">搜点评</a>
-  <a class="float-end d-md-none" href="{{ url_for('home.search_reviews', q=keyword) }}">搜点评</a>
+  <a class="btn btn-white btn-sm float-end d-md-none" href="{{ url_for('home.search_reviews', q=keyword) }}">搜点评</a>
   {% elif this_module and this_module=='home.search_reviews' %}
   <a class="btn btn-white float-end d-none d-md-inline-block" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程</a>
-  <a class="float-end d-md-none" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程</a>
+  <a class="btn btn-white btn-sm float-end d-md-none" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程</a>
   {% elif this_module and this_module=='home.follow_reviews' and follow_type=='course' %}
   <a class="btn btn-white float-end d-none d-md-inline-block" href="{{ url_for('home.follow_reviews', follow_type='user') }}">
     <i class="fas fa-arrow-right" aria-hidden="true"></i> 关注的人
