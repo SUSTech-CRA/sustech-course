@@ -342,17 +342,40 @@ def forgot_password():
         return redirect(request.args.get('next') or gen_index_url())
     form = ForgotPasswordForm()
     if form.validate_on_submit():
-        email = form['email'].data
-        user = User.query.filter_by(email=email).first()
-        if user:
-            send_reset_password_mail(email)
-            message = _('密码重置邮件已发送。')  #一个反馈信息
-            status = True
+
+        # google recaptcha
+        # recaptcha_response = request.form.get('g-recaptcha-response')
+        # recaptcha_challenge_data = {
+        #     'secret': app.config['RECAPTCHA_SECRET_KEY'],
+        #     'response': recaptcha_response
+        # }
+        # recaptcha_challenge_response = requests.post('https://recaptcha.google.cn/recaptcha/api/siteverify', data=recaptcha_challenge_data)
+
+        # cloudflare
+        recaptcha_response = request.form.get('cf-turnstile-response')
+        recaptcha_challenge_data = {
+            'secret': app.config['RECAPTCHA_SECRET_KEY'],
+            'response': recaptcha_response
+        }
+        recaptcha_challenge_response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify',
+                                                     data=recaptcha_challenge_data)
+
+        recaptcha_challenge_result = recaptcha_challenge_response.json()
+
+        if recaptcha_challenge_result['success']:
+            email = form['email'].data
+            user = User.query.filter_by(email=email).first()
+            if user:
+                send_reset_password_mail(email)
+                message = _('密码重置邮件已发送。')  #一个反馈信息
+                status = True
+            else:
+                message = _('此邮件地址尚未被注册。')
+                status = False
+            return render_template('feedback.html', status=status, message=message)
         else:
-            message = _('此邮件地址尚未被注册。')
-            status = False
-        return render_template('feedback.html', status=status, message=message)
-    return render_template('forgot-password.html', title='忘记密码')
+            return render_template('feedback.html', status=False, message=_('验证码错误，请勿重复提交表单，<a href="/reset-password/">点此返回密码重置页面</a>'), title='忘记密码')
+    return render_template('forgot-password.html', recaptcha_site_key = app.config['RECAPTCHA_SITE_KEY'], title='忘记密码')
 
 @home.route('/reset-password/<string:token>/', methods=['GET','POST'])
 def reset_password(token):
