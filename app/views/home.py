@@ -238,28 +238,52 @@ def signup():
         return redirect(request.args.get('next') or gen_index_url())
     form = RegisterForm()
     if form.validate_on_submit():
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        user = User(username=username, email=email, password=password)
-        email_suffix = email.split('@')[-1]
-        if email_suffix == 'mail.sustech.edu.cn':
-            user.identity = 'Student'
-        elif email_suffix == 'sustech.edu.cn':
-            user.identity = 'Teacher'
-            ok,message = user.bind_teacher(email)
-            #TODO: deal with bind feedback
+        # google
+        # recaptcha_response = request.form.get('g-recaptcha-response')
+        # recaptcha_challenge_data = {
+        #     'secret': app.config['RECAPTCHA_SECRET_KEY'],
+        #     'response': recaptcha_response
+        # }
+        # recaptcha_challenge_response = requests.post('https://recaptcha.google.cn/recaptcha/api/siteverify', data=recaptcha_challenge_data)
+
+        # cloudflare
+        recaptcha_response = request.form.get('cf-turnstile-response')
+        recaptcha_challenge_data = {
+            'secret': app.config['RECAPTCHA_SECRET_KEY'],
+            'response': recaptcha_response
+        }
+        recaptcha_challenge_response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', data=recaptcha_challenge_data)
+
+        recaptcha_challenge_result = recaptcha_challenge_response.json()
+        # print(recaptcha_challenge_result)
+        if recaptcha_challenge_result['success']:
+            username = request.form.get('username')
+            email = request.form.get('email')
+            password = request.form.get('password')
+            user = User(username=username, email=email, password=password)
+            email_suffix = email.split('@')[-1]
+            email_prefix = email.split('@')[0]
+            # if prefix does not contain "list-"
+            if email_prefix.find("list-") == -1:
+                if email_suffix == 'mail.sustech.edu.cn':
+                    user.identity = 'Student'
+                elif email_suffix == 'sustech.edu.cn':
+                    user.identity = 'Teacher'
+                ok,message = user.bind_teacher(email)
+                #TODO: deal with bind feedback
+            else:
+                abort(403, "必须使用科大学生或教师邮箱注册")
+            send_confirm_mail(user.email)
+            user.save()
+            #login_user(user)
+            '''注册完毕后显示一个需要激活的页面'''
+            return render_template('feedback.html', status=True, message=_('我们已经向您发送了激活邮件，请在邮箱中点击激活链接。如果您没有收到邮件，有可能是在垃圾箱中。'), title='注册')
         else:
-            abort(403, "必须使用科大学生或教师邮箱注册")
-        send_confirm_mail(user.email)
-        user.save()
-        #login_user(user)
-        '''注册完毕后显示一个需要激活的页面'''
-        return render_template('feedback.html', status=True, message=_('我们已经向您发送了激活邮件，请在邮箱中点击激活链接。如果您没有收到邮件，有可能是在垃圾箱中。'), title='注册')
+            return render_template('feedback.html', status=False, message=_('验证码错误，请重试。'), title='注册')
 #TODO: log error
     if form.errors:
         print(form.errors)
-    return render_template('signup.html', form=form, title='注册')
+    return render_template('signup.html', form=form, recaptcha_site_key = app.config['RECAPTCHA_SITE_KEY'], title='注册')
 
 
 @home.route('/confirm-email/')

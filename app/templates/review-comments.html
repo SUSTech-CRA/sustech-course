@@ -6,7 +6,7 @@
       <span>{{ comment.content|content_filter|safe|urlize(nofollow=true) }}</span>
       <span class="text-muted small float-end">
         {% if user.is_authenticated %}
-          <span class="fa fa-share-alt grey left-pd-md" aria-hidden="true"></span>
+          <i class="fa-solid fa-reply grey"></i>
           <a href="javascript: reply_comment({{review.id}}, '{{ comment.author.username }}');">回复</a>
         {% endif %}
         {% if user == comment.author or user.is_admin %}
