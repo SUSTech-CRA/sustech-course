@@ -2,141 +2,184 @@
 {% block content %}
 <!--<script src='https://recaptcha.google.cn/recaptcha/api.js'></script>-->
 <script src='https://challenges.cloudflare.com/turnstile/v0/api.js' async defer></script>
+
+{% for message in get_flashed_messages(category_filter=["error"]) %}
+<div class="alert alert-danger" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+
 <div class="container">
-  <div class="row float-element">
-
+  <div class="row">
     {{ error }}
-    <h3 class="blue">注册</h3>
+    <h3 class="text-primary mb-3">注册</h3>
     <hr>
-    <form class="form-horizontal" method="post" action="{{ url_for('home.signup') }}">
-      <div id='csrf-token' class="form-group" type="hiddent">
-        {{ form.csrf_token }}
-      </div>
+    <form class="row g-3" method="post" action="{{ url_for('home.signup') }}" novalidate>
+      <input  hidden name="csrf_token" value="{{ csrf_token() }}">
 
-
-      <div id="regverify-email" class="form-group">
-          <label for="reginput-email" class="col-sm-4 control-label">南科大邮箱，学生请使用<b>数字邮箱</b></label>
-        <div class="col-sm-4">
-          <input type="email" id="reginput-email" name="email" class="form-control" placeholder="sid@mail.sustech.edu.cn or tid@sustech.edu.cn" onchange="regverify('email')">
-          <span class="fa fa-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="fa fa-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="help-block" style="display:none"></span>
-          {% if form.errors.get('email') %}
+      <div class="col-md-6">
+      <label for="reginput-email" class="form-label">南科大邮箱（学生请使用数字邮箱）</label>
+      <input type="email" class="form-control" id="reginput-email" name="email" placeholder="sid@mail.sustech.edu.cn or tid@sustech.edu.cn" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+      <div id="emailFeedback" class="invalid-feedback">请输入有效的邮箱地址</div>
+        {% if form.errors.get('email') %}
+          <div class="invalid-feedback">
             {% for info in form.errors.get('email') %}
               {{ info }}
             {% endfor %}
-          {% endif %}
-        </div>
+          </div>
+        {% endif %}
       </div>
 
-
-
-      <div id="regverify-username" class="form-group">
-        <label for="reginput-username" class="col-sm-2 control-label">用户名</label>
-        <div class="col-sm-4">
-          <input type="text" id="reginput-username" name="username" class="form-control" placeholder="Username" onchange="regverify('username')">
-          <span class="fa fa-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="fa fa-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="help-block" style="display:none"></span>
-          {% if form.errors.get('username') %}
+      <!-- Username Field -->
+      <div class="col-md-6">
+        <label for="reginput-username" class="form-label">用户名</label>
+        <input type="text" class="form-control" id="reginput-username" name="username" placeholder="Username" required>
+        <div id="usernameFeedback" class="invalid-feedback">用户名为空或已被占用</div>
+        {% if form.errors.get('username') %}
+          <div class="invalid-feedback">
             {% for info in form.errors.get('username') %}
               {{ info }}
             {% endfor %}
-          {% endif %}
-        </div>
+          </div>
+        {% endif %}
       </div>
 
-
-
-
-      <div id="regverify-password" class="form-group">
-        <label for="reginput-password" class="col-sm-2 control-label">密码</label>
-        <div class="col-sm-4">
-          <input type="password" name="password" class="form-control" id="reginput-password" placeholder="Password" onchange="checkPassword()">
-          <span class="fa fa-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="fa fa-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="help-block" style="display:none"></span>
-          {% if form.errors.get('password') %}
+    <!-- Password Field -->
+    <div class="col-md-6">
+      <label for="reginput-password" class="form-label">密码</label>
+      <input type="password" class="form-control" id="reginput-password" name="password" placeholder="Password" minlength="8" required>
+      <div id="passwordLengthFeedback" class="invalid-feedback">密码长度必须至少为8个字符</div>
+        {% if form.errors.get('password') %}
+          <div class="invalid-feedback">
             {% for info in form.errors.get('password') %}
               {{ info }}
             {% endfor %}
-          {% endif %}
-        </div>
+          </div>
+        {% endif %}
       </div>
 
-      <div id="regverify-confirm-password" class="form-group">
-        <label for="reginput-confirm-password" class="col-sm-2 control-label">确认密码</label>
-        <div class="col-sm-4">
-          <input type="password" class="form-control" name="confirm_password" id="reginput-confirm-password" placeholder="Confirm Password" onchange="checkConfirmPassword()">
-          <span class="fa fa-ok form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="fa fa-remove form-control-feedback" aria-hidden="true" style="display:none"></span>
-          <span class="help-block" style="display:none"></span>
-        </div>
-      </div>
-    完成验证码
-    <!--<div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>-->
-    <div class="cf-turnstile" data-sitekey="{{ recaptcha_site_key }}"></div>
+    <!-- Confirm Password Field -->
+    <div class="col-md-6">
+      <label for="reginput-confirm-password" class="form-label">确认密码</label>
+      <input type="password" class="form-control" id="reginput-confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+      <div id="confirmPasswordFeedback" class="invalid-feedback">密码不匹配</div>
+    </div>
 
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-4">
-          <button type="submit" class="btn btn-blue btn-block">注册</button>
-        </div>
+      <div class="col-12">
+        完成验证码
+        <div class="cf-turnstile" data-sitekey="{{ recaptcha_site_key }}"></div>
+      </div>
+
+      <div class="col-12">
+        <button type="submit" class="btn btn-blue btn-lg" id="submit-button" disabled=True>注册</button>
       </div>
     </form>
 
-    <div class="row ud-pd-md">
-      <div class="col-sm-offset-2 col-sm-4">
+    <div class="row mt-3">
+      <div class="col">
         <span class="text-muted">已有账号？ <a href="{{ url_for('home.signin') }}">马上登录</a></span>
       </div>
     </div>
-
   </div>
 </div>
 {% endblock %}
 
-
 {% block script %}
 <script>
- $('#reginput-email').focus();
- function inputFeedback(elem, ok, error_msg) {
-   elem.find('.form-control-feedback').hide();
-   if (ok) {
-     elem.attr('class', 'form-group has-success has-feedback');
-     elem.find('.glyphicon-ok').show();
-     elem.find('.help-block').hide();
-   } else {
-     elem.attr('class', 'form-group has-error has-feedback');
-     elem.find('.help-block').text(error_msg);
-     elem.find('.help-block').show();
-     elem.find('.glyphicon-remove').show();
-   }
- }
- function regverify(name) {
-   $.ajax({
-     type: "get",
-     url: "{{ url_for('api.reg_verify') }}",
-     async: true,
-     data: {
-       name: name,
-       value: $('#reginput-' + name).val(),
-     },
-     success: function(data) {
-       elem = $('#regverify-' + name);
-       inputFeedback(elem, (data == 'OK'), data);
-     },
-     error: function(err) {
-       alert('数据通信错误: ' + err.toString());
-     }
-   });
- }
- function checkPassword() {
-   pwd = $('#reginput-password').val();
-   elem = $('#regverify-password');
-   inputFeedback(elem, (pwd.length >= 6), '密码长度必须大于等于 6 个字符！');
- }
- function checkConfirmPassword() {
-   elem = $('#regverify-confirm-password');
-   inputFeedback(elem, ($('#reginput-password').val() === $('#reginput-confirm-password').val()), '两次输入的密码不匹配！');
- }
+  $(document).ready(function () {
+    $('#reginput-email').focus();
+
+    var form = document.querySelector('form');
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+
+  // Function to check the overall validity and toggle the submit button
+  function toggleSubmitButton() {
+    var usernameValid = !$('#reginput-username').hasClass('is-invalid') && $('#reginput-username').val().length > 0;
+    var passwordsMatch = $('#reginput-password').val() === $('#reginput-confirm-password').val();
+
+    $('#submit-button').prop('disabled', !(usernameValid && passwordsMatch));
+  }
+
+  // Username validation with button control
+  $('#reginput-username').on('input', function() {
+    var username = $(this).val();
+    if (username.length > 0) {
+      $.ajax({
+        type: "get",
+        url: "{{ url_for('api.reg_verify') }}",
+        data: {
+          name: "username",
+          value: username
+        },
+        success: function(response) {
+          if (response === 'OK') {
+            $('#usernameFeedback').hide();
+            $('#reginput-username').removeClass('is-invalid');
+            $('#reginput-username').addClass('is-valid')
+          } else {
+            $('#usernameFeedback').show();
+            $('#reginput-username').removeClass('is-valid');
+            $('#reginput-username').addClass('is-invalid');
+          }
+          toggleSubmitButton();
+        }
+      });
+    } else {
+      $('#reginput-username').removeClass('is-valid');
+      $('#reginput-username').addClass('is-invalid');
+      toggleSubmitButton();
+    }
+  });
+
+    // Email format validation
+  $('#reginput-email').on('input', function() {
+    if (this.validity.typeMismatch || this.validity.patternMismatch) {
+      $('#emailFeedback').show();
+      $(this).removeClass('is-valid');
+      $(this).addClass('is-invalid');
+    } else {
+      $('#emailFeedback').hide();
+      $(this).removeClass('is-invalid');
+      $(this).addClass('is-valid');
+    }
+  });
+
+  // Password length validation
+  $('#reginput-password').on('input', function() {
+    if (this.validity.tooShort) {
+      $('#passwordLengthFeedback').show();
+      $(this).removeClass('is-valid');
+      $(this).addClass('is-invalid');
+    } else {
+      $('#passwordLengthFeedback').hide();
+      $(this).removeClass('is-invalid');
+      $(this).addClass('is-valid');
+    }
+    toggleSubmitButton(); // Assuming you have the toggleSubmitButton function
+  });
+
+  // Password match validation
+  $('#reginput-confirm-password, #reginput-password').on('input', function() {
+    var password = $('#reginput-password').val();
+    var confirmPassword = $('#reginput-confirm-password').val();
+
+    if (password !== confirmPassword) {
+      $('#confirmPasswordFeedback').show();
+      $('#reginput-confirm-password').removeClass('is-valid')
+      $('#reginput-confirm-password').addClass('is-invalid');
+    } else {
+      $('#confirmPasswordFeedback').hide();
+      $('#reginput-confirm-password').removeClass('is-invalid');
+      $('#reginput-confirm-password').addClass('is-valid');
+    }
+    toggleSubmitButton();
+  });
+  });
 </script>
 {% endblock %}

@@ -255,11 +255,23 @@ def signup():
         recaptcha_challenge_response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', data=recaptcha_challenge_data)
 
         recaptcha_challenge_result = recaptcha_challenge_response.json()
-        # print(recaptcha_challenge_result)
         if recaptcha_challenge_result['success']:
             username = request.form.get('username')
             email = request.form.get('email')
             password = request.form.get('password')
+
+            # 检查用户名是否已被注册
+            existing_user = User.query.filter_by(username=username).first()
+            if existing_user:
+                flash('该用户名已被注册，请选择其他用户名。')
+                return render_template('signup.html', form=form, recaptcha_site_key=app.config['RECAPTCHA_SITE_KEY'], title='注册')
+
+            # 检查邮箱是否已被注册
+            existing_email = User.query.filter_by(email=email).first()
+            if existing_email:
+                flash('该邮箱已被注册，请使用其他邮箱。')
+                return render_template('signup.html', form=form, recaptcha_site_key=app.config['RECAPTCHA_SITE_KEY'], title='注册')
+
             user = User(username=username, email=email, password=password)
             email_suffix = email.split('@')[-1]
             email_prefix = email.split('@')[0]
@@ -282,7 +294,9 @@ def signup():
             return render_template('feedback.html', status=False, message=_('验证码错误，请重试。'), title='注册')
 #TODO: log error
     if form.errors:
+        # {'username': ['此用户名已被他人使用！'], 'email': ['此邮件地址已被注册！']}
         print(form.errors)
+        flash(form.errors, 'error')
     return render_template('signup.html', form=form, recaptcha_site_key = app.config['RECAPTCHA_SITE_KEY'], title='注册')
 
 
