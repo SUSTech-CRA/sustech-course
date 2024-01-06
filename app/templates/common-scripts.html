@@ -8,10 +8,12 @@ $(document).ready(function() {
     function updateDarkMode() {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             // 如果是暗模式
-            $('.navbar, .nav, .form-control, .btn, .pagination, .form-check-input, .dropdown, table').attr('data-bs-theme', 'dark');
+            //$('.navbar, .nav, .form-control, .btn, .pagination, .form-check-input, .dropdown, table').attr('data-bs-theme', 'dark');
+            $('html').attr('data-bs-theme', 'dark');
         } else {
             // 如果是亮模式或未定义
-            $('.navbar, .nav, .form-control, .btn, .pagination, .form-check-input, .dropdown, table').attr('data-bs-theme', 'light');
+            //$('.navbar, .nav, .form-control, .btn, .pagination, .form-check-input, .dropdown, table').attr('data-bs-theme', 'light');
+            $('html').attr('data-bs-theme', 'light');
         }
     }
 
