@@ -4,22 +4,22 @@ $(document).ready(function() {
     $('.review table').addClass('table table-sm table-striped');
     $('.course-overview-table table').addClass('table');
 
-    // 检查是否处于暗模式
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        // 如果是暗模式，则添加 data-bs-theme="dark"
-        $('.navbar').attr('data-bs-theme', 'dark');
-        $('.nav').attr('data-bs-theme', 'dark');
-        $('.form-control').attr('data-bs-theme', 'dark');
-        $('.btn').attr('data-bs-theme', 'dark');
-        $('.pagination').attr('data-bs-theme', 'dark');
-        $('.form-check-input').attr('data-bs-theme', 'dark');
-        $('.dropdown').attr('data-bs-theme', 'dark');
-        $('table').attr('data-bs-theme', 'dark');
-    } else {
-        // 如果是亮模式或未定义，则可以选择添加亮模式特定的代码
-        //$('table').attr('data-bs-theme', 'light');
-        //$('.form-control').attr('data-bs-theme', 'light');
+    // 定义一个函数来更新暗色模式
+    function updateDarkMode() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // 如果是暗模式
+            $('.navbar, .nav, .form-control, .btn, .pagination, .form-check-input, .dropdown, table').attr('data-bs-theme', 'dark');
+        } else {
+            // 如果是亮模式或未定义
+            $('.navbar, .nav, .form-control, .btn, .pagination, .form-check-input, .dropdown, table').attr('data-bs-theme', 'light');
+        }
     }
+
+    // 初始时调用该函数以设置正确的主题
+    updateDarkMode();
+
+    // 设置监听器以在暗色模式变化时更新
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(updateDarkMode);
 });
  $.ajaxSetup({
      beforeSend: function(xhr, settings) {

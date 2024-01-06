@@ -180,6 +180,24 @@
                                                 setTimeout(loadPlotly, 50); // 每隔50毫秒检查一次
                                             }
                                         }
+                                        function updatePlotlyTheme() {
+                                            var isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                                            // 根据暗色模式更新颜色和图表布局
+                                            var backgroundColor = isDarkMode ? '#333' : '#fff';
+                                            var textColor = isDarkMode ? '#fff' : '#333';
+
+                                            var updatedLayout = {
+                                                paper_bgcolor: backgroundColor,
+                                                plot_bgcolor: backgroundColor,
+                                                font: {
+                                                    color: textColor
+                                                }
+                                            };
+
+                                            // 更新图表
+                                            Plotly.relayout('plotly-div', updatedLayout);
+                                        }
 
                                         loadPlotly(); // 启动检查流程
 
@@ -257,6 +275,9 @@
                                                 staticPlot: true
                                             }
                                             Plotly.newPlot('plotly-div', plotData, layout, plotly_config);
+                                            updatePlotlyTheme();
+                                            // 监听系统颜色方案的改变
+                                            window.matchMedia('(prefers-color-scheme: dark)').addListener(updatePlotlyTheme);
                                         }
                                     </script>
                             </div>
