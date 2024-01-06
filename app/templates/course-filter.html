@@ -1,10 +1,10 @@
-<div class="select-box desktop mb-2"> <!-- 使用 mb-2 替代内联 padding-bottom -->
+<div class="select-box desktop mb-2 course-type-select-desktop">
   {% if course_type_dict %}
   <div class="d-flex align-items-center">
     <strong>课程类别：</strong>
-    <ul class="list-inline mb-0 ms-2"> <!-- 使用 mb-0 和 ms-2 替代内联样式 -->
+    <ul class="list-inline mb-0 ms-2">
       <li class="list-inline-item {% if not course_type %}active{% endif %}">
-        <a class="py-1 px-2" href="{{ url_for(this_module, q=keyword, sort_by=sort_by) }}">全部</a> <!-- 使用 py-1 和 px-2 替代内联 padding -->
+        <a class="py-1 px-2" href="{{ url_for(this_module, q=keyword, sort_by=sort_by) }}">全部</a>
       </li>
       {% for type, course_type_label in course_type_dict.items() %}
       <li class="list-inline-item {% if type==course_type %}active{% endif %}">

@@ -1,0 +1,97 @@
+/*darkmode override*/
+@media (prefers-color-scheme: dark) {
+    .text-muted {
+        color: #b4b4b4 !important; /* 暗模式下的静音文本颜色，使用 !important 覆盖 Bootstrap 的样式 */
+    }
+    body {
+        background-color: #121212; /* 暗色模式下的背景色 */
+        color: #e0e0e0; /* 暗色模式下的默认文字颜色 */
+    }
+
+    .float-element { background-color: #1e1e1e; }
+    .dashed { border-bottom: 1px #444 dashed; }
+    .solid { border-bottom: 1px #444 solid; }
+    .hr-box { border-bottom: 1px #444 solid; }
+
+    .blue { color: #699fcf; }
+    .grey { color: #aaa; }
+    .dark-grey { color: #888; }
+    a { color: #699fcf; }
+    a:hover, a:focus { filter: brightness(120%); }
+
+    .shadow { box-shadow: 3px 3px 2px #222; }
+
+    .tips {
+        border: 1px #444 dashed;
+        background: #1e1e1e;
+        color: #ccc;
+    }
+    .status-message { color: #ccc; }
+
+    .ck {
+        background-color: #fefefe; /* 暗色模式下的背景色 */
+        color: #010101; /* 暗色模式下的默认文字颜色 */
+    }
+
+    /*blockquote {*/
+    /*    border-left: 2px solid #699fcf;*/
+    /*    background: #1e1e1e;*/
+    /*}*/
+    /*blockquote::before { color: #699fcf; }*/
+
+    /* 调整表格样式 */
+
+
+
+    /* Navbar调整 */
+    .navbar-brand { color: #699fcf; }
+
+    /* 其他可能需要调整的元素... */
+        /* 调整卡片组件 */
+    .card {
+        background-color: #242424;
+        color: #ddd;
+    }
+
+    /* 调整下拉菜单 */
+    .dropdown-menu {
+        background-color: #333;
+        color: #ddd;
+    }
+
+    /* 调整模态框 */
+    .modal-content {
+        background-color: #242424;
+        color: #ddd;
+    }
+
+    /* 调整表单输入 */
+    .form-control {
+        background-color: #333;
+        border: 1px solid #444;
+        color: #ddd;
+    }
+
+    /* 调整导航栏 */
+    .navbar {
+        background-color: #333;
+        color: #ddd;
+    }
+
+    .select-box a {
+        color: #ddd;
+    }
+
+
+    /*按钮*/
+    .btn-white {
+        background-color: #333;
+    }
+    .btn-grey {
+        color: #ddd;
+        background-color: #333;
+        border: 1px #3f3f3f solid;
+    }
+
+
+}

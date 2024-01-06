@@ -443,69 +443,31 @@ a.nounderline:active { text-decoration: none; }
 
 /*引号*/
 
-blockquote {
-  font-size: 0.9em; /* 字号略小于16px */
-  margin: 10px 0; /* 简化外边距 */
-  padding: 10px 20px; /* 简化内边距 */
-  border-left: 2px solid #337ab7; /* 边框更细，颜色改为蓝色 */
-  position: relative; /* 保持相对定位以便于放置引号 */
-  background: #fafafa; /* 保留灰色背景 */
-}
+/*blockquote {*/
+/*  font-size: 0.9em; !* 字号略小于16px *!*/
+/*  margin: 10px 0; !* 简化外边距 *!*/
+/*  padding: 10px 20px; !* 简化内边距 *!*/
+/*  border-left: 2px solid #337ab7; !* 边框更细，颜色改为蓝色 *!*/
+/*  position: relative; !* 保持相对定位以便于放置引号 *!*/
+/*  background: #fafafa; !* 保留灰色背景 *!*/
+/*}*/
 
-blockquote::before {
-  content: "\201C"; /* 引号内容 */
-  color: #337ab7; /* 将引号颜色改为蓝色 */
-  font-size: 2em; /* 缩小引号大小 */
-  position: absolute; /* 绝对定位引号 */
-  left: 10px; /* 左侧位置 */
-  top: 0; /* 顶部位置 */
-}
+/*blockquote::before {*/
+/*  content: "\201C"; !* 引号内容 *!*/
+/*  color: #337ab7; !* 将引号颜色改为蓝色 *!*/
+/*  font-size: 2em; !* 缩小引号大小 *!*/
+/*  position: absolute; !* 绝对定位引号 *!*/
+/*  left: 10px; !* 左侧位置 *!*/
+/*  top: 0; !* 顶部位置 *!*/
+/*}*/
 
-blockquote::after {
-  content: ''; /* 清除原有的after内容 */
-}
+/*blockquote::after {*/
+/*  content: ''; !* 清除原有的after内容 *!*/
+/*}*/
 
 /*表格*/
 /* 针对.review类中的表格的样式 */
-.review table {
-  max-width: 100%; /* 表格的最大宽度为100% */
-  border-collapse: collapse; /* 移除表格间的间隙 */
-  border: 1px solid #ddd; /* 表格的外边框 */
-  box-sizing: border-box; /* 确保边框和内边距不会增加宽度 */
-}
 
-/* 使表格可以滚动 */
-.review {
-  overflow-x: auto; /* 当表格宽度超过容器时，出现水平滚动条 */
-}
-
-.review table th,
-.review table td {
-  text-align: left; /* 文字左对齐 */
-  padding: 8px; /* 单元格内边距 */
-  border: 1px solid #ddd; /* 单元格边框 */
-}
-
-/* 表头样式 */
-.review table th {
-  background-color: rgba(51, 122, 183, 0.05); /* 表头背景色 */
-  color: #333; /* 表头文字颜色 */
-}
-
-/*!* 鼠标悬停在行上时的样式 *!*/
-/*.review table tr:hover {*/
-/*  background-color: rgba(51, 122, 183, 0.2); !* 悬停时行的背景色 *!*/
-/*}*/
-
-/* 表格的奇数行样式 */
-.review table tr:nth-child(odd) {
-  background-color: rgba(51, 122, 183, 0.05); /* 奇数行背景色 */
-}
-
-/* 表格的偶数行样式 */
-/*.review table tr:nth-child(even) {*/
-/*  background-color: #f9f9f9; !* 偶数行背景色 *!*/
-/*}*/
 
 /*navbar color*/
 .navbar-brand {

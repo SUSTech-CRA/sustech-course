@@ -1,4 +1,26 @@
 <script>
+$(document).ready(function() {
+    // 为 .review 类中的所有表格添加 Bootstrap 的表格样式类
+    $('.review table').addClass('table table-sm table-striped');
+    $('.course-overview-table table').addClass('table');
+
+    // 检查是否处于暗模式
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // 如果是暗模式，则添加 data-bs-theme="dark"
+        $('.navbar').attr('data-bs-theme', 'dark');
+        $('.nav').attr('data-bs-theme', 'dark');
+        $('.form-control').attr('data-bs-theme', 'dark');
+        $('.btn').attr('data-bs-theme', 'dark');
+        $('.pagination').attr('data-bs-theme', 'dark');
+        $('.form-check-input').attr('data-bs-theme', 'dark');
+        $('.dropdown').attr('data-bs-theme', 'dark');
+        $('table').attr('data-bs-theme', 'dark');
+    } else {
+        // 如果是亮模式或未定义，则可以选择添加亮模式特定的代码
+        //$('table').attr('data-bs-theme', 'light');
+        //$('.form-control').attr('data-bs-theme', 'light');
+    }
+});
  $.ajaxSetup({
      beforeSend: function(xhr, settings) {
          if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
