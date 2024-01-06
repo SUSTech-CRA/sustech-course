@@ -272,8 +272,8 @@ def reg_verify():
 
     if name == 'username':
         return validate_username(value)
-    elif name == 'email':
-        return validate_email(value)
+    # elif name == 'email':
+    #     return validate_email(value)
     return 'Invalid Request', 400
 
 @api.route('/notifications/', methods=['POST'])
