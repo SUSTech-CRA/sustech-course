@@ -6,8 +6,8 @@
         <div class="row float-element">
             <div class="row">
                 <div class="col-md-8 inline-h3">
-                    <span class="blue h3">{{ course.name }}</span><span class="h3 blue mobile">{% if course.teachers %}（
-                    {{ course.teacher_names_display|name_display_short }}）{% endif %}</span>
+                    <span class="blue h3 fw-bold">{{ course.name }}</span><span class="h5 blue mobile">{% if course.teachers %}
+                    （{{ course.teacher_names_display|name_display_short }}）{% endif %}</span>
                     <span class="small grey align-bottom left-pd-sm desktop">{{ course.term_ids|term_display }} &nbsp;课程号：{{ course.courseries }}</span>
                     <br><span
                         class="small grey align-bottom mobile">{{ course.term_ids|term_display }} &nbsp;课程号：{{ course.courseries }}</span>
