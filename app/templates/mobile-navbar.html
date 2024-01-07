@@ -5,7 +5,7 @@
 {% endif %}
 <div class="mb-1 input-group">
     <input type="text" name="q" class="form-control" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
-    <button type="submit" class="btn btn-secondary" id="search-button">
+    <button type="submit" class="btn btn-secondary" id="search-button-down">
         <i class="fa fa-search"></i>
     </button>
 </div>
@@ -50,12 +50,12 @@
 
 <div class="pt-3 pb-2">
   {% if title %}
-  <span class="text-primary h4 d-none d-md-block">{{ title }}
+  <span class="blue h4 d-none d-md-block">{{ title }}
     {% if this_module == 'course.index' and course_type_dict and course_type %}
     「{{ course_type_dict[course_type][0] }}」
     {% endif %}
   </span>
-  <span class="text-primary h5 d-block d-md-none">
+  <span class="blue h5 d-block d-md-none">
     {% if this_module == 'course.index' and course_type_dict and course_type %}
       「{{ course_type_dict[course_type][0] }}」
     {% endif %}
