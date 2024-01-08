@@ -31,8 +31,8 @@
      if (!elem) return;
      elem.text(parseInt(elem.text()) + 1);
      elem.parent().attr('href', 'javascript:cancel_upvote_review("' + review_id + '")');
-     elem.parent().find('span.glyphicon').removeClass('grey');
-     elem.parent().find('span.glyphicon').addClass('blue');
+     elem.parent().find('span.fa-thumbs-up').removeClass('grey');
+     elem.parent().find('span.fa-thumbs-up').addClass('blue');
 
      $.post("{{ url_for('api.review_upvote') }}", { review_id: review_id }, function(o) {
        if (typeof o.count != "undefined") {
@@ -52,8 +52,8 @@
      if (!elem) return;
      elem.text(parseInt(elem.text()) - 1);
      elem.parent().attr('href', 'javascript:upvote_review("' + review_id + '")');
-     elem.parent().find('span.glyphicon').removeClass('blue');
-     elem.parent().find('span.glyphicon').addClass('grey');
+     elem.parent().find('span.fa-thumbs-up').removeClass('blue');
+     elem.parent().find('span.fa-thumbs-up').addClass('grey');
 
      $.post("{{ url_for('api.review_cancel_upvote') }}", { review_id: review_id }, function(o) {
        if (typeof o.count != "undefined") {

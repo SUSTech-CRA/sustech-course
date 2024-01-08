@@ -8,10 +8,10 @@
         color: #e0e0e0; /* 暗色模式下的默认文字颜色 */
     }
 
-    .float-element { background-color: #1e1e1e; }
+    .float-element { background-color: var(--bs-body-bg); }
     .dashed { border-bottom: 1px #444 dashed; }
     .solid { border-bottom: 1px #444 solid; }
-    .hr-box { border-bottom: 1px #444 solid; }
+    /*.hr-box { border-bottom: 1px #444 solid; }*/
 
     .blue { color: #699fcf; }
     .grey { color: #aaa; }
@@ -19,23 +19,19 @@
     a { color: #699fcf; }
     a:hover, a:focus { filter: brightness(120%); }
 
-    .shadow { box-shadow: 3px 3px 2px #222; }
+    /*.shadow { box-shadow: 3px 3px 2px #222; }*/
 
-    .tips {
-        border: 1px #444 dashed;
-        background: #1e1e1e;
-        color: #ccc;
-    }
+    /*.tips {*/
+    /*    border: 1px #444 dashed;*/
+    /*    background: var(--bs-body-bg);*/
+    /*    color: #ccc;*/
+    /*}*/
     .status-message { color: #ccc; }
 
-    .ck {
-        background-color: #fefefe; /* 暗色模式下的背景色 */
-        color: #010101; /* 暗色模式下的默认文字颜色 */
-    }
 
     /*blockquote {*/
     /*    border-left: 2px solid #699fcf;*/
-    /*    background: #1e1e1e;*/
+    /*    background: var(--bs-body-bg);*/
     /*}*/
     /*blockquote::before { color: #699fcf; }*/
 
@@ -48,48 +44,49 @@
 
     /* 其他可能需要调整的元素... */
         /* 调整卡片组件 */
-    .card {
-        background-color: #242424;
-        color: #ddd;
-    }
+    /*.card {*/
+    /*    background-color: #242424;*/
+    /*    color: #ddd;*/
+    /*}*/
 
     /* 调整下拉菜单 */
-    .dropdown-menu {
-        background-color: #333;
-        color: #ddd;
-    }
+    /*.dropdown-menu {*/
+    /*    background-color: #333;*/
+    /*    color: #ddd;*/
+    /*}*/
 
     /* 调整模态框 */
-    .modal-content {
-        background-color: #242424;
-        color: #ddd;
-    }
+    /*.modal-content {*/
+    /*    background-color: #242424;*/
+    /*    color: #ddd;*/
+    /*}*/
 
     /* 调整表单输入 */
-    .form-control {
-        background-color: #333;
-        border: 1px solid #444;
-        color: #ddd;
-    }
+    /*.form-control {*/
+    /*    background-color: #333;*/
+    /*    border: 1px solid #444;*/
+    /*    color: #ddd;*/
+    /*}*/
 
     /* 调整导航栏 */
     .navbar {
-        background-color: #333;
+        background-color: var(--bs-body-bg);
         color: #ddd;
     }
 
-    .select-box a {
-        color: #ddd;
-    }
+    /*.select-box a {*/
+    /*    color: #ddd;*/
+    /*}*/
+
 
 
     /*按钮*/
     .btn-white {
-        background-color: #333;
+        background-color: var(--bs-body-bg);
     }
     .btn-grey {
         color: #ddd;
-        background-color: #333;
+        background-color: var(--bs-body-bg);
         border: 1px #3f3f3f solid;
     }
 
