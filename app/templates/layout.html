@@ -2,7 +2,7 @@
 
 <body>
   <div id="wrap">
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg shadow">
       <div class="container">
         <a class="navbar-brand fw-bold desktop" href="{{ url_for('home.index') }}">
           <i class="fa-solid fa-pencil"></i> Niuwa Curriculum Evaluation System
@@ -56,7 +56,7 @@
             </li>
           </ul>
           {% else %}
-          <button type="button" class="btn btn-primary mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
+          <button type="button" class="btn btn-blue mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
           {% endif %}
         </div>
       </div>
@@ -66,12 +66,12 @@
   {% if not current_user.is_authenticated %}
   <div class="modal fade" id="signin" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-signin">
-      <div class="modal-content">
+      <div class="modal-content shadow">
         <form id="signin-form" class="form-signin">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <div class="form-signin-heading">
             <span class="h2">请登录</span>
-            <a class="btn btn-outline-primary float-right" href="/signup">注册</a>
+            <a class="btn btn-white float-right" href="/signup">注册</a>
           </div>
           <div id="signin-alert" role="alert" class="display: none"></div>
           <label for="inputEmail" class="sr-only">用户名</label>
