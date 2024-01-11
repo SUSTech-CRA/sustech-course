@@ -99,12 +99,19 @@
   </div>
   {% endif %}
 
-<div class="container">
+    <!-- banner -->
+    {% if banner %}
+    <div class="container" style="font-size: 13px">
+      {% if banner.mobile %}
+      <div class="text-center banner mobile">{{ banner.mobile|safe }}</div>
+      {% endif %}
 
-<div class="text-center banner" style="font-size: 13px">NCES现已支持CRA SSO / CAS登录，详情请见<a href="https://blog.sustcra.com/p/cra-sharelatex-sso-cas/">此博客</a>。 界面近期更新中，可能不稳定，如遇问题请反馈至 service@cra.moe <br>🌝NCES现已新增暗色模式🌚</div>
-
-</div>
-<!-- end banner -->
+      {% if banner.desktop %}
+      <div class="text-center banner desktop">{{ banner.desktop|safe }}</div>
+      {% endif %}
+    </div>
+    <!-- end banner -->
+    {% endif %}
 
 
   {% block content %}
