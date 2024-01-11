@@ -1,4 +1,4 @@
-name: nces
+name: nces2
 channels:
   - conda-forge
   - defaults
@@ -105,3 +105,4 @@ dependencies:
       - wtforms==3.0.1
       - xxhash==3.4.1
       - zipp==3.16.2
+      - cachelib==0.10.2
