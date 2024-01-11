@@ -17,7 +17,7 @@ def index(lang_en=False):
     site_stat = dict()
     site_stat['user_count'] = User.query.count()
     site_stat['course_count'] = Course.query.count()
-    site_stat['review_count'] = Review.query.count()
+    site_stat['review_count'] = Review.query.filter(Review.is_hidden == False).filter(Review.is_blocked == False).count()
     site_stat['registered_teacher_count'] = User.query.filter(User.identity == 'Teacher').count()
     site_stat['course_avg_rate'] = db.session.query(db.func.avg(Review.rate)).first()[0]
     site_stat['course_avg_rate_count'] = db.session.query(db.func.count(Review.id) / db.func.count(db.func.distinct(Review.course_id))).first()[0]
@@ -36,7 +36,9 @@ def index(lang_en=False):
     user_review_count_dist = db.session.query(db.text('review_count'), func.count().label('user_count')).select_from(user_review_counts).group_by(db.text('review_count')).order_by(db.text('review_count')).all()
 
     # find the distribution of publication dates of reviews (count per month)
-    review_dates = db.session.query(func.year(Review.publish_time).label('publish_year'), func.month(Review.publish_time).label('publish_month'), func.count().label('review_count')).group_by(db.text('publish_year'), db.text('publish_month')).order_by(db.text('publish_year'), db.text('publish_month')).all()
+    review_dates = (db.session.query(func.year(Review.publish_time).label('publish_year'), func.month(Review.publish_time).label('publish_month'), func.count().label('review_count'))
+                              .filter(Review.is_hidden == False).filter(Review.is_blocked == False)
+                              .group_by(db.text('publish_year'), db.text('publish_month')).order_by(db.text('publish_year'), db.text('publish_month')).all())
 
     # find the distribution of registration dates of user (count per month)
     user_reg_dates = db.session.query(func.year(User.register_time).label('reg_year'), func.month(User.register_time).label('reg_month'), func.count().label('user_count')).group_by(db.text('reg_year'), db.text('reg_month')).order_by(db.text('reg_year'), db.text('reg_month')).all()
@@ -78,7 +80,7 @@ def view_ranking():
     # join Teacher, Course, Review, Dept classes via course_teachers intermediate table
     teacher_rank_join = sql.outerjoin(sql.join(Teacher, sql.join(course_teachers, sql.join(Course, Review, Course.id == Review.course_id), course_teachers.c.course_id == Course.id), course_teachers.c.teacher_id == Teacher.id), Dept, Dept.id == Course.dept_id)
     # find teachers with low rating courses (average rate < 8)
-    teachers_with_low_rating_course = sql.select(Teacher.id).join(course_teachers).join(Course).join(CourseRate).filter(CourseRate._rate_average < 8)
+    teachers_with_low_rating_course = sql.select(Teacher.id).join(course_teachers).join(Course).join(CourseRate).filter(CourseRate._rate_average > 0).filter(CourseRate._rate_average < 8)
     # find teachers with at least 3 high rating courses (average rate > 9)
     teacher_query_with_high_rating_course = sql.select(Teacher.id.label('teacher_id'), func.count(CourseRate.id).label('course_count')).select_from(sql.join(Teacher, sql.join(course_teachers, CourseRate, course_teachers.c.course_id == CourseRate.id), Teacher.id == course_teachers.c.teacher_id)).filter(CourseRate._rate_average > 9).group_by(Teacher.id)
     teachers_with_high_rating_course = db.session.query(db.text('teacher_id')).select_from(teacher_query_with_high_rating_course).filter(db.text('course_count >= 3')).all()
@@ -132,13 +134,15 @@ def view_ranking():
                            .limit(topk_count).all())
 
     # find top 10 reviews with the most number of upvotes
-    review_rank_join = sql.join(User, sql.join(Course, Review, Course.id == Review.course_id), User.id == Review.author_id)
+    # WARNING: ALL REVIEW QUERYS MUST CONTAIN "is_anonymous", otherwise anonymous reviews will be leaked!
+    # review_rank_join = sql.join(User, sql.join(Course, Review, Course.id == Review.course_id), User.id == Review.author_id)
     review_rank = (db.session.query(Course.id.label('course_id'),
                                     Course.name.label('course_name'),
                                     Review.id.label('review_id'),
                                     User.id.label('author_id'),
                                     User.username.label('author_username'),
-                                    Review.upvote_count.label('review_upvotes_count'))
+                                    Review.upvote_count.label('review_upvotes_count'),
+                                    Review.is_anonymous.label('is_anonymous'))
                              .join(User).join(Course)
                              .filter(Review.is_blocked == False)
                              .filter(Review.is_hidden == False)
@@ -154,7 +158,8 @@ def view_ranking():
                                            User.id.label('author_id'),
                                            User.username.label('author_username'),
                                            Review.upvote_count.label('review_upvotes_count'),
-                                           func.length(Review.content).label('review_length'))
+                                           func.length(Review.content).label('review_length'),
+                                           Review.is_anonymous.label('is_anonymous'))
                                     .join(User).join(Course)
                                     .filter(Review.is_blocked == False)
                                     .filter(Review.is_hidden == False)

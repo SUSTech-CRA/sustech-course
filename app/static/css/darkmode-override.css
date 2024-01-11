@@ -1,5 +1,9 @@
 /*darkmode override*/
+
 @media (prefers-color-scheme: dark) {
+    :root {
+        --bs-body-bg: #212529;
+    }
     .text-muted {
         color: #b4b4b4; /* 暗模式下的静音文本颜色，使用 !important 覆盖 Bootstrap 的样式 */
     }
@@ -74,9 +78,10 @@
         color: #ddd;
     }
 
-    /*.select-box a {*/
-    /*    color: #ddd;*/
-    /*}*/
+    /*课程列表的文字颜色*/
+    .select-box a {
+        color: #ddd;
+    }
 
 
 

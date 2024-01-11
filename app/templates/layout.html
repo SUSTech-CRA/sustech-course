@@ -2,7 +2,7 @@
 
 <body>
   <div id="wrap">
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg shadow">
       <div class="container">
         <a class="navbar-brand fw-bold desktop" href="{{ url_for('home.index') }}">
           <i class="fa-solid fa-pencil"></i> Niuwa Curriculum Evaluation System
@@ -56,7 +56,7 @@
             </li>
           </ul>
           {% else %}
-          <button type="button" class="btn btn-primary mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
+          <button type="button" class="btn btn-blue mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
           {% endif %}
         </div>
       </div>
@@ -66,12 +66,12 @@
   {% if not current_user.is_authenticated %}
   <div class="modal fade" id="signin" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-signin">
-      <div class="modal-content">
+      <div class="modal-content shadow">
         <form id="signin-form" class="form-signin">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <div class="form-signin-heading">
             <span class="h2">请登录</span>
-            <a class="btn btn-outline-primary float-right" href="/signup">注册</a>
+            <a class="btn btn-white float-right" href="/signup">注册</a>
           </div>
           <div id="signin-alert" role="alert" class="display: none"></div>
           <label for="inputEmail" class="sr-only">用户名</label>
@@ -99,12 +99,19 @@
   </div>
   {% endif %}
 
-<div class="container">
+    <!-- banner -->
+    {% if banner %}
+    <div class="container" style="font-size: 13px">
+      {% if banner.mobile %}
+      <div class="text-center banner mobile">{{ banner.mobile|safe }}</div>
+      {% endif %}
 
-<div class="text-center banner" style="font-size: 13px">NCES现已支持CRA SSO / CAS登录，详情请见<a href="https://blog.sustcra.com/p/cra-sharelatex-sso-cas/">此博客</a>。 界面近期更新中，可能不稳定，如遇问题请反馈至 service@cra.moe <br>🌝NCES现已新增暗色模式🌚</div>
-
-</div>
-<!-- end banner -->
+      {% if banner.desktop %}
+      <div class="text-center banner desktop">{{ banner.desktop|safe }}</div>
+      {% endif %}
+    </div>
+    <!-- end banner -->
+    {% endif %}
 
 
   {% block content %}
