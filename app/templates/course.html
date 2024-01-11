@@ -317,6 +317,11 @@
                                         href="/community-rules/">社区规范</a>被隐藏，请同学们文明点评，遵守社区规范。</span>
                             </div>
                         {% endif %}
+                        {% if course.num_deleted_reviews > 0 %}
+                        <div class="alert alert-warning" role="alert">
+                            <span style="font-weight:bold;">本课程有 {{ course.num_deleted_reviews }} 位用户曾删除过点评。</span>
+                        </div>
+                        {% endif %}
 
                         {% if reviews|length >= 2 %}
                             <div class="ud-pd-sm">
