@@ -1,4 +1,4 @@
-<div id="review-{{ review.id }}-comments" class="card shadow" style="display:{{ 'block' if review.comments else 'none' }}">
+<div id="review-{{ review.id }}-comments" class="card shadow-sm" style="display:{{ 'block' if review.comments else 'none' }}">
   <div class="card-body">
     {% for comment in review.comments %}
     <div class="solid ud-pd-sm">
