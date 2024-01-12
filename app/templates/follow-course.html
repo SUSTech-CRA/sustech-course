@@ -15,10 +15,10 @@
       <div class="ud-pd-md dashed">
         <a href="{{ url_for('course.view_course', course_id=course.id) }}">{{ course.name }}（{{ course.teacher.name or _('未知') }}）</a>
 	{% if course.introduction %}
-	<span class="badge rounded-pill bg-info text-dark">课程简介</span>
+	<span class="badge rounded-pill bg-info">课程简介</span>
 	{% endif %}
 	{% if course in user.courses_joined %}
-        <span class="badge rounded-pill bg-info text-dark">已学过</span>
+        <span class="badge rounded-pill bg-info">已学过</span>
         {% endif %}
       </div>
       {% endfor %}

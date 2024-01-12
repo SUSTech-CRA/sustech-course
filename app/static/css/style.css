@@ -228,6 +228,9 @@ a:hover, a:focus {
     background-color: #f3f3f3;
     border: 1px #f3f3f3 solid;
 }
+.bg-blue {
+    background-color: #1caaea;
+}
 
 /* special elements */
 .tips {

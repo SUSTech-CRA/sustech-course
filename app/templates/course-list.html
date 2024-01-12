@@ -8,10 +8,10 @@
       </a>
 
       {% if course.introduction %}
-      <span class="badge rounded-pill bg-info text-dark">课程简介</span>
+      <span class="badge rounded-pill bg-info">课程简介</span>
       {% endif %}
       {% if current_user.is_authenticated and course in current_user.courses_joined %}
-      <span class="badge rounded-pill bg-info text-dark">已学过</span>
+      <span class="badge rounded-pill bg-info">已学过</span>
       {% endif %}
       {% if course.reviewed %}
       <span class="badge rounded-pill bg-success">已点评</span>

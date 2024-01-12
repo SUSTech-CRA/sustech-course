@@ -6,11 +6,12 @@
         <div class="row float-element shadow">
             <div class="row">
                 <div class="col-md-8 inline-h3">
-                    <span class="blue h3 fw-bold">{{ course.name }}</span><span class="h5 blue mobile">{% if course.teachers %}
+                    <span class="blue h3 fw-bold">{{ course.name }} </span><span class="h5 blue mobile">{% if course.teachers %}
                     （{{ course.teacher_names_display|name_display_short }}）{% endif %}</span>
-                    <span class="small grey align-bottom left-pd-sm desktop">{{ course.term_ids|term_display }} &nbsp;课程号：{{ course.courseries }}</span>
+                    <span  class="badge rounded-pill bg-blue">{{ course.courseries }}</span>
+                    <span class="small grey align-bottom left-pd-sm desktop">{{ course.term_ids|term_display }} &nbsp;</span>
                     <br><span
-                        class="small grey align-bottom mobile">{{ course.term_ids|term_display }} &nbsp;课程号：{{ course.courseries }}</span>
+                        class="small grey align-bottom mobile">{{ course.term_ids|term_display }}</span>
 
                     {% if current_user.is_authenticated %}
                         <button class="btn btn-link float-right"><a
