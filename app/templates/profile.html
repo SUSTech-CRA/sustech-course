@@ -145,8 +145,8 @@
           </li>
 	  {% if user != current_user  %}
           <div id="action-btn-group" class="ud-pd-sm">
-            <button style="display:none" onclick="follow_user({{ user.id }})" class="btn btn-white btn-flat btn-follow"><span class="fa fa-heart-empty" aria-hidden="true"></span> 关注</button>
-            <button style="display:none" onclick="unfollow_user({{ user.id }})" class="btn btn-blue btn-flat btn-unfollow"><span class="fa fa-heart" aria-hidden="true"></span> 已关注</button>
+            <button style="display:none" onclick="follow_user({{ user.id }})" class="btn btn-white btn-flat btn-follow"><span class="fa fa-regular fa-heart" aria-hidden="true"></span> 关注</button>
+            <button style="display:none" onclick="unfollow_user({{ user.id }})" class="btn btn-blue btn-flat btn-unfollow"><span class="fa fa-solid fa-heart" aria-hidden="true"></span> 已关注</button>
           </div>
 	  {% endif %}
         </ul>
