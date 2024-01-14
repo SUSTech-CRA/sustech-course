@@ -18,5 +18,12 @@
         <a class="left-pd-sm">English</a>
       </span>
     </div>
-    <span class="footer-text text-muted">Copyright &copy; {{ date.year }} Niuwa Curriculum Evaluation System</span>
+    {% if client_ip %}
+    <span class="footer-text blue">
+        <pre>{{ current_date }} | {{ client_ip }}</pre>
+    </span>
+    {% endif %}
+    <span class="footer-text text-muted">
+        Copyright &copy; {{ date.year }} Niuwa Curriculum Evaluation System
+    </span>
 </div><!-- end container -->

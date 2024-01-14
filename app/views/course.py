@@ -8,6 +8,7 @@ from app.utils import sanitize
 from sqlalchemy import or_, func
 import json
 import os
+import datetime
 
 course = Blueprint('course',__name__)
 
@@ -134,6 +135,12 @@ def view_course(course_id):
     reviews = query.all()
     review_num = len(reviews)
 
+    #get client ip
+    client_ip = request.access_route[-1]
+    # get current date in YYYYMMDD HH:MM:SS format
+    current_date = datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')
+
+
     return render_template('course.html', course=course, course_rate = course.course_rate, reviews=reviews,
             related_courses=related_courses, teacher=teacher, same_teacher_courses=same_teacher_courses,
             user=current_user, sort_by=ordering, term=term, rating=rating, sort_dict=sort_dict,
@@ -142,7 +149,9 @@ def view_course(course_id):
             latest_score = course.latest_score,
             score_type_pf = course.score_type_pf,
             score_semester = course.score_semester,
-            description=str(course.rate.average_rate) + ' 分，' + str(course.rate.review_count) + ' 人评价')
+            description=str(course.rate.average_rate) + ' 分，' + str(course.rate.review_count) + ' 人评价',
+            client_ip=client_ip,
+            current_date=current_date)
 
 
 
