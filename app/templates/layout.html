@@ -28,11 +28,16 @@
             </li>
             {% endif %}
             <li class="nav-item">
+              <a class="nav-link" href="https://mirrors.sustech.edu.cn/courses/本科人才培养方案/" target="_blank">培养方案</a>
+            </li>
+          <!--
+            <li class="nav-item">
               <a class="nav-link" href="https://nces.cra.moe/community-rules/" target="_blank">社区规范</a>
             </li>
+            -->
           </ul>
 
-          <form class="d-flex mx-2" style="max-width: 500px;" action="{{ url_for('home.search_reviews') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
+          <form class="d-flex mx-2" style="max-width: 400px;" action="{{ url_for('home.search_reviews') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
             <div class="input-group w-100">
               <input type="text" name="q" class="form-control" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
               <button type="submit" class="btn btn-secondary" id="search-button">
