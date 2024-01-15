@@ -681,6 +681,14 @@ class CourseRate(db.Model):
             return mapper[round(rank)]
         return None
 
+    # return difficulty in score
+    @property
+    def difficulty_score(self):
+        if self.review_count:
+            rank = 100 - (self._difficulty_total/self.review_count - 1) * 100 / 2
+            return "{:.2f}".format(rank)
+        return None
+
     @property
     def homework(self):
         mapper = {1:'很少',
@@ -690,6 +698,13 @@ class CourseRate(db.Model):
             rank = round(self._homework_total/self.review_count)
             if rank in mapper:
                 return mapper[rank]
+        return None
+
+    @property
+    def homework_score(self):
+        if self.review_count:
+            rank = 100 - (self._homework_total/self.review_count - 1) * 100 / 2
+            return "{:.2f}".format(rank)
         return None
 
     @property
@@ -704,6 +719,13 @@ class CourseRate(db.Model):
         return None
 
     @property
+    def grading_score(self):
+        if self.review_count:
+            rank = 100 - (self._grading_total/self.review_count - 1) * 100 / 2
+            return "{:.2f}".format(rank)
+        return None
+
+    @property
     def gain(self):
         mapper = {1:'很多',
                 2:'一般',
@@ -712,6 +734,13 @@ class CourseRate(db.Model):
             rank = round(self._gain_total/self.review_count)
             if rank in mapper:
                 return mapper[rank]
+        return None
+
+    @property
+    def gain_score(self):
+        if self.review_count:
+            rank = 100 - (self._gain_total / self.review_count - 1) * 100 / 2
+            return "{:.2f}".format(rank)
         return None
 
     @property

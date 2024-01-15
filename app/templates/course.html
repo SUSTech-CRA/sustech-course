@@ -41,28 +41,69 @@
                             <span class="rl-pd-sm h4"><span class="text-muted px12">(暂无评价)</span>
                         </div>
                     {% endif %}
+                <!--
                     <ul class="text-muted list-inline list-unstyled ud-pd-sm course-overview-table">
                         <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">收获大小：{{ course.rate.gain or '你猜' }}</li>
                     </ul>
+                    -->
+                {% if course.rate.difficulty_score %}
+                    <ul class="text-muted list-inline list-unstyled">
+                        <li class="list-inline-item">课程难度
+                            <div class="progress">
+                                <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.difficulty_score }}%;" aria-valuenow="{{ course.rate.difficulty_score }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ course.rate.difficulty or '你猜' }}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-inline-item">作业多少
+                            <div class="progress">
+                                <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.homework_score }}%;" aria-valuenow="{{ course.rate.homework_score }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ course.rate.homework or '你猜' }}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-inline-item">给分好坏
+                            <div class="progress">
+                                <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.grading_score }}%;" aria-valuenow="{{ course.rate.grading_score }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ course.rate.grading or '你猜' }}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-inline-item">收获大小
+                            <div class="progress">
+                                <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.gain_score }}%;" aria-valuenow="{{ course.rate.gain_score }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ course.rate.gain or '你猜' }}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                {% else %}
+                    <ul class="text-muted list-inline list-unstyled ud-pd-sm course-overview-table">
+                        <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
+                        <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
+                        <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
+                        <li class="list-inline-item right-mg-md">收获大小：{{ course.rate.gain or '你猜' }}</li>
+                    </ul>
+                {% endif %}
 
-                    <table class="table table-condensed no-border">
-                        <tr>
-                            <td><strong>选课类别：</strong>{{ course.join_type or '未知' }}</td>
-                            <td><strong>教学语言：</strong>{{ course.teaching_type or '未知' }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>课程类别：</strong>{{ course.course_type or '未知' }}</td>
-                            <td><strong>开课单位：</strong>{{ course.course_major or '未知' }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>课程层次：</strong>{{ course.course_level or '未知' }}</td>
-                            <td><strong>学分：</strong>{{ course.credit or '未知' }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <table class="table table-condensed no-border">
+                    <tr>
+                        <td><i class="fa fa-list-alt fa-fw" aria-hidden="true"></i><strong> 选课类别：</strong>{{ course.join_type or '未知' }}</td>
+                        <td><i class="fa fa-language fa-fw" aria-hidden="true"></i><strong> 教学语言：</strong>{{ course.teaching_type or '未知' }}</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-book fa-fw" aria-hidden="true"></i><strong> 课程类别：</strong>{{ course.course_type or '未知' }}</td>
+                        <td><i class="fa fa-university fa-fw" aria-hidden="true"></i><strong> 开课单位：</strong>{{ course.course_major or '未知' }}</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i><strong> 课程层次：</strong>{{ course.course_level or '未知' }}</td>
+                        <td><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><strong> 获得学分：</strong>{{ course.credit or '未知' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
 
                     <div class="ud-pd-sm">
                         {% if course.homepage and course.homepage != 'http://' %}

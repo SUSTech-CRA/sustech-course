@@ -477,3 +477,7 @@ a.nounderline:active { text-decoration: none; }
 .navbar-brand {
     color: #337ab7;
 }
+/*progress bar*/
+.course-metric-progress-bar {
+    background-color: #337ab7;
+}
