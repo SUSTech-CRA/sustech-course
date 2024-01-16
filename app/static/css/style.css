@@ -481,3 +481,15 @@ a.nounderline:active { text-decoration: none; }
 .course-metric-progress-bar {
     background-color: #337ab7;
 }
+
+/* block quote in review */
+.review-blockquote {
+  padding: 10px;
+  margin: 0 0 10px;
+  border-left: 5px solid rgba(204, 204, 204, 0.5); /* Gray left border with transparency */
+}
+
+.review-blockquote p {
+  margin-bottom: 0; /* Remove bottom margin from the paragraph */
+  font-style: italic;
+}
