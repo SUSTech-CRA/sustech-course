@@ -19,7 +19,7 @@
       <div class="ud-pd-md dashed">
         <div class="row">
           <div class="col-sm-1 col-xs-2 right-pd-no">
-            <img class="avatar-md circle" src="{% if review.is_anonymous %}{{ review.author.default_avatar }}{% else %}{{ review.author.avatar }}{% endif %}"/>
+            <img class="avatar-md circle" alt="user avatar" src="{% if review.is_anonymous %}{{ review.author.default_avatar }}{% else %}{{ review.author.avatar }}{% endif %}"/>
           </div>
           <div class="col-md-11 col-xs-10">
             <div class="grey bm-pd-md">
@@ -42,7 +42,7 @@
       {% endfor %}
 
 <nav aria-label="Page navigation" class="mt-3">
-  <ul class="pagination">
+  <ul class="pagination flex-wrap">
     {% if reviews.has_prev %}
       <li class="page-item">
         <a class="page-link" href="{{ url_for('home.index', page=reviews.prev_num) }}" aria-label="Previous">

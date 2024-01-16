@@ -153,8 +153,9 @@
 <!--<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-html-embed/40.2.0/files/build/html-embed.js"></script>-->
 <script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-code-block/40.2.0/files/build/code-block.js"></script>
 <script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-ckbox/40.2.0/files/build/ckbox.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-markdown-gfm/40.2.0/files/build/markdown-gfm.js"></script>
 
-<!--<script src="/static/js/ckeditor-math.js"></script>-->
+<script src="/static/js/ckeditor-math.js"></script>
 
 <!--<script src="/static/ckeditor/adapters/jquery.js"></script>-->
 <!--<script>-->
@@ -168,6 +169,14 @@
 var uploadApi = document.location.origin + "/api/upload/image";
 
 CKEditor5.editorClassic.ClassicEditor.create( document.querySelector( '#content-editor' ), {
+            heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h3', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h4', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h5', title: 'Heading 3', class: 'ck-heading_heading3' }
+            ]
+        },
     		plugins: [
 			CKEditor5.essentials.Essentials,
 			CKEditor5.autoformat.Autoformat,
@@ -201,6 +210,7 @@ CKEditor5.editorClassic.ClassicEditor.create( document.querySelector( '#content-
             CKEditor5.adapterCkfinder.UploadAdapter,
             CKEditor5.ckfinder.CKFinder,
             CKEditor5.codeBlock.CodeBlock,
+            CKEditor5.markdownGfm.PasteFromMarkdownExperimental,
             //CKEditor5.ckbox.CKBox,
             //CKEditor5.math.Math,
 			//CKEditor5.upload.Base64UploadAdapter,
