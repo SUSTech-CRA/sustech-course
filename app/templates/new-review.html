@@ -64,13 +64,14 @@
         <p class="grey">（编辑框支持Markdown语法，插入公式请用$$，如$e^{i \pi}$）</p>
         <div class="ud-pd-sm">
           <textarea id="content-editor" name="content">{% if review.content %}{{ review.content|safe }}{% endif %}</textarea>
+            <p class="fs-6"><span id="word-count">Counting...</span></p>
         </div>
       </div>
 
       <div class="ud-pd-sm"></div>
       <div class="class-control">
         <input {% if review.is_anonymous %}checked{% endif %} id="is_anonymous" name="is_anonymous" type="checkbox" value="1">
-        <label for="is_anonymous">匿名发表点评
+        <label for="is_anonymous">匿名发表点评（为防止无意义点评，匿名点评需满40字）
           {% if review.author.is_teacher %}
           (由于您是教师用户，即使匿名发表点评，也会标注“教师点评”，但不会暴露您的用户名和头像)
           {% endif %}
@@ -199,6 +200,10 @@ $(function(){
         }
         var content_html = editor.getData();
         var content_text = content_html.replace(/(<([^>]+)>)/ig, "");
+        if ($('#is_anonymous').is(":checked") && content_text.trim().length < 40) {
+            alert('匿名发表点评需满40字！');
+            return;
+        }
         if (content_text.trim().length < 10) {
             alert('点评内容太短啦！');
             return;

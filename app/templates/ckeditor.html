@@ -154,6 +154,7 @@
 <script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-code-block/40.2.0/files/build/code-block.js"></script>
 <script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-ckbox/40.2.0/files/build/ckbox.js"></script>
 <script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-markdown-gfm/40.2.0/files/build/markdown-gfm.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-word-count/40.2.0/files/build/word-count.js"></script>
 
 <script src="/static/js/ckeditor-math.js"></script>
 
@@ -211,6 +212,7 @@ CKEditor5.editorClassic.ClassicEditor.create( document.querySelector( '#content-
             CKEditor5.ckfinder.CKFinder,
             CKEditor5.codeBlock.CodeBlock,
             CKEditor5.markdownGfm.PasteFromMarkdownExperimental,
+            CKEditor5.wordCount.WordCount,
             //CKEditor5.ckbox.CKBox,
             //CKEditor5.math.Math,
 			//CKEditor5.upload.Base64UploadAdapter,
@@ -299,6 +301,14 @@ CKEditor5.editorClassic.ClassicEditor.create( document.querySelector( '#content-
             'tableRow',
             'mergeTableCells'
         ]
+    },
+        wordCount: {
+                onUpdate: stats => {
+                    //console.log( 'Characters: ' + stats.characters );
+                    var wordCountElement = document.getElementById('word-count');
+                    // 更新元素的内容
+                    wordCountElement.textContent = '字数: ' + stats.characters;
+                }
     },
                 licenseKey: '',
 
