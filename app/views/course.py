@@ -177,6 +177,14 @@ def view_course(course_id):
             client_ip=client_ip,
             current_date=current_date)
 
+@course.route('/<int:course_id>/material/', methods=['GET'])
+@login_required
+def render_course_materials(course_id):
+    course = Course.query.get(course_id)
+    if not course:
+        abort(404)
+    return render_template('course-material-file-browser.html', course=course, title='Course Material - ' + course.name, course_id=course_id)
+
 
 
 @course.route('/<int:course_id>/upvote/', methods=['POST'])

@@ -98,10 +98,10 @@ dependencies:
       - speaklater==1.3
       - tomli==2.0.1
       - typing-extensions==4.7.1
-      - urllib3==2.0.4
       - werkzeug==2.3.8
       - wtforms==3.0.1
       - xxhash==3.4.1
       - zipp==3.16.2
       - cachelib==0.10.2
       - pillow==10.0.1
+      - boto3==1.34.23

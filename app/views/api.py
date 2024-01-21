@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, Markup, redirect, render_template, abort
+from flask import Blueprint, jsonify, request, Markup, redirect, render_template, abort, json
 from flask_login import login_required, current_user
 from app.models import Review, ReviewComment, User, Course, ImageStore, Notification
 from app.models import ReviewCommentHistory, ThirdPartySigninHistory
@@ -15,8 +15,14 @@ import re
 import os
 from datetime import datetime
 
-api = Blueprint('api',__name__)
+import boto3
+from botocore.exceptions import NoCredentialsError
+import botocore.config
 
+api = Blueprint('api',__name__)
+json.provider.DefaultJSONProvider.ensure_ascii = False
+s3_client = app.config['S3_CONFIG']
+s3_bucket_name = app.config['S3_BUCKET_NAME']
 
 @api.route('/review/upvote/',methods=['POST'])
 @login_required
@@ -32,7 +38,7 @@ def review_upvote():
         else:
             return jsonify(ok=False,message="The review doesn't exist.")
     else:
-        return jsonify(ok=false,message="A id must be given")
+        return jsonify(ok=False,message="A id must be given")
 
 @api.route('/review/cancel_upvote/',methods=['POST'])
 @login_required
@@ -266,6 +272,40 @@ def upload_image():
 def upload_file():
     return generic_upload(request.files['upload'], 'file')
 
+
+@api.route('/course-material/list/', defaults={'subpath': ''}, methods=['GET'])
+@api.route('/course-material/list/<path:subpath>', methods=['GET'])
+@login_required
+def list_files(subpath):
+    # get base dir from query string
+    base_dir = request.args.get('base_dir') or ''
+    # decode base dir from url
+    base_dir = base_dir.encode('utf-8').decode('utf-8')
+    print("base_dir: " + base_dir)
+    # remove base dir from subpath
+    subpath = base_dir + subpath
+    if not subpath.startswith('course-material'):
+        return jsonify({'error': 'Invalid path'}), 400
+    print("subpath: " + subpath)
+    try:
+        response = s3_client.list_objects_v2(Bucket=s3_bucket_name, Prefix=subpath, Delimiter='/')
+        # print(response)
+        files = response.get('Contents', [])
+        directories = response.get('CommonPrefixes', [])
+        return jsonify({'files': files, 'directories': directories})
+    except NoCredentialsError:
+        return jsonify({'error': 'Credential problem'}), 403
+
+@api.route('/course-material/download/<path:filename>', methods=['GET'])
+@login_required
+def download_file(filename):
+    if not filename.startswith('course-material'):
+        return jsonify({'error': 'Invalid path'}), 400
+    try:
+        url = s3_client.generate_presigned_url('get_object', Params={'Bucket': s3_bucket_name, 'Key': filename}, ExpiresIn=600)
+        return redirect(url)
+    except NoCredentialsError:
+        return jsonify({'error': 'Credential problem'}), 403
 
 
 @api.route('/reg_verify', methods=['GET'])

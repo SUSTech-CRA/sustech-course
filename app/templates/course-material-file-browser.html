@@ -1,0 +1,176 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <div class="container">
+        <div class="my-4 file-browser float-element shadow-sm">
+            <btn class="btn btn-blue btn-sm" onclick="window.location.href='/course/{{ course_id }}'">Back to Course</btn>
+            <h2 class="mb-3 blue">{{ title }}</h2>
+            <nav aria-label="breadcrumb">
+                <ol id="breadcrumbs" class="breadcrumb">
+                    <!-- Breadcrumb items will be added here -->
+                </ol>
+            </nav>
+            <div class="table-responsive">
+                <table id="file-table" class="table">
+                    <thead>
+                        <tr>
+                            <th class="name-column">Name</th>
+                            <th class="last-mod-column">Last Modified</th>
+                            <th>Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Files and directories will be listed here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <style>
+        .bi {
+            vertical-align: -0.125em;
+            margin-right: 0.5em;
+        }
+
+        /* Custom table styles */
+        #file-table th.name-column {
+            width: 60%; /* Adjust this percentage as needed */
+        }
+        #file-table th {
+            white-space: nowrap; /* Ensures content stays on one line */
+        }
+        #file-table td {
+            overflow: hidden; /* Hides text that overflows the cell */
+            text-overflow: ellipsis; /* Adds an ellipsis to overflowed text */
+        }
+
+    </style>
+    <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+
+//base_dir = 'course-material/CS203/'; // use jinja2 to pass base_dir
+base_dir = 'course-material/{{ course.courseries }}/';
+
+        $(document).ready(function() {
+    var currentPath = '';
+
+    function updateBreadcrumbs() {
+    var html = '<li class="breadcrumb-item"><a href="#" class="clickable" data-path="">{{ course.courseries }}</a></li>';
+    // remove base_dir from path
+    currentPath = currentPath.replace(base_dir, '');
+    var pathSegments = currentPath.split('/').filter(Boolean);
+    var cumulativePath = '';
+
+    pathSegments.forEach(function(segment, index) {
+        cumulativePath += segment + '/';
+        if (index < pathSegments.length - 1) {
+            html += '<li class="breadcrumb-item"><a href="#" class="clickable" data-path="' + cumulativePath + '">' + segment + '</a></li>';
+        } else {
+            // The last segment is not clickable
+            html += '<li class="breadcrumb-item active" aria-current="page">' + segment + '</li>';
+        }
+    });
+
+    $('#breadcrumbs').html(html);
+}
+
+function getFileIcon(fileName) {
+    var extension = fileName.split('.').pop().toLowerCase();
+    switch(extension) {
+        case 'jpg':
+        case 'jpeg':
+        case 'png':
+        case 'gif':
+            return 'bi-file-image'; // Bootstrap icon for images
+        case 'zip':
+        case 'rar':
+        case '7z':
+            return 'bi-file-zip'; // Bootstrap icon for archives
+        case 'pdf':
+            return 'bi-file-pdf'; // Bootstrap icon for PDFs
+        case 'doc':
+        case 'docx':
+            return 'bi-file-word'; // Bootstrap icon for Word documents
+        case 'xls':
+        case 'xlsx':
+            return 'bi-file-excel'; // Bootstrap icon for Excel files
+        case 'ppt':
+        case 'pptx':
+            return 'bi-file-ppt'; // Bootstrap icon for PowerPoint files
+        case 'txt':
+            return 'bi-file-text'; // Bootstrap icon for text files
+        default:
+            return 'bi-file'; // Generic file icon
+    }
+}
+
+
+    function fetchAndDisplayFiles(path) {
+        currentPath = path;
+        // remove base_dir from path
+        path = path.replace(base_dir, '');
+        updateBreadcrumbs();
+        $.ajax({
+            url: '/api/course-material/list/' + path,
+            //query: base_dir=course-material/CS203-数据结构与算法分析
+            data: {
+                base_dir: base_dir
+            },
+            method: 'GET',
+            success: function(response) {
+                var $tbody = $('#file-table tbody');
+                $tbody.empty(); // Clear existing list
+
+                response.directories.forEach(function(dir) {
+                    var dirPath = dir.Prefix;
+                    console.log(dirPath);
+                    console.log(dirPath.split('/'));
+                    $tbody.append('<tr><td class="clickable" data-path="' + dirPath + '"><i class="bi bi-folder"></i>' + dirPath.split('/')[dirPath.split('/').length - 2] + '</td><td></td><td>directory</td></tr>');
+                });
+
+                response.files.forEach(function(file) {
+                    var downloadLink = '/api/course-material/download/' + file.Key;
+                    var iconClass = getFileIcon(file.Key);
+                    // convert file.LastModified to local time, format YYYY-MM-DD HH:MM
+                    var date = new Date(file.LastModified);
+                    file.LastModified = date.toLocaleString('zh-CN', { hour12: false });
+                    // convert file.Size to human readable format
+                    var size = file.Size;
+                    var unit = 'B';
+                    if (size > 1024) {
+                        size /= 1024;
+                        unit = 'KB';
+                    }
+                    if (size > 1024) {
+                        size /= 1024;
+                        unit = 'MB';
+                    }
+                    if (size > 1024) {
+                        size /= 1024;
+                        unit = 'GB';
+                    }
+                    file.Size = size.toFixed(0) + ' ' + unit;
+                    $tbody.append('<tr><td><i class="' + iconClass + '"></i> <a href="' + downloadLink + '" target="_blank">' + file.Key.split('/').pop() + '</a></td><td>' + file.LastModified + '</td><td>' + file.Size + '</td></tr>');
+                });
+            },
+            error: function() {
+                alert('Error fetching files');
+            }
+        });
+    }
+
+    // Initial fetch for the root directory
+    fetchAndDisplayFiles('');
+
+    // Handle clicks on directories and breadcrumbs
+    $(document).on('click', '.clickable', function() {
+        var path = $(this).data('path');
+        fetchAndDisplayFiles(path);
+    });
+});
+
+    </script>
+{% endblock %}
+{#</body>#}
+{#</html>#}
