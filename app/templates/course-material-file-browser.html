@@ -3,14 +3,27 @@
 
 <link rel="stylesheet" href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
     <div class="container">
-        <div class="my-4 file-browser float-element shadow-sm">
+        <div class="file-browser float-element shadow-sm">
             <btn class="btn btn-blue btn-sm" onclick="window.location.href='/course/{{ course_id }}'">Back to Course</btn>
             <h2 class="mb-3 blue">{{ title }}</h2>
+            <p>
+              <i class="bi bi-info-circle"></i>如无法打开，请在校内访问或使用VPN回校后再访问
+            </p>
+            {% if course.course_material_code %}
+            <p>
+              <i class="bi bi-exclamation-triangle"></i>此课程含有多个等级/课程号，他们共用{{ course.course_material_code }}的课件库。
+            </p>
+            {% endif %}
             <nav aria-label="breadcrumb">
                 <ol id="breadcrumbs" class="breadcrumb">
                     <!-- Breadcrumb items will be added here -->
                 </ol>
             </nav>
+            <div class="d-flex justify-content-center">
+              <div id="loading-animation" class="spinner-border spinner-border-sm" role="status" style="display: none;">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
             <div class="table-responsive">
                 <table id="file-table" class="table">
                     <thead>
@@ -29,28 +42,40 @@
     </div>
     <style>
         .bi {
-            vertical-align: -0.125em;
-            margin-right: 0.5em;
+            margin-right: 0.25em;
         }
 
         /* Custom table styles */
         #file-table th.name-column {
             width: 60%; /* Adjust this percentage as needed */
         }
-        #file-table th {
-            white-space: nowrap; /* Ensures content stays on one line */
+
+        .table-responsive {
+            overflow-x: auto;
         }
-        #file-table td {
-            overflow: hidden; /* Hides text that overflows the cell */
-            text-overflow: ellipsis; /* Adds an ellipsis to overflowed text */
+
+        .table td, .table th {
+            white-space: nowrap;
         }
+
+        .table-responsive a {
+            color: inherit; /* 继承父元素的字体颜色 */
+            text-decoration: none; /* 去除下划线 */
+        }
+
+        #loading-animation {
+        /* 自定义加载动画样式 */
+        margin-top: 20px;
+        margin-bottom: 20px;
+        }
+
 
     </style>
     <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
 
 //base_dir = 'course-material/CS203/'; // use jinja2 to pass base_dir
-base_dir = 'course-material/{{ course.courseries }}/';
+base_dir = 'course-material/{% if course.course_material_code %}{{ course.course_material_code }}{% else %}{{ course.courseries }}{% endif %}/';
 
         $(document).ready(function() {
     var currentPath = '';
@@ -111,6 +136,9 @@ function getFileIcon(fileName) {
         // remove base_dir from path
         path = path.replace(base_dir, '');
         updateBreadcrumbs();
+
+        $('#loading-animation').show(); // 显示加载动画
+
         $.ajax({
             url: '/api/course-material/list/' + path,
             //query: base_dir=course-material/CS203-数据结构与算法分析
@@ -121,12 +149,16 @@ function getFileIcon(fileName) {
             success: function(response) {
                 var $tbody = $('#file-table tbody');
                 $tbody.empty(); // Clear existing list
+                    if (response.directories.length === 0 && response.files.length === 0) {
+        // 如果没有文件和目录，显示一个提示
+        $tbody.append('<tr><td colspan="3" class="text-center">This folder is empty.</td></tr>');
+    } else {
 
                 response.directories.forEach(function(dir) {
                     var dirPath = dir.Prefix;
                     console.log(dirPath);
                     console.log(dirPath.split('/'));
-                    $tbody.append('<tr><td class="clickable" data-path="' + dirPath + '"><i class="bi bi-folder"></i>' + dirPath.split('/')[dirPath.split('/').length - 2] + '</td><td></td><td>directory</td></tr>');
+                    $tbody.append('<tr><td class="clickable" data-path="' + dirPath + '"><i class="bi bi-folder"></i>' + dirPath.split('/')[dirPath.split('/').length - 2] + '</td><td></td><td>dir</td></tr>');
                 });
 
                 response.files.forEach(function(file) {
@@ -153,9 +185,13 @@ function getFileIcon(fileName) {
                     file.Size = size.toFixed(0) + ' ' + unit;
                     $tbody.append('<tr><td><i class="' + iconClass + '"></i> <a href="' + downloadLink + '" target="_blank">' + file.Key.split('/').pop() + '</a></td><td>' + file.LastModified + '</td><td>' + file.Size + '</td></tr>');
                 });
-            },
+            }
+                },
             error: function() {
                 alert('Error fetching files');
+            },
+            complete: function() {
+            $('#loading-animation').hide(); // 请求完成后隐藏加载动画
             }
         });
     }

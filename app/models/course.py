@@ -189,6 +189,9 @@ class Course(db.Model):
     # add score_semester TEXT
     score_semester = db.Column(db.Integer, default=0)
 
+    # for corese material location
+    course_material_code = db.Column(db.String(80))  # CS102A，用于区分同一门课程，不同的课号
+
     #followers : backref to User
     #upvote_users: backref to User
     #downvote_users: backref to User
