@@ -170,7 +170,7 @@ def view_ranking():
     # find top 10 courses with at least 20 reviews and highest normalized average rating
     top_rated_courses = (Course.query
                                .join(CourseRate)
-                               .filter(CourseRate.review_count >= 20)
+                               .filter(CourseRate.review_count >= 10)
                                .order_by(Course.QUERY_ORDER())
                                .limit(topk_count).all())
 

@@ -4,9 +4,9 @@
     :root {
         --bs-body-bg: #212529;
     }
-    .text-muted {
-        color: #b4b4b4; /* 暗模式下的静音文本颜色，使用 !important 覆盖 Bootstrap 的样式 */
-    }
+    /*.text-muted {*/
+    /*    color: #b4b4b4; !* 暗模式下的静音文本颜色，使用 !important 覆盖 Bootstrap 的样式 *!*/
+    /*}*/
     body {
         background-color: #121212; /* 暗色模式下的背景色 */
         color: #e0e0e0; /* 暗色模式下的默认文字颜色 */
