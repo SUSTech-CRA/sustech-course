@@ -1,5 +1,5 @@
       <div class="ud-pd-sm">
-	<span class="text-muted">共 {{ reviews.total }} 个点评（当前第 {{ reviews.page }} 页）</span>
+	<span class="text-secondary-emphasis">共 {{ reviews.total }} 个点评（当前第 {{ reviews.page }} 页）</span>
       </div>
 
       {% for review in reviews.items %}
@@ -22,7 +22,7 @@
               <span class="float-right localtime" style="display: none;">{{ review.update_time|utctime }}</span>
             </div>
             {% include 'review-hidden.html' %}
-            <p class="text-muted">
+            <p class="text-secondary-emphasis">
 	      {% if keyword %}
 	      {{ review.content|abstract_by_keyword(keyword)|safe }}
 	      {% else %}

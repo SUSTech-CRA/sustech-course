@@ -7,6 +7,49 @@
     {#  if have course, show course#}
     {% if course %}
     <meta name="description" property="og:description" content="Review of {{ course.name_with_teachers_short }} on Niuwa Curriculum Evaluation System">
+    <!-- ld json -->
+    <script type="application/ld+json">
+
+    {
+      "@context": "http://schema.org",
+      "@type": "Course",
+      "name": "{{ course.name }}",
+      "description": "{{ course.description|striptags|safe }}",
+      "provider": {
+        "@type": "Organization",
+        "name": "Niuwa Curriculum Evaluation System",
+        "sameAs": "https://nces.cra.moe"
+      },
+        {%  if course.rate.average_rate %}
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": {{ course.rate.average_rate / 2}},
+            "ratingCount": {{ course.review_count}},
+            "reviewCount": {{ course.rate.review_count}}
+          },
+        {% endif %}
+        "offers": [{
+           "@type": "Offer",
+           "category": "Paid",
+           "priceCurrency": "CNY",
+           "price": 1000
+        }],
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "instructor": {
+          "@type": "Person",
+          "name": "{{ course.teacher_names_display|name_display_short }}"
+        },
+        "courseMode": "Onsite",
+        "courseSchedule": {
+           "@type": "Schedule",
+           "repeatFrequency": "Weekly",
+           "duration": "PT{{ course.hours_per_week or '2'}}H",
+           "repeatCount": 16
+        }
+      }
+    }
+    </script>
     {% else %}
     <meta name="description" property="og:description" content="评课是为了更好地选课！">
     {% endif %}

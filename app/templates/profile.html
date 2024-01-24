@@ -17,7 +17,7 @@
         </div>
 
         {% if user.reviews_count == 0 %}
-        <p class="text-muted">快去写点评吧～</p>
+        <p class="text-secondary-emphasis">快去写点评吧～</p>
         {% endif %}
 
         {% for review in user.reviews[0:3] %}
@@ -34,7 +34,7 @@
 	        {% if current_user == user and review.only_visible_to_student %}
 	        <span class="badge rounded-pill bg-success">仅登录学生可见</span>
 	        {% endif %}
-            <span class="text-muted small float-right desktop localtime" style="display: none;">{{ review.update_time|utctime }}</span>
+            <span class="text-secondary-emphasis small float-right desktop localtime" style="display: none;">{{ review.update_time|utctime }}</span>
           </div>
           {% include 'review-hidden.html' %}
           <p class="dark-grey">{{ review.content|abstract }}
@@ -58,7 +58,7 @@
         </div>
 
         {% if user.courses_following_count == 0 %}
-        <p class="text-muted">可以关注喜欢的课程哦！</p>
+        <p class="text-secondary-emphasis">可以关注喜欢的课程哦！</p>
         {% endif %}
 
         {% for course in user.courses_following[0:6] %}
@@ -88,7 +88,7 @@
 {#              （{{ user.classes_joined_count }}门）</a>#}
 {#          {% else %}#}
 {#          <span class="blue h4"><strong>学过</strong></span>#}
-{#          <span class="text-muted">（绑定学号才能显示学过课程）</span>#}
+{#          <span class="text-secondary-emphasis">（绑定学号才能显示学过课程）</span>#}
 {#          {% endif %}#}
 {#          {% if user.classes_joined_count > 6 %}#}
 {#          <span class="float-right"><a href="{{ url_for('user.join_course', user_id=user.id) }}">查看更多 &raquo;</a></span>#}
@@ -96,10 +96,10 @@
 {#        </div>#}
 {##}
 {#        {% if user.classes_joined_count == 0 %}#}
-{#        <p class="text-muted">还没有学过的课程呢。</p>#}
+{#        <p class="text-secondary-emphasis">还没有学过的课程呢。</p>#}
 {#        {% endif %}#}
 {#        {% if not current_user.is_authenticated %}#}
-{#        <p class="text-muted">为保护隐私，您需要 <a data-bs-toggle="modal" data-bs-target="#signin">登录</a> 才能查看已学课程。</p>#}
+{#        <p class="text-secondary-emphasis">为保护隐私，您需要 <a data-bs-toggle="modal" data-bs-target="#signin">登录</a> 才能查看已学课程。</p>#}
 {#        {% else %}#}
 {#        {% for course_class in user.classes_joined[0:6] %}#}
 {#        {% if course_class.course_id %}#}
