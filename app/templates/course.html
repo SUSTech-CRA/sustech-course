@@ -31,18 +31,18 @@
                                 {% endif %}
                             {% endfor %}
                             <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span
-                                class="rl-pd-sm text-secondary-emphasis">({{ course.review_count }}人评价)</span>
+                                class="rl-pd-sm text-body-secondary">({{ course.review_count }}人评价)</span>
                         </div>
                     {% else %}
                         <div class="ud-pd-sm blue">
                             {% for star in range(0,5) %}
                                 <span class="fa-sharp fa-regular fa-star glyphicon-lg" aria-hidden="true"></span>
                             {% endfor %}
-                            <span class="rl-pd-sm h4"><span class="text-secondary-emphasis px12">(暂无评价)</span>
+                            <span class="rl-pd-sm h4"><span class="text-body-secondary px12">(暂无评价)</span>
                         </div>
                     {% endif %}
                 <!--
-                    <ul class="text-secondary-emphasis list-inline list-unstyled ud-pd-sm course-overview-table">
+                    <ul class="text-body-secondary list-inline list-unstyled ud-pd-sm course-overview-table">
                         <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
@@ -50,7 +50,7 @@
                     </ul>
                     -->
                 {% if course.rate.difficulty_score %}
-                    <ul class="text-secondary-emphasis list-inline list-unstyled">
+                    <ul class="text-body-secondary list-inline list-unstyled">
                         <li class="list-inline-item">课程难度
                             <div class="progress">
                                 <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.difficulty_score }}%;" aria-valuenow="{{ course.rate.difficulty_score }}" aria-valuemin="0" aria-valuemax="100">
@@ -81,7 +81,7 @@
                         </li>
                     </ul>
                 {% else %}
-                    <ul class="text-secondary-emphasis list-inline list-unstyled ud-pd-sm course-overview-table">
+                    <ul class="text-body-secondary list-inline list-unstyled ud-pd-sm course-overview-table">
                         <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
@@ -184,7 +184,7 @@
                             <div>
                                 {{ course.introduction|safe }}
                             </div>
-                            <p class="text-secondary-emphasis pull-right small">
+                            <p class="text-body-secondary pull-right small">
                                 {% if user.is_authenticated %}
                                     <span class="fa fa-pencil grey left-pd-sm" aria-hidden="true"></span>
                                     <a href="{{ url_for('course.edit_course', course_id=course.id) }}">编辑课程信息</a>
@@ -409,7 +409,7 @@
                                         </option>
                                     {% endfor %}
                                 </select>
-                                <span class="rl-pd-sm text-secondary-emphasis">{{ review_num }}条点评</span>
+                                <span class="rl-pd-sm text-body-secondary">{{ review_num }}条点评</span>
                             </div>
                         {% endif %}
 
@@ -463,13 +463,13 @@
                                             </div>
                                             {% include 'review-hidden.html' %}
 
-                                            <ul class="text-secondary-emphasis list-inline top-pd-sm desktop">
+                                            <ul class="text-body-secondary list-inline top-pd-sm desktop">
                                                 <li class="list-inline-item right-mg-md">课程难度：{{ review.difficulty_display }}</li>
                                                 <li class="list-inline-item right-mg-md">作业多少：{{ review.homework_display }}</li>
                                                 <li class="list-inline-item right-mg-md">给分好坏：{{ review.grading_display }}</li>
                                                 <li class="list-inline-item right-mg-md">收获大小：{{ review.gain_display }}</li>
                                             </ul>
-                                            <ul class="text-secondary-emphasis list-inline list-unstyled top-pd-sm mobile ">
+                                            <ul class="text-body-secondary list-inline list-unstyled top-pd-sm mobile ">
                                                 <li class="list-inline-item" >难度：{{ review.difficulty_display }}</li>
                                                 <li class="list-inline-item" >作业：{{ review.homework_display }}</li>
                                                 <li class="list-inline-item" >给分：{{ review.grading_display }}</li>
@@ -665,7 +665,7 @@
                                                     <small class="text-secondary small">({{ rel_course.review_count }})</small>
                                                 {% endif %}
                                             </div>
-                                            <small class="text-secondary-emphasis">{{ rel_course.term_ids|term_display_short }}</small>
+                                            <small class="text-body-secondary">{{ rel_course.term_ids|term_display_short }}</small>
                                         </div>
                                     </li>
                                 {% endif %}
@@ -701,7 +701,7 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                            <small class="text-secondary-emphasis">{{ rel_course.term_ids|term_display_short }}</small>
+                                            <small class="text-body-secondary">{{ rel_course.term_ids|term_display_short }}</small>
                                         </li>
                                     {% endif %}
                                 {% endfor %}

@@ -17,7 +17,7 @@
       <span class="badge rounded-pill bg-success">已点评</span>
       {% endif %}
 
-      <span class="small text-secondary-emphasis">{{ course.term_ids|term_display_one }}</span>
+      <span class="small text-body-secondary">{{ course.term_ids|term_display_one }}</span>
 
       {% if course.review_count %}
       <div class="ud-pd-sm blue">
@@ -30,18 +30,18 @@
           <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
           {% endif %}
         {% endfor %}
-        <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span class="text-secondary-emphasis px12">({{ course.review_count }} 人评价)</span>
+        <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span class="text-body-secondary px12">({{ course.review_count }} 人评价)</span>
       </div>
       {% else %}
       <div class="ud-pd-sm blue">
         {% for star in range(0,5) %}
           <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
         {% endfor %}
-        <span class="rl-pd-sm h4"><span class="text-secondary-emphasis px12">暂无评价</span>
+        <span class="rl-pd-sm h4"><span class="text-body-secondary px12">暂无评价</span>
       </div>
       {% endif %}
     <!--
-      <ul class="text-secondary-emphasis list-inline list-unstyled">
+      <ul class="text-body-secondary list-inline list-unstyled">
         <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
         <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
         <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
@@ -49,7 +49,7 @@
       </ul>
       -->
                     {% if course.rate.difficulty_score %}
-                    <ul class="text-secondary-emphasis list-inline list-unstyled">
+                    <ul class="text-body-secondary list-inline list-unstyled">
                         <li class="list-inline-item">课程难度
                             <div class="progress">
                                 <div class="progress-bar overflow-visible course-metric-progress-bar " role="progressbar" style="width: {{ course.rate.difficulty_score }}%;" aria-valuenow="{{ course.rate.difficulty_score }}" aria-valuemin="0" aria-valuemax="100">
@@ -81,7 +81,7 @@
                         <!-- 其他列表项 -->
                     </ul>
                 {% else %}
-                    <ul class="text-secondary-emphasis list-inline list-unstyled ud-pd-sm course-overview-table">
+                    <ul class="text-body-secondary list-inline list-unstyled ud-pd-sm course-overview-table">
                         <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>

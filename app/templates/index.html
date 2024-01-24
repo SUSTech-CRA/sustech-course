@@ -12,7 +12,7 @@
 
     <div class="bm-pd-md">
       <h4 class="blue">最新点评</h4>
-      <span class="text-secondary-emphasis">共 {{ reviews.total }} 个点评（当前第 {{ reviews.page }} 页）</span>
+      <span class="text-body-secondary">共 {{ reviews.total }} 个点评（当前第 {{ reviews.page }} 页）</span>
 
       {% for review in reviews.items %}
           {% if not review.is_blocked or current_user.is_admin or current_user == review.author %}
@@ -34,7 +34,7 @@
               <span class="float-right localtime" style="display: none;">{{ review.update_time|utctime }}</span>
             </div>
             {% include 'review-hidden.html' %}
-            <p class="text-secondary-emphasis">{{ review.content|abstract }} <a href="{{ url_for('course.view_course', course_id=review.course.id) }}#review-{{ review.id }}">&gt;&gt;更多</a></p>
+            <p class="text-body-secondary">{{ review.content|abstract }} <a href="{{ url_for('course.view_course', course_id=review.course.id) }}#review-{{ review.id }}">&gt;&gt;更多</a></p>
           </div><!-- ./col-md-8 -->
         </div><!-- ./row -->
       </div><!-- ./dashed -->

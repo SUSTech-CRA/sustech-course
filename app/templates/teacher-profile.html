@@ -9,9 +9,9 @@
 	<div class="inline-h3">
           <span class="blue h3">课程</span>
 	  {% if courses.total == 0 %}
-          <span class="text-secondary-emphasis small">还没有课程哦！</span>
+          <span class="text-body-secondary small">还没有课程哦！</span>
           {% else %}
-          <span class="text-secondary-emphasis">(共 {{ courses.total }} 门)</span>
+          <span class="text-body-secondary">(共 {{ courses.total }} 门)</span>
 	</div>
 
 	{% for course in courses.items %}
@@ -42,14 +42,14 @@
               <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
               {% endif %}
             {% endfor %}
-            <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span class="text-secondary-emphasis px12">({{ course.review_count }} 人评价)</span>
+            <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span class="text-body-secondary px12">({{ course.review_count }} 人评价)</span>
           </div>
           {% else %}
           <div class="ud-pd-sm blue">
             {% for star in range(0,5) %}
               <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
             {% endfor %}
-            <span class="rl-pd-sm h4"><span class="text-secondary-emphasis px12">暂无评价</span></span>
+            <span class="rl-pd-sm h4"><span class="text-body-secondary px12">暂无评价</span></span>
           </div>
           {% endif %}
 	</div> <!-- end course.item -->	

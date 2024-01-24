@@ -4,9 +4,9 @@
 <div class="container"">
   <div class="row float-element shadow">
       {% if teacher %}
-      <span class="text-secondary-emphasis"> {{ teacher.name }} 共 {{ courses.total }} 门课</span></span>
+      <span class="text-body-secondary"> {{ teacher.name }} 共 {{ courses.total }} 门课</span></span>
         {% elif student %}
-      <span class="text-secondary-emphasis"> {{ student.name }} 共 {{ courses.total }} 门课</span></span>
+      <span class="text-body-secondary"> {{ student.name }} 共 {{ courses.total }} 门课</span></span>
     {% else %}
   {% endif %}
     <hr>
@@ -84,10 +84,10 @@
               <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
               {% endif %}
             {% endfor %}
-            <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span class="text-secondary-emphasis px12">({{ course.review_count }} 人评价)</span>
+            <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span class="text-body-secondary px12">({{ course.review_count }} 人评价)</span>
           </div>
  
-          <ul class="text-secondary-emphasis list-inline list-unstyled">
+          <ul class="text-body-secondary list-inline list-unstyled">
               <li class="right-mg-md">课程难度：{{ course.rate.difficulty }}</li>
               <li class="right-mg-md">作业多少：{{ course.rate.homework }}</li>
               <li class="right-mg-md">给分好坏：{{ course.rate.grading }}</li>
@@ -98,10 +98,10 @@
             {% for star in range(0,5) %}
               <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
             {% endfor %}
-            <span class="rl-pd-sm h4"><span class="text-secondary-emphasis px12">暂无评价</span>
+            <span class="rl-pd-sm h4"><span class="text-body-secondary px12">暂无评价</span>
           </div>
 
-          <ul class="text-secondary-emphasis list-inline list-unstyled">
+          <ul class="text-body-secondary list-inline list-unstyled">
               <li class="list-inline-item right-mg-md">课程难度：你猜</li>
               <li class="list-inline-item right-mg-md">作业多少：你猜</li>
               <li class="list-inline-item right-mg-md">给分好坏：你猜</li>

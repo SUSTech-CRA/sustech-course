@@ -8,7 +8,7 @@
       <div class="bm-pd-lg">
 	<div class="inline-h3">
           <span class="blue h3">课程信息编辑历史</span>
-          <span class="text-secondary-emphasis">(共 {{ course.info_history_count }} 次)</span>
+          <span class="text-body-secondary">(共 {{ course.info_history_count }} 次)</span>
 	</div>
 
 	{% if course.info_history_count == 0 %}
@@ -23,8 +23,8 @@
       	    </p>
             <p>课程简介：{% if history.introduction %}{{ history.introduction|safe }}{% else %}暂无{% endif %}</p>
             <div>
-              <span class="text-secondary-emphasis">贡献者：<a href="{{ url_for('user.view_profile', user_id=history.author) }}">{{ history.author_user.username }}</a></span>
-              <span class="text-secondary-emphasis pull-right">编辑时间：<span class="localtime" style="display: none;">{{ history.update_time|utctime }}</span></span>
+              <span class="text-body-secondary">贡献者：<a href="{{ url_for('user.view_profile', user_id=history.author) }}">{{ history.author_user.username }}</a></span>
+              <span class="text-body-secondary pull-right">编辑时间：<span class="localtime" style="display: none;">{{ history.update_time|utctime }}</span></span>
             </div>
       	  </div>
 	  {% endfor %}
