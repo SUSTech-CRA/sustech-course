@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, render_template, flash, abort, jsonify, make_response, session
+from flask import Blueprint, request, redirect, url_for, render_template, flash, abort, jsonify, make_response, session, current_app
 from flask_login import login_user, login_required, current_user, logout_user
 from app.models import User, RevokedToken as RT, Course, CourseRate, CourseTerm, Teacher, Review, Notification, follow_course, follow_user, SearchLog, ThirdPartySigninHistory, Announcement
 from app.forms import LoginForm, RegisterForm, ForgotPasswordForm, ResetPasswordForm
@@ -166,7 +166,7 @@ def oauth_callback():
     session["family_name"] = data.get("family_name")
     session["full_name"] = data.get("name")
     session["email"] = data.get("email")
-    email = email = session["email"]
+    email = session["email"]
     session["access_token"] = access_token  # 以后存到用户表中
     # print(User.query.filter_by(email=session["email"]).first())
 
@@ -676,3 +676,7 @@ def songshu():
     '''Test'''
 
     return render_template('songshu.html')
+
+@home.route('/robots.txt')
+def robots():
+    return current_app.send_static_file('robots.txt')
