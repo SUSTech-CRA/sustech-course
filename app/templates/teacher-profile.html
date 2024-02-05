@@ -42,7 +42,7 @@
               <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
               {% endif %}
             {% endfor %}
-            <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span class="text-body-secondary px12">({{ course.review_count }} 人评价)</span>
+            <span class="rl-pd-sm h4 mono-font">{{ course.rate.average_rate }}</span><span class="text-body-secondary px12">({{ course.review_count }} 人评价)</span>
           </div>
           {% else %}
           <div class="ud-pd-sm blue">
@@ -78,10 +78,10 @@
 
       <div class="ud-pd-md dashed">
         <ul class="list-unstyled dark-grey">
-            <li class="ud-pd-sm">共 <span class="blue"><strong>{{ courses.total }}</strong></span> 门课</li>
-            <li class="ud-pd-sm">共 <span class="blue"><strong>{{ stats['num_rating'] }}</strong></span> 个点评</li>
-            <li class="ud-pd-sm">平均分: <span class="blue"><strong>{{ '%.2f' % stats['avg_rating'] }}</strong></span></li>
-            <li class="ud-pd-sm">归一化平均分: <span class="blue"><strong>{{ '%.2f' % stats['normalized_rating'] }}</strong></span></li>
+            <li class="ud-pd-sm">共 <span class="blue mono-font"><strong>{{ courses.total }}</strong></span> 门课</li>
+            <li class="ud-pd-sm">共 <span class="blue mono-font"><strong>{{ stats['num_rating'] }}</strong></span> 个点评</li>
+            <li class="ud-pd-sm">平均分: <span class="blue mono-font"><strong>{{ '%.2f' % stats['avg_rating'] }}</strong></span></li>
+            <li class="ud-pd-sm">归一化平均分: <span class="blue mono-font"><strong>{{ '%.2f' % stats['normalized_rating'] }}</strong></span></li>
         </ul>
       </div>
 

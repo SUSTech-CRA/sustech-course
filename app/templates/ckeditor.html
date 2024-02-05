@@ -157,7 +157,7 @@
 <script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-markdown-gfm/40.2.0/files/build/markdown-gfm.js"></script>
 <script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-word-count/40.2.0/files/build/word-count.js"></script>
 
-<script src="/static/js/ckeditor-math.js"></script>
+<!-- <script src="/static/js/ckeditor-math.js"></script> -->
 
 <!--<script src="/static/ckeditor/adapters/jquery.js"></script>-->
 <!--<script>-->
@@ -185,6 +185,7 @@
             CKEditor5.basicStyles.Bold,
             CKEditor5.basicStyles.Italic,
             CKEditor5.basicStyles.Underline,
+            CKEditor5.basicStyles.Strikethrough,
             CKEditor5.basicStyles.Code,
             CKEditor5.blockQuote.BlockQuote,
             //CKEditor5.cloudServices.CloudServices,
@@ -209,7 +210,7 @@
             CKEditor5.table.TableCellProperties,
             CKEditor5.table.TableToolbar,
             CKEditor5.typing.TextTransformation,
-            CKEditor5.adapterCkfinder.UploadAdapter,
+            CKEditor5.adapterCkfinder.UploadAdapter, // removed in 42.0.0
             CKEditor5.ckfinder.CKFinder,
             CKEditor5.codeBlock.CodeBlock,
             CKEditor5.markdownGfm.PasteFromMarkdownExperimental,
@@ -228,6 +229,7 @@
                 'bold',
                 'italic',
                 'underline',
+                'strikethrough',
                 'link',
                 'bulletedList',
                 'numberedList',

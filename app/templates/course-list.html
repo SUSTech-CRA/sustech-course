@@ -4,7 +4,7 @@
     <div class="col-md-12 col-xs-12">
       <a class="px16" href="{{ url_for('course.view_course', course_id=course.id) }}">{{ course.name }}
           {% if course.teachers %}（{{ course.teacher_names_display|name_display_short }}）{% endif %}
-          {% if course.course_code %}{{ course.course_code }}{% endif %}
+          {% if course.course_code %}<span class="badge badge-black-white mono-font">{{ course.course_code }}</span>{% endif %}
       </a>
 
       {% if course.introduction %}
@@ -17,7 +17,7 @@
       <span class="badge rounded-pill bg-success">已点评</span>
       {% endif %}
 
-      <span class="small text-body-secondary">{{ course.term_ids|term_display_one }}</span>
+      <span class="small text-body-secondary"> {{ course.term_ids|term_display_one }}</span>
 
       {% if course.review_count %}
       <div class="ud-pd-sm blue">
@@ -30,7 +30,7 @@
           <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
           {% endif %}
         {% endfor %}
-        <span class="rl-pd-sm h4">{{ course.rate.average_rate }}</span><span class="text-body-secondary px12">({{ course.review_count }} 人评价)</span>
+        <span class="rl-pd-sm h4 mono-font">{{ course.rate.average_rate }}</span><span class="text-body-secondary px12">({{ course.review_count }} 人评价)</span>
       </div>
       {% else %}
       <div class="ud-pd-sm blue">

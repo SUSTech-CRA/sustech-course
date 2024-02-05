@@ -95,5 +95,11 @@
         border: 1px #3f3f3f solid;
     }
 
+    /* 黑白 badge */
+    .badge-black-white {
+        background-color: #343a40;
+        color: #699fcf;
+    }
+
 
 }

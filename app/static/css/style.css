@@ -6,7 +6,7 @@
 body {
     padding-bottom: 30px;
     background-color: #f3f3f3;
-    font-family: 'Noto Sans SC', 'Open Sans', sans-serif;
+    font-family: 'Noto Sans SC', Helvetica, Arial, sans-serif;
 }
 
 /* Sticky footer styles */
@@ -492,4 +492,15 @@ a.nounderline:active { text-decoration: none; }
 .review-blockquote p {
   margin-bottom: 0; /* Remove bottom margin from the paragraph */
   font-style: italic;
+}
+
+/* 黑白 badge */
+.badge-black-white {
+    background-color: #f8f9fa;
+    color: #337ab7;
+}
+
+.mono-font {
+    font-family: 'Noto Sans Mono', 'Noto Sans SC', 'Open Sans', Helvetica, Arial, sans-serif;
+    font-weight: 600;
 }

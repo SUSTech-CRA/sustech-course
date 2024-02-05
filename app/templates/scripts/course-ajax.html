@@ -8,11 +8,12 @@ $(document).ready(function() {
         type: 'HEAD',
         success: function() {
             // 链接有效，显示查看按钮
-            $("#course-link-status").html('<a href="' + url + '" target="_blank" class="btn btn-white"><i class="fa-solid fa-book"></i> 查看课程大纲PDF</a>');
+            $("#course-link-status").html('<a href="' + url + '" target="_blank" class="btn btn-white"><i class="fa-solid fa-book"></i> 课程大纲PDF</a>');
         },
         error: function() {
             // 链接无效，显示消息
-            $("#course-link-status").text('暂未收录该课程的大纲(´ﾟдﾟ`)');
+            // set button disabled
+            $("#course-link-status").html('<button class="btn btn-white" disabled>暂未收录课程大纲(´ﾟдﾟ`)</button>');
         }
     });
 });
