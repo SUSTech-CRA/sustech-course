@@ -87,7 +87,7 @@ def load_courses(insert=True):
         # https://github.com/jingning42/ustc-course/blob/66c68a9615d4f658c51d5273b7869d02ee5ddd3d/app/models/course.py#L85
         # 20223 2022-23 SUMMER
         # 20231 2023-24 AUTUMN
-        term = '20223'  # manual add 20211学期> 2021-2022秋季
+        term = '20232'  # manual add 20211学期> 2021-2022秋季
         course_kcbh[code] = dict(
             kcid=c['kcid'],  #"2FCC66B429FA494A8F902D739570FCC3"
             # kcid=abs(hash(c['kcid'])) % (10 ** 8),  # "55932488" #需要做个hash，似乎不影响实际使用，
