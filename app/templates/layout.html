@@ -47,6 +47,31 @@
           </form>
 
           {% if current_user.is_authenticated %}
+
+        <div id="dropdown-notice" class="dropdown"> <!-- Changed to a <div> and added dropdown class -->
+              <a class="nav-link dropdown-toggle mt-2 mt-lg-0" href="#" id="notificationDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa-solid fa-envelope"></i>
+                  {% if current_user.unread_notification_count > 0 %}
+                  <span > {{ current_user.unread_notification_count }}</span>
+                  {% endif %}
+              </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdownMenuLink">
+              {% if current_user.latest_notifications_text|length == 0 %}
+              {% set notification_text_list = ["还没有消息哦！"] %}
+              {% else %}
+              {% set notification_text_list = current_user.latest_notifications_text %}
+              {% endif %}
+              {% for notification_text in notification_text_list %}
+              <li class="ud-pd-sm dashed">
+                <div class="notice">{{ notification_text|safe }}</div>
+              </li>
+              {% endfor %}
+              <li class="ud-pd-sm float-end"><a class="blue" href="{{ url_for('user.notice')}}">查看全部</a></li>
+            </ul>
+        </div>
+
+
+
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle mt-2 mt-lg-0" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
