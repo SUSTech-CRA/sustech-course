@@ -227,18 +227,18 @@
                                             plotlyScriptLoaded = true;
                                             callback();
                                         };
-                                        script.src = "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/plotly.js/2.27.1/plotly-basic.min.js";
+                                        script.src = "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/plotly.js/2.29.0/plotly-basic.min.js";
                                         document.head.appendChild(script);
                                     }
 
                                     // 调用绘图函数
-                                    function loadPlotly() {
+                                    function loadPlotly_score() {
                                         if (!plotRendered) {
                                             if (plotlyScriptLoaded) {
-                                                drawPlot();
+                                                drawPlot_score();
                                                 plotRendered = true;
                                             } else {
-                                                loadPlotlyScript(drawPlot);
+                                                loadPlotlyScript(drawPlot_score);
                                             }
                                         }
                                     }
@@ -247,7 +247,7 @@
                                             var isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
                                             // 根据暗色模式更新颜色和图表布局
-                                            var backgroundColor = isDarkMode ? '#333' : '#fff';
+                                            var backgroundColor = isDarkMode ? '#212529' : '#fff';
                                             var textColor = isDarkMode ? '#fff' : '#333';
 
                                             var updatedLayout = {
@@ -264,10 +264,10 @@
 
                                         // 为按钮添加点击事件监听器
                                         document.querySelector('[data-bs-target="#plotly-div"]').addEventListener('click', function() {
-                                            loadPlotly();
+                                            loadPlotly_score();
                                         });
 
-                                        function drawPlot() {
+                                        function drawPlot_score() {
                                                                                     // 你的数据
                                             var data = {
                                                     "scores": [{{ course.latest_score }}]
@@ -350,6 +350,11 @@
 
                         </div>
                         {% endif %}
+                <!-- 显示课程评论统计 -->
+{#                        <div class="ud-pd-md">#}
+{##}
+{#                    </div>#}
+
 
 
                     <div class="solid ud-pd-md inline-h3">
@@ -428,6 +433,128 @@
                                     {% endfor %}
                                 </select>
                                 <span class="rl-pd-sm text-body-secondary">{{ review_num }}条点评</span>
+
+                        <button class="btn btn-small btn-default" type="button" data-bs-toggle="collapse" data-bs-target="#plotly-course-stats" aria-expanded="false" aria-controls="plotly-course-stats">
+                            <i class="fa-solid fa-chart-bar"></i> 课程评论统计
+                        </button>
+                        <div>
+                            <div id="plotly-course-stats" class="collapse"></div>
+                            <script>
+                                var plotRendered = false;
+                                var plotlyScriptLoaded = false;
+
+                                // 动态加载 Plotly 库
+                                function loadPlotlyScript(callback) {
+                                    var script = document.createElement('script');
+                                    script.onload = function () {
+                                        plotlyScriptLoaded = true;
+                                        callback();
+                                    };
+                                    script.src = "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/plotly.js/2.29.0/plotly-basic.min.js";
+                                    document.head.appendChild(script);
+                                }
+
+                                // 调用绘图函数
+                                function loadPlotly_review() {
+                                    if (!plotRendered) {
+                                        if (plotlyScriptLoaded) {
+                                            drawPlot_review();
+                                            plotRendered = true;
+                                        } else {
+                                            loadPlotlyScript(drawPlot_review);
+                                        }
+                                    }
+                                }
+
+                                // 为按钮添加点击事件监听器
+                                document.querySelector('[data-bs-target="#plotly-course-stats"]').addEventListener('click', function() {
+                                    loadPlotly_review();
+                                });
+
+                                        function updatePlotlyTheme_review() {
+                                            var isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                                            // 根据暗色模式更新颜色和图表布局
+                                            var backgroundColor = isDarkMode ? '#212529' : '#fff';
+                                            var textColor = isDarkMode ? '#fff' : '#333';
+
+                                            var updatedLayout = {
+                                                paper_bgcolor: backgroundColor,
+                                                plot_bgcolor: backgroundColor,
+                                                font: {
+                                                    color: textColor
+                                                }
+                                            };
+
+                                            // 更新图表
+                                            Plotly.relayout('plotly-course-stats', updatedLayout);
+                                        }
+
+                                function drawPlot_review() {
+                                    // 从 Flask 模板获取数据
+                                    var categories = [{% for row in course.review_per_term_dist() %}'{{ row[0]|term_display }}',{% endfor %}];
+                                    var averages = [{% for row in course.review_per_term_dist() %}{{ '%.1f' % row[2] }},{% endfor %}];
+                                    var reviewCounts = [{% for row in course.review_per_term_dist() %}{{ row[1] }},{% endfor %}];
+
+                                    // 创建平均分数据
+                                    var averageData = {
+                                        x: categories,
+                                        y: averages,
+                                        type: 'scatter',
+                                        name: '平均分',
+                                        yaxis: 'y1',
+                                        mode: 'lines+markers',
+                                        line: { width: 3 }  // 增加线条粗细
+                                    };
+
+                                    // 创建点评数量数据
+                                    var reviewCountData = {
+                                        x: categories,
+                                        y: reviewCounts,
+                                        type: 'bar',
+                                        name: '点评数量',
+                                        yaxis: 'y2',
+                                        opacity: 0.6  // 调整透明度
+                                    };
+
+                                    var layout_review = {
+                                        title: '课程评论统计',
+                                        yaxis: {
+                                            title: '平均分',
+                                            range: [0, 10]  // 设置 y 轴范围从 0 到 10
+                                        },
+                                        yaxis2: {
+                                            title: '点评数量',
+                                            overlaying: 'y',
+                                            side: 'right'
+                                        },
+                                        legend: {
+                                            x: 0.5,          // x 位置居中
+                                            y: -0.2,         // y 位置放在底部（负值）
+                                            xanchor: 'center', // 水平居中对齐
+                                            yanchor: 'top',    // 垂直以顶部对齐
+                                            orientation: 'h' // 水平放置图例
+                                        },
+                                        margin: {           // 增加底部边距以显示图例
+                                            b: 50
+                                        }
+                                    };
+
+
+
+                                    var data_review = [reviewCountData, averageData];
+
+                                    Plotly.newPlot('plotly-course-stats', data_review, layout_review);
+
+                                    updatePlotlyTheme_review();
+                                    // 监听系统颜色方案的改变
+                                    window.matchMedia('(prefers-color-scheme: dark)').addListener(updatePlotlyTheme_review);
+
+                                }
+
+
+                            </script>
+                        </div>
                             </div>
                         {% endif %}
 
