@@ -14,7 +14,7 @@
       "@context": "http://schema.org",
       "@type": "Course",
       "name": "{{ course.name }}",
-      "description": "{{ course.description|striptags|safe }}",
+      "description": "{{ course.description|striptags|escape_json|safe }}",
       "provider": {
         "@type": "Organization",
         "name": "Niuwa Curriculum Evaluation System",

@@ -14,11 +14,17 @@ from flask_babel import Babel
 from datetime import datetime
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_minify import minify
-
+import json
 
 app = Flask(__name__)
 # minify app (may need to turn off when debug)
 minify(app=app, html=True, js=True, cssless=True)
+
+# json escape
+def escape_json(value):
+    """转义字符串以在 JSON 中安全使用。"""
+    return json.dumps(value, ensure_ascii=False)[1:-1]  # 使用 json.dumps 来转义，并去除首尾的双引号
+app.jinja_env.filters['escape_json'] = escape_json
 
 # 复制 default.py 为 myconf.py
 app.config.from_object('config.sustech')
