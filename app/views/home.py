@@ -15,6 +15,7 @@ import requests
 from oauthlib import oauth2
 import uuid
 import faker
+from cachelib import SimpleCache
 
 home = Blueprint('home',__name__)
 OAUTH = app.config['OAUTH']
@@ -58,6 +59,20 @@ def latest_reviews_rss():
     rss_content = render_template('feed.xml', reviews=reviews_paged)
     response = make_response(rss_content)
     response.headers['Content-Type'] = 'application/rss+xml; charset=utf-8'
+    return response
+
+sitemap_cache = SimpleCache()
+@app.route('/sitemap.xml')
+def latest_reviews_sitemap():
+    # 尝试从缓存中获取数据
+    response = sitemap_cache.get('latest_reviews_sitemap')
+    if response is None:
+        reviews_paged = gen_ordered_reviews_query().paginate(page=1, per_page=1000)
+        rss_content = render_template('sitemap.xml', reviews=reviews_paged)
+        response = make_response(rss_content)
+        response.headers['Content-Type'] = 'application/xml; charset=utf-8'
+        # 缓存数据和响应
+        sitemap_cache.set('latest_reviews_sitemap', response, timeout=60*60)  # 缓存一小时
     return response
 
 @home.route('/follow_reviews')

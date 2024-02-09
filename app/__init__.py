@@ -26,6 +26,14 @@ def escape_json(value):
     return json.dumps(value, ensure_ascii=False)[1:-1]  # 使用 json.dumps 来转义，并去除首尾的双引号
 app.jinja_env.filters['escape_json'] = escape_json
 
+# 创建一个将日期转换为 XML Schema 格式的过滤器
+def date_to_xmlschema(date):
+    if date:
+        return date.isoformat()
+    return None
+
+app.jinja_env.filters['date_to_xmlschema'] = date_to_xmlschema
+
 # 复制 default.py 为 myconf.py
 app.config.from_object('config.sustech')
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # 允许使用HTTP进行OAuth

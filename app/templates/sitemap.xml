@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% for review in reviews.items %}
+        {% if not review.is_blocked %}
+        <url>
+            <loc>https://nces.cra.moe{{ url_for('course.view_course', course_id=review.course.id) }}#review-{{ review.id }}</loc>
+            <lastmod>{{ review.update_time|date_to_xmlschema }}Z</lastmod>
+        </url>
+        {% endif %}
+    {% endfor %}
+</urlset>
