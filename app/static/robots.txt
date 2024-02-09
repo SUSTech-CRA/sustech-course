@@ -1,3 +1,29 @@
 User-agent: *
-Disallow: /api/
-Disallow: /course/*/review/ba
+
+Disallow: /api/*
+
+# material
+Disallow: /course/*/material/
+
+# vote
+Disallow: /course/*/upvote/
+Disallow: /course/*/undo-upvote/
+Disallow: /course/*/downvote/
+Disallow: /course/*/undo-downvote/
+
+# follow
+Disallow: /course/*/follow/
+Disallow: /course/*/unfollow/
+
+# join
+Disallow: /course/*/join/
+Disallow: /course/*/quit/
+
+# reviews
+Disallow: /course/*/reviews/
+
+# edit
+Disallow: /course/*/edit/
+Disallow: /course/*/remove_teacher/
+Disallow: /course/*/add_teacher/
+
