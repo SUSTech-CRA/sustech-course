@@ -5,6 +5,9 @@ $(document).ready(function() {
     $('.course-overview-table table').addClass('table');
     $('.review blockquote').addClass('review-blockquote');
 
+    //add img-fluid to all images
+    $('.review img').addClass('img-fluid');
+
     // 定义一个函数来更新暗色模式
     function updateDarkMode() {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {

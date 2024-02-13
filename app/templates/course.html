@@ -6,9 +6,10 @@
         <div class="row float-element shadow">
             <div class="row">
                 <div class="col-md-8 inline-h3">
-                    <span class="blue h2 fw-bold">{{ course.name }} </span><span class="h5 blue mobile">{% if course.teachers %}
+                    <span class="blue h2 fw-bold">{{ course.name }} </span><span
+                        class="h5 blue mobile">{% if course.teachers %}
                     （{{ course.teacher_names_display|name_display_short }}）{% endif %}</span>
-                    <span  class="badge bg-secondary mono-font">{{ course.courseries }}</span>
+                    <span class="badge bg-secondary mono-font">{{ course.courseries }}</span>
                     <span class="small grey align-bottom left-pd-sm desktop">{{ course.term_ids|term_display }} &nbsp;</span>
                     <br><span
                         class="small grey align-bottom mobile">{{ course.term_ids|term_display }}</span>
@@ -41,7 +42,7 @@
                             <span class="rl-pd-sm h4"><span class="text-body-secondary px12">(暂无评价)</span>
                         </div>
                     {% endif %}
-                <!--
+                    <!--
                     <ul class="text-body-secondary list-inline list-unstyled ud-pd-sm course-overview-table">
                         <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
                         <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
@@ -49,61 +50,80 @@
                         <li class="list-inline-item right-mg-md">收获大小：{{ course.rate.gain or '你猜' }}</li>
                     </ul>
                     -->
-                {% if course.rate.difficulty_score %}
-                    <ul class="text-body-secondary list-inline list-unstyled">
-                        <li class="list-inline-item">课程难度
-                            <div class="progress">
-                                <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.difficulty_score }}%;" aria-valuenow="{{ course.rate.difficulty_score }}" aria-valuemin="0" aria-valuemax="100">
-                                    {{ course.rate.difficulty or '你猜' }}
+                    {% if course.rate.difficulty_score %}
+                        <ul class="text-body-secondary list-inline list-unstyled">
+                            <li class="list-inline-item">课程难度
+                                <div class="progress">
+                                    <div class="progress-bar overflow-visible course-metric-progress-bar"
+                                         role="progressbar" style="width: {{ course.rate.difficulty_score }}%;"
+                                         aria-valuenow="{{ course.rate.difficulty_score }}" aria-valuemin="0"
+                                         aria-valuemax="100">
+                                        {{ course.rate.difficulty or '你猜' }}
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="list-inline-item">作业多少
-                            <div class="progress">
-                                <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.homework_score }}%;" aria-valuenow="{{ course.rate.homework_score }}" aria-valuemin="0" aria-valuemax="100">
-                                    {{ course.rate.homework or '你猜' }}
+                            </li>
+                            <li class="list-inline-item">作业多少
+                                <div class="progress">
+                                    <div class="progress-bar overflow-visible course-metric-progress-bar"
+                                         role="progressbar" style="width: {{ course.rate.homework_score }}%;"
+                                         aria-valuenow="{{ course.rate.homework_score }}" aria-valuemin="0"
+                                         aria-valuemax="100">
+                                        {{ course.rate.homework or '你猜' }}
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="list-inline-item">给分好坏
-                            <div class="progress">
-                                <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.grading_score }}%;" aria-valuenow="{{ course.rate.grading_score }}" aria-valuemin="0" aria-valuemax="100">
-                                    {{ course.rate.grading or '你猜' }}
+                            </li>
+                            <li class="list-inline-item">给分好坏
+                                <div class="progress">
+                                    <div class="progress-bar overflow-visible course-metric-progress-bar"
+                                         role="progressbar" style="width: {{ course.rate.grading_score }}%;"
+                                         aria-valuenow="{{ course.rate.grading_score }}" aria-valuemin="0"
+                                         aria-valuemax="100">
+                                        {{ course.rate.grading or '你猜' }}
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="list-inline-item">收获大小
-                            <div class="progress">
-                                <div class="progress-bar overflow-visible course-metric-progress-bar" role="progressbar" style="width: {{ course.rate.gain_score }}%;" aria-valuenow="{{ course.rate.gain_score }}" aria-valuemin="0" aria-valuemax="100">
-                                    {{ course.rate.gain or '你猜' }}
+                            </li>
+                            <li class="list-inline-item">收获大小
+                                <div class="progress">
+                                    <div class="progress-bar overflow-visible course-metric-progress-bar"
+                                         role="progressbar" style="width: {{ course.rate.gain_score }}%;"
+                                         aria-valuenow="{{ course.rate.gain_score }}" aria-valuemin="0"
+                                         aria-valuemax="100">
+                                        {{ course.rate.gain or '你猜' }}
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
-                {% else %}
-                    <ul class="text-body-secondary list-inline list-unstyled ud-pd-sm course-overview-table">
-                        <li class="list-inline-item right-mg-md">课程难度：{{ course.rate.difficulty or '你猜' }}</li>
-                        <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
-                        <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
-                        <li class="list-inline-item right-mg-md">收获大小：{{ course.rate.gain or '你猜' }}</li>
-                    </ul>
-                {% endif %}
+                            </li>
+                        </ul>
+                    {% else %}
+                        <ul class="text-body-secondary list-inline list-unstyled ud-pd-sm course-overview-table">
+                            <li class="list-inline-item right-mg-md">
+                                课程难度：{{ course.rate.difficulty or '你猜' }}</li>
+                            <li class="list-inline-item right-mg-md">作业多少：{{ course.rate.homework or '你猜' }}</li>
+                            <li class="list-inline-item right-mg-md">给分好坏：{{ course.rate.grading or '你猜' }}</li>
+                            <li class="list-inline-item right-mg-md">收获大小：{{ course.rate.gain or '你猜' }}</li>
+                        </ul>
+                    {% endif %}
 
-                <table class="table table-condensed no-border">
-                    <tr>
-                        <td><i class="fa fa-list-alt fa-fw" aria-hidden="true"></i><strong> 选课类别：</strong>{{ course.join_type or '未知' }}</td>
-                        <td><i class="fa fa-language fa-fw" aria-hidden="true"></i><strong> 教学语言：</strong>{{ course.teaching_type or '未知' }}</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-book fa-fw" aria-hidden="true"></i><strong> 课程类别：</strong>{{ course.course_type or '未知' }}</td>
-                        <td><i class="fa fa-university fa-fw" aria-hidden="true"></i><strong> 开课单位：</strong>{{ course.course_major or '未知' }}</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i><strong> 课程层次：</strong>{{ course.course_level or '未知' }}</td>
-                        <td><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><strong> 获得学分：</strong>{{ course.credit or '未知' }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <table class="table table-condensed no-border">
+                        <tr>
+                            <td><i class="fa fa-list-alt fa-fw" aria-hidden="true"></i><strong>
+                                选课类别：</strong>{{ course.join_type or '未知' }}</td>
+                            <td><i class="fa fa-language fa-fw" aria-hidden="true"></i><strong>
+                                教学语言：</strong>{{ course.teaching_type or '未知' }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-book fa-fw" aria-hidden="true"></i><strong>
+                                课程类别：</strong>{{ course.course_type or '未知' }}</td>
+                            <td><i class="fa fa-university fa-fw" aria-hidden="true"></i><strong>
+                                开课单位：</strong>{{ course.course_major or '未知' }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i><strong>
+                                课程层次：</strong>{{ course.course_level or '未知' }}</td>
+                            <td><i class="fa fa-credit-card fa-fw" aria-hidden="true"></i><strong>
+                                获得学分：</strong>{{ course.credit or '未知' }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
 
                     <div class="ud-pd-sm">
                         {% if course.homepage and course.homepage != 'http://' %}
@@ -115,12 +135,15 @@
                     </div>
                     <div class="ud-pd-sm">
                         <b id="course-link-status">
-                            <a href="https://mirrors.sustech.edu.cn/courses/syllabus/{{ course.courseries }}.pdf" target="_blank" class="btn btn-white" id="course-link"><i class="fa-solid fa-folder"></i> 课程大纲PDF</a>
+                            <a href="https://mirrors.sustech.edu.cn/courses/syllabus/{{ course.courseries }}.pdf"
+                               target="_blank" class="btn btn-white" id="course-link"><i class="fa-solid fa-folder"></i>
+                                课程大纲PDF</a>
                         </b>
                         {% if (current_user.is_authenticated and current_user.identity == 'Student') %}
-                        <b id="course-materials-link">
-                            <a href="./material" target="_blank" class="btn btn-white"><i class="fa-solid fa-folder"></i> 课件</a>
-                        </b>
+                            <b id="course-materials-link">
+                                <a href="./material" target="_blank" class="btn btn-white"><i
+                                        class="fa-solid fa-folder"></i> 课件</a>
+                            </b>
                         {% endif %}
                     </div>
 
@@ -161,14 +184,15 @@
                             <div>
                                 {{ course.description }}
                                 {% if course.description_eng %}
-                                <br><br>
-                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#engDescCollapse">
-                                    <b><i class="fa-solid fa-language"></i> 展开英文描述 Expand English Description</b>
-                                </button>
-                                <br>
-                                <div id="engDescCollapse" class="collapse">
-                                    {{ course.description_eng }}
-                                </div>
+                                    <br><br>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#engDescCollapse">
+                                        <b><i class="fa-solid fa-language"></i> 展开英文描述 Expand English Description</b>
+                                    </button>
+                                    <br>
+                                    <div id="engDescCollapse" class="collapse">
+                                        {{ course.description_eng }}
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -208,15 +232,16 @@
                         </div>
                     {% endif %}
 
-                        {#    put score here  #}
-                        {% if (current_user.is_authenticated and current_user.identity == 'Student') and course.latest_score and (not course.score_type_pf) %}
+                    {#    put score here  #}
+                    {% if (current_user.is_authenticated and current_user.identity == 'Student') and course.latest_score and (not course.score_type_pf) %}
                         <div class="ud-pd-md">
-                                <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse" data-bs-target="#plotly-div" aria-expanded="false" aria-controls="plotly-div">
-                                    <i class="fa-solid fa-chart-simple"></i> 成绩分布估计（%）
-                                </button>
+                            <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#plotly-div" aria-expanded="false" aria-controls="plotly-div">
+                                <i class="fa-solid fa-chart-simple"></i> 成绩分布估计（%）
+                            </button>
                             <div>
-                                    <div id="plotly-div" class="collapse"></div>
-                                    <script>
+                                <div id="plotly-div" class="collapse"></div>
+                                <script>
                                     var plotRendered = false;
                                     var plotlyScriptLoaded = false;
 
@@ -243,118 +268,117 @@
                                         }
                                     }
 
-                                        function updatePlotlyTheme() {
-                                            var isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                                    function updatePlotlyTheme() {
+                                        var isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-                                            // 根据暗色模式更新颜色和图表布局
-                                            var backgroundColor = isDarkMode ? '#212529' : '#fff';
-                                            var textColor = isDarkMode ? '#fff' : '#333';
+                                        // 根据暗色模式更新颜色和图表布局
+                                        var backgroundColor = isDarkMode ? '#212529' : '#fff';
+                                        var textColor = isDarkMode ? '#fff' : '#333';
 
-                                            var updatedLayout = {
-                                                paper_bgcolor: backgroundColor,
-                                                plot_bgcolor: backgroundColor,
-                                                font: {
-                                                    color: textColor
+                                        var updatedLayout = {
+                                            paper_bgcolor: backgroundColor,
+                                            plot_bgcolor: backgroundColor,
+                                            font: {
+                                                color: textColor
+                                            }
+                                        };
+
+                                        // 更新图表
+                                        Plotly.relayout('plotly-div', updatedLayout);
+                                    }
+
+                                    // 为按钮添加点击事件监听器
+                                    document.querySelector('[data-bs-target="#plotly-div"]').addEventListener('click', function () {
+                                        loadPlotly_score();
+                                    });
+
+                                    function drawPlot_score() {
+                                        // 你的数据
+                                        var data = {
+                                                "scores": [{{ course.latest_score }}]
+                                            }
+                                        ;
+
+                                        // 标签和颜色
+                                        var labels = ["F", "D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+"];
+                                        var colors = ["#808080", "#A93226", "#C0392B", "#E74C3C", "#F39C12", "#F4D03F", "#F7DC6F", "#3498DB", "#5DADE2", "#85C1E9", "#7DCEA0", "#58D68D", "#2ECC71"];
+
+                                        //revsere labal (A+ at left, F at right)
+                                        labels.reverse();
+                                        colors.reverse();
+                                        data.scores.reverse();
+
+                                        // 构建图表数据
+                                        var plotData = labels.map((label, index) => {
+                                            return {
+                                                type: 'bar',
+                                                x: [data.scores[index]],
+                                                y: ['Grades'],
+                                                orientation: 'h',
+                                                text: [(data.scores[index] / data.scores.reduce((a, b) => a + b, 0) * 100).toFixed(0)],
+                                                textposition: 'inside',
+                                                hoverinfo: 'none',
+                                                name: label,
+                                                marker: {
+                                                    color: colors[index]
                                                 }
                                             };
-
-                                            // 更新图表
-                                            Plotly.relayout('plotly-div', updatedLayout);
-                                        }
-
-                                        // 为按钮添加点击事件监听器
-                                        document.querySelector('[data-bs-target="#plotly-div"]').addEventListener('click', function() {
-                                            loadPlotly_score();
                                         });
 
-                                        function drawPlot_score() {
-                                                                                    // 你的数据
-                                            var data = {
-                                                    "scores": [{{ course.latest_score }}]
-                                                }
-                                            ;
-
-                                            // 标签和颜色
-                                            var labels = ["F", "D-", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+"];
-                                            var colors = ["#808080", "#A93226", "#C0392B", "#E74C3C", "#F39C12", "#F4D03F", "#F7DC6F", "#3498DB", "#5DADE2", "#85C1E9", "#7DCEA0", "#58D68D", "#2ECC71"];
-
-                                            //revsere labal (A+ at left, F at right)
-                                            labels.reverse();
-                                            colors.reverse();
-                                            data.scores.reverse();
-
-                                            // 构建图表数据
-                                            var plotData = labels.map((label, index) => {
-                                                return {
-                                                    type: 'bar',
-                                                    x: [data.scores[index]],
-                                                    y: ['Grades'],
-                                                    orientation: 'h',
-                                                    text: [(data.scores[index] / data.scores.reduce((a, b) => a + b, 0) * 100).toFixed(0)],
-                                                    textposition: 'inside',
-                                                    hoverinfo: 'none',
-                                                    name: label,
-                                                    marker: {
-                                                        color: colors[index]
-                                                    }
-                                                };
-                                            });
-
-                                            // 图表设置
-                                            var layout = {
-                                                barmode: 'stack',
-                                                xaxis: {
-                                                    showgrid: false,
-                                                    zeroline: false,
-                                                    showline: false,
-                                                    showticklabels: false
-                                                },
-                                                yaxis: {
-                                                    showgrid: false,
-                                                    zeroline: false,
-                                                    showline: false,
-                                                    showticklabels: false
-                                                },
-                                                showlegend: true,
-                                                legend: {
-                                                    x: 0.5,
-                                                    y: -0.2,
-                                                    xanchor: 'center',
-                                                    yanchor: 'top',
-                                                    orientation: 'h',
-                                                    traceorder: 'normal'
-                                                },
-                                                height: 120,  // Increase the height to accommodate the legend below
-                                                autosize: true,  // Enable autosize for responsiveness
-                                                margin: {
-                                                    l: 0,
-                                                    r: 0,
-                                                    b: 0,  // Increase the bottom margin to accommodate the legend
-                                                    t: 0
-                                                }
-                                            };
-
-                                            // 绘制图表
-                                            var plotly_config ={
-                                                responsive: true,
-                                                displayModeBar: false,
-                                                staticPlot: true
+                                        // 图表设置
+                                        var layout = {
+                                            barmode: 'stack',
+                                            xaxis: {
+                                                showgrid: false,
+                                                zeroline: false,
+                                                showline: false,
+                                                showticklabels: false
+                                            },
+                                            yaxis: {
+                                                showgrid: false,
+                                                zeroline: false,
+                                                showline: false,
+                                                showticklabels: false
+                                            },
+                                            showlegend: true,
+                                            legend: {
+                                                x: 0.5,
+                                                y: -0.2,
+                                                xanchor: 'center',
+                                                yanchor: 'top',
+                                                orientation: 'h',
+                                                traceorder: 'normal'
+                                            },
+                                            height: 120,  // Increase the height to accommodate the legend below
+                                            autosize: true,  // Enable autosize for responsiveness
+                                            margin: {
+                                                l: 0,
+                                                r: 0,
+                                                b: 0,  // Increase the bottom margin to accommodate the legend
+                                                t: 0
                                             }
-                                            Plotly.newPlot('plotly-div', plotData, layout, plotly_config);
-                                            updatePlotlyTheme();
-                                            // 监听系统颜色方案的改变
-                                            window.matchMedia('(prefers-color-scheme: dark)').addListener(updatePlotlyTheme);
+                                        };
+
+                                        // 绘制图表
+                                        var plotly_config = {
+                                            responsive: true,
+                                            displayModeBar: false,
+                                            staticPlot: true
                                         }
-                                    </script>
+                                        Plotly.newPlot('plotly-div', plotData, layout, plotly_config);
+                                        updatePlotlyTheme();
+                                        // 监听系统颜色方案的改变
+                                        window.matchMedia('(prefers-color-scheme: dark)').addListener(updatePlotlyTheme);
+                                    }
+                                </script>
                             </div>
 
                         </div>
-                        {% endif %}
-                <!-- 显示课程评论统计 -->
-{#                        <div class="ud-pd-md">#}
-{##}
-{#                    </div>#}
-
+                    {% endif %}
+                    <!-- 显示课程评论统计 -->
+                    {#                        <div class="ud-pd-md">#}
+                    {##}
+                    {#                    </div>#}
 
 
                     <div class="solid ud-pd-md inline-h3">
@@ -389,9 +413,9 @@
                             </div>
                         {% endif %}
                         {% if course.num_deleted_reviews > 0 %}
-                        <div class="alert alert-warning" role="alert">
-                            <span style="font-weight:bold;">本课程有 {{ course.num_deleted_reviews }} 位用户曾删除过点评。</span>
-                        </div>
+                            <div class="alert alert-warning" role="alert">
+                                <span style="font-weight:bold;">本课程有 {{ course.num_deleted_reviews }} 位用户曾删除过点评。</span>
+                            </div>
                         {% endif %}
 
                         {% if reviews|length >= 2 %}
@@ -434,42 +458,44 @@
                                 </select>
                                 <span class="rl-pd-sm text-body-secondary">{{ review_num }}条点评</span>
 
-                        <button class="btn btn-small btn-default" type="button" data-bs-toggle="collapse" data-bs-target="#plotly-course-stats" aria-expanded="false" aria-controls="plotly-course-stats">
-                            <i class="fa-solid fa-chart-bar"></i> 课程评论统计
-                        </button>
-                        <div>
-                            <div id="plotly-course-stats" class="collapse"></div>
-                            <script>
-                                var plotRendered = false;
-                                var plotlyScriptLoaded = false;
+                                <button class="btn btn-small btn-default" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#plotly-course-stats" aria-expanded="false"
+                                        aria-controls="plotly-course-stats">
+                                    <i class="fa-solid fa-chart-bar"></i> 课程评论统计
+                                </button>
+                                <div>
+                                    <div id="plotly-course-stats" class="collapse"></div>
+                                    <script>
+                                        var plotRendered = false;
+                                        var plotlyScriptLoaded = false;
 
-                                // 动态加载 Plotly 库
-                                function loadPlotlyScript(callback) {
-                                    var script = document.createElement('script');
-                                    script.onload = function () {
-                                        plotlyScriptLoaded = true;
-                                        callback();
-                                    };
-                                    script.src = "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/plotly.js/2.29.0/plotly-basic.min.js";
-                                    document.head.appendChild(script);
-                                }
-
-                                // 调用绘图函数
-                                function loadPlotly_review() {
-                                    if (!plotRendered) {
-                                        if (plotlyScriptLoaded) {
-                                            drawPlot_review();
-                                            plotRendered = true;
-                                        } else {
-                                            loadPlotlyScript(drawPlot_review);
+                                        // 动态加载 Plotly 库
+                                        function loadPlotlyScript(callback) {
+                                            var script = document.createElement('script');
+                                            script.onload = function () {
+                                                plotlyScriptLoaded = true;
+                                                callback();
+                                            };
+                                            script.src = "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/plotly.js/2.29.0/plotly-basic.min.js";
+                                            document.head.appendChild(script);
                                         }
-                                    }
-                                }
 
-                                // 为按钮添加点击事件监听器
-                                document.querySelector('[data-bs-target="#plotly-course-stats"]').addEventListener('click', function() {
-                                    loadPlotly_review();
-                                });
+                                        // 调用绘图函数
+                                        function loadPlotly_review() {
+                                            if (!plotRendered) {
+                                                if (plotlyScriptLoaded) {
+                                                    drawPlot_review();
+                                                    plotRendered = true;
+                                                } else {
+                                                    loadPlotlyScript(drawPlot_review);
+                                                }
+                                            }
+                                        }
+
+                                        // 为按钮添加点击事件监听器
+                                        document.querySelector('[data-bs-target="#plotly-course-stats"]').addEventListener('click', function () {
+                                            loadPlotly_review();
+                                        });
 
                                         function updatePlotlyTheme_review() {
                                             var isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -490,71 +516,71 @@
                                             Plotly.relayout('plotly-course-stats', updatedLayout);
                                         }
 
-                                function drawPlot_review() {
-                                    // 从 Flask 模板获取数据
-                                    var categories = [{% for row in course.review_per_term_dist() %}'{{ row[0]|term_display }}',{% endfor %}];
-                                    var averages = [{% for row in course.review_per_term_dist() %}{{ '%.1f' % row[2] }},{% endfor %}];
-                                    var reviewCounts = [{% for row in course.review_per_term_dist() %}{{ row[1] }},{% endfor %}];
+                                        function drawPlot_review() {
+                                            // 从 Flask 模板获取数据
+                                            var categories = [{% for row in course.review_per_term_dist() %}'
+                                                {{ row[0]|term_display }}',{% endfor %}];
+                                            var averages = [{% for row in course.review_per_term_dist() %}{{ '%.1f' % row[2] }}, {% endfor %}];
+                                            var reviewCounts = [{% for row in course.review_per_term_dist() %}{{ row[1] }}, {% endfor %}];
 
-                                    // 创建平均分数据
-                                    var averageData = {
-                                        x: categories,
-                                        y: averages,
-                                        type: 'scatter',
-                                        name: '平均分',
-                                        yaxis: 'y1',
-                                        mode: 'lines+markers',
-                                        line: { width: 3 }  // 增加线条粗细
-                                    };
+                                            // 创建平均分数据
+                                            var averageData = {
+                                                x: categories,
+                                                y: averages,
+                                                type: 'scatter',
+                                                name: '平均分',
+                                                yaxis: 'y1',
+                                                mode: 'lines+markers',
+                                                line: {width: 3}  // 增加线条粗细
+                                            };
 
-                                    // 创建点评数量数据
-                                    var reviewCountData = {
-                                        x: categories,
-                                        y: reviewCounts,
-                                        type: 'bar',
-                                        name: '点评数量',
-                                        yaxis: 'y2',
-                                        opacity: 0.6  // 调整透明度
-                                    };
+                                            // 创建点评数量数据
+                                            var reviewCountData = {
+                                                x: categories,
+                                                y: reviewCounts,
+                                                type: 'bar',
+                                                name: '点评数量',
+                                                yaxis: 'y2',
+                                                opacity: 0.6  // 调整透明度
+                                            };
 
-                                    var layout_review = {
-                                        title: '课程评论统计',
-                                        yaxis: {
-                                            title: '平均分',
-                                            range: [0, 10]  // 设置 y 轴范围从 0 到 10
-                                        },
-                                        yaxis2: {
-                                            title: '点评数量',
-                                            overlaying: 'y',
-                                            side: 'right'
-                                        },
-                                        legend: {
-                                            x: 0.5,          // x 位置居中
-                                            y: -0.2,         // y 位置放在底部（负值）
-                                            xanchor: 'center', // 水平居中对齐
-                                            yanchor: 'top',    // 垂直以顶部对齐
-                                            orientation: 'h' // 水平放置图例
-                                        },
-                                        margin: {           // 增加底部边距以显示图例
-                                            b: 50
+                                            var layout_review = {
+                                                title: '课程评论统计',
+                                                yaxis: {
+                                                    title: '平均分',
+                                                    range: [0, 10]  // 设置 y 轴范围从 0 到 10
+                                                },
+                                                yaxis2: {
+                                                    title: '点评数量',
+                                                    overlaying: 'y',
+                                                    side: 'right'
+                                                },
+                                                legend: {
+                                                    x: 0.5,          // x 位置居中
+                                                    y: -0.2,         // y 位置放在底部（负值）
+                                                    xanchor: 'center', // 水平居中对齐
+                                                    yanchor: 'top',    // 垂直以顶部对齐
+                                                    orientation: 'h' // 水平放置图例
+                                                },
+                                                margin: {           // 增加底部边距以显示图例
+                                                    b: 50
+                                                }
+                                            };
+
+
+                                            var data_review = [reviewCountData, averageData];
+
+                                            Plotly.newPlot('plotly-course-stats', data_review, layout_review);
+
+                                            updatePlotlyTheme_review();
+                                            // 监听系统颜色方案的改变
+                                            window.matchMedia('(prefers-color-scheme: dark)').addListener(updatePlotlyTheme_review);
+
                                         }
-                                    };
 
 
-
-                                    var data_review = [reviewCountData, averageData];
-
-                                    Plotly.newPlot('plotly-course-stats', data_review, layout_review);
-
-                                    updatePlotlyTheme_review();
-                                    // 监听系统颜色方案的改变
-                                    window.matchMedia('(prefers-color-scheme: dark)').addListener(updatePlotlyTheme_review);
-
-                                }
-
-
-                            </script>
-                        </div>
+                                    </script>
+                                </div>
                             </div>
                         {% endif %}
 
@@ -562,16 +588,17 @@
                             {% if not review.is_blocked or current_user.is_admin or review.author == current_user %}
                                 {% if not review.is_hidden or review.author == current_user %}
                                     {% if not review.only_visible_to_student or (current_user.is_authenticated and current_user.identity == 'Student') or review.author == current_user %}
-                                        <div class="ud-pd-md dashed review" id="review-{{ review.id }}">
-                                            <div class="blue ud-pd-sm">
-            <span class="right-pd-sm px16">
-              {% if review.is_anonymous %}
-                  匿名用户
-              {% else %}
-                  <a href={{ url_for('user.view_profile', user_id=review.author.id) }}>{{ review.author.username }}</a>
-              {% endif %}
-            </span>
-
+                                        <div class="card small-padding-card mb-3 shadow-sm review review-content"
+                                             id="review-{{ review.id }}">
+                                            <div class="card-header blue">
+                        <span class="px16 no-underline">
+                            {% if review.is_anonymous %}
+                                匿名用户
+                            {% else %}
+                                <a href={{ url_for('user.view_profile', user_id=review.author.id) }}>{{ review.author.username }}</a>
+                            {% endif %}
+                        </span>
+                                                &nbsp;
                                                 {% for star in range(0,5) %}
                                                     {% if review.rate >= 1.5 + star * 2 %}
                                                         <span class="fa-sharp fa-solid fa-star"
@@ -584,9 +611,8 @@
                                                               aria-hidden="true"></span>
                                                     {% endif %}
                                                 {% endfor %}
-
-                                                <span class="left-pd-md">{{ review.term|term_display }}</span>
-
+                                                &nbsp;
+                                                <span class="text-body-secondary">{{ review.term|term_display }}</span>
                                                 <span class="pull-right">
               {% if review.only_visible_to_student %}
                   <span class="badge bg-success" style="">仅登录学生可见</span>
@@ -605,111 +631,110 @@
                                                         {% endif %}
                                                     {% endif %}
             </span>
+                                                <!-- 其他元素，例如“仅登录学生可见”标签等 -->
                                             </div>
-                                            {% include 'review-hidden.html' %}
-
-                                            <ul class="text-body-secondary list-inline top-pd-sm desktop">
-                                                <li class="list-inline-item right-mg-md">课程难度：{{ review.difficulty_display }}</li>
-                                                <li class="list-inline-item right-mg-md">作业多少：{{ review.homework_display }}</li>
-                                                <li class="list-inline-item right-mg-md">给分好坏：{{ review.grading_display }}</li>
-                                                <li class="list-inline-item right-mg-md">收获大小：{{ review.gain_display }}</li>
-                                            </ul>
-                                            <ul class="text-body-secondary list-inline list-unstyled top-pd-sm mobile ">
-                                                <li class="list-inline-item" >难度：{{ review.difficulty_display }}</li>
-                                                <li class="list-inline-item" >作业：{{ review.homework_display }}</li>
-                                                <li class="list-inline-item" >给分：{{ review.grading_display }}</li>
-                                                <li class="list-inline-item" >收获：{{ review.gain_display }}</li>
-                                            </ul>
-                                            <div class="review-content" id="review-content-{{ review.id }}">
+                                            <div class="card-body">
+                                                <!-- 评价的其他详细信息，例如课程难度等 -->
+                                                <ul class="list-inline text-body-secondary">
+                                                    <li class="list-inline-item">
+                                                        难度：{{ review.difficulty_display }}</li>
+                                                    <li class="list-inline-item">作业：{{ review.homework_display }}</li>
+                                                    <li class="list-inline-item">给分：{{ review.grading_display }}</li>
+                                                    <li class="list-inline-item">收获：{{ review.gain_display }}</li>
+                                                </ul>
+                                                <!-- 评价内容 -->
                                                 <p>{{ review.content|my_urlize(nofollow=true)|safe }}</p>
-                                            </div>
-                                            {% if review.filter_rule %}
-                                                <div style="display:none;" class="review-filter-rule"
-                                                     id="review-filter-rule-{{ review.id }}">{{ review.filter_rule }}</div>
-                                            {% endif %}
-
-                                            <div class="bm-pd-md grey" id="review-{{ review.id }}">
+                                                <!-- 评价的底部操作区，例如点赞、评论等 -->
+                                                <div class="bm-pd-md grey review" id="review-{{ review.id }}">
                                                 <span class="small localtime"
                                                       style="display: none;">{{ review.publish_time|utctime }}</span>
-                                                {% if review.publish_time != review.update_time %}
-                                                    <span class="small">（最后修改于</span><span class="small localtime"
-                                                                                                style="display: none;">{{ review.update_time|utctime }}</span>
-                                                    <span class="small">）</span>
-                                                {% endif %}
-                                                {% if current_user.is_authenticated %}
+                                                    {% if review.publish_time != review.update_time %}
+                                                        <span class="small">（最后修改于</span>
+                                                        <span class="small localtime"
+                                                              style="display: none;">{{ review.update_time|utctime }}</span>
+                                                        <span class="small">）</span>
+                                                    {% endif %}
+                                                    {% if current_user.is_authenticated %}
+                                                        <a class="nounderline"
+                                                           href="javascript: {{ 'cancel_' if review.is_upvoted() }}upvote_review({{ review.id }})">
+                                                    {% else %}
+                                                        <a class="nounderline" data-bs-toggle="modal"
+                                                           data-bs-target="#signin"
+                                                           href="#">
+                                                    {% endif %}
+                                                    <span class="fa-regular fa-thumbs-up {{ 'blue' if review.is_upvoted() else 'grey' }} left-pd-lg"
+                                                          aria-hidden="true"></span>
+                                                    <span id="review-upvote-count-{{ review.id }}">{{ review.upvote_count }}</span>
+                                                    </a>
                                                     <a class="nounderline"
-                                                       href="javascript: {{ 'cancel_' if review.is_upvoted() }}upvote_review({{ review.id }})">
-                                                {% else %}
-                                                    <a class="nounderline" data-bs-toggle="modal" data-bs-target="#signin"
-                                                       href="#">
-                                                {% endif %}
-                                                <span class="fa-regular fa-thumbs-up {{ 'blue' if review.is_upvoted() else 'grey' }} left-pd-lg"
-                                                      aria-hidden="true"></span>
-                                                <span id="review-upvote-count-{{ review.id }}">{{ review.upvote_count }}</span>
-                                                </a>
-                                                <a class="nounderline"
-                                                   href="javascript: show_review_comments({{ review.id }})">
+                                                       href="javascript: show_review_comments({{ review.id }})">
                                                     <span class="fa fa-comment {{ 'blue' if review.comments else 'grey' }} left-pd-md"
                                                           aria-hidden="true"></span>
-                                                    <span id="review-comment-count-{{ review.id }}">{{ review.comment_count }}</span>
-                                                </a>
-                                                <span class="left-pd-md small review-links" style="cursor:pointer;"
-                                                      data-clipboard-action="copy"
-                                                      data-clipboard-text="{{ url_for('course.view_course', course_id=course.id, _external=True) }}#review-{{ review.id }}"
-                                                      data-toggle="tooltip" data-trigger="click" data-placement="top"
-                                                      title="链接已复制">复制链接</span>
-                                                <span class="pull-right">
+                                                        <span id="review-comment-count-{{ review.id }}">{{ review.comment_count }}</span>
+                                                    </a>
+                                                    <span class="left-pd-md small review-links" style="cursor:pointer;"
+                                                          data-clipboard-action="copy"
+                                                          data-clipboard-text="{{ url_for('course.view_course', course_id=course.id, _external=True) }}#review-{{ review.id }}"
+                                                          data-toggle="tooltip" data-trigger="click"
+                                                          data-placement="top"
+                                                          title="链接已复制">复制链接</span>
+                                                    <span class="pull-right">
               {% if review.author == user %}
                   <a class="nounderline desktop" href="{{ url_for('course.new_review',course_id=course.id) }}">
                 <span class="fa fa-pencil grey left-pd-sm small" aria-hidden="true"></span>
                 编辑
               </a>
               {% endif %}
-                                                    {% if review.author == user or user.is_admin %}
-                                                        <a class="nounderline"
-                                                           href="javascript: delete_review({{ review.id }}, {{ '1' if review.author != user else '0' }})">
+                                                        {% if review.author == user or user.is_admin %}
+                                                            <a class="nounderline"
+                                                               href="javascript: delete_review({{ review.id }}, {{ '1' if review.author != user else '0' }})">
                 <span class="fa-solid fa-trash-can grey left-pd-md small" aria-hidden="true"></span>
                 删除
               </a>
-                                                    {% endif %}
-                                                    {% if review.author == user %}
-                                                        <span class="fa fa-ban-circle grey left-pd-md"
-                                                              aria-hidden="true"></span>
-                                                        {% if review.is_hidden %}
-                                                            <a href="javascript: unhide_review({{ review.id }});">解除隐藏</a>
-                                                        {% else %}
-                                                            <a href="javascript: hide_review({{ review.id }});">隐藏</a>
                                                         {% endif %}
-                                                    {% elif user.is_admin %}
-                                                        <span class="fa fa-ban-circle grey left-pd-md"
-                                                              aria-hidden="true"></span>
-                                                        {% if review.is_blocked %}
-                                                            <a href="javascript: unblock_review({{ review.id }});">解除屏蔽</a>
-                                                        {% else %}
-                                                            <a href="javascript: block_review({{ review.id }});">屏蔽</a>
+                                                        {% if review.author == user %}
+                                                            <span class="fa fa-ban-circle grey left-pd-md"
+                                                                  aria-hidden="true"></span>
+                                                            {% if review.is_hidden %}
+                                                                <a href="javascript: unhide_review({{ review.id }});">解除隐藏</a>
+                                                            {% else %}
+                                                                <a href="javascript: hide_review({{ review.id }});">隐藏</a>
+                                                            {% endif %}
+                                                        {% elif user.is_admin %}
+                                                            <span class="fa fa-ban-circle grey left-pd-md"
+                                                                  aria-hidden="true"></span>
+                                                            {% if review.is_blocked %}
+                                                                <a href="javascript: unblock_review({{ review.id }});">解除屏蔽</a>
+                                                            {% else %}
+                                                                <a href="javascript: block_review({{ review.id }});">屏蔽</a>
+                                                            {% endif %}
                                                         {% endif %}
-                                                    {% endif %}
             </span>
-                                            </div>
+                                                </div>
 
-                                            {% if review.author == current_user and review.upvote_users|length > 0 %}
-                                                <div class="bm-pd-md" id="review-upvotes-{{ review.id }}">
-                                                    <p style="line-break: loose;">
+                                                {% if review.author == current_user and review.upvote_users|length > 0 %}
+                                                    <div class="bm-pd-md" id="review-upvotes-{{ review.id }}">
+                                                        <p style="line-break: loose;">
                                                         <span class="fa-regular fa-thumbs-up blue"
                                                               aria-hidden="true"></span>
-                                                        {% for upvote_user in review.upvote_users %}
-                                                            {% if upvote_user != review.upvote_users[0] %}、{% endif %}
-                                                            <a href={{ url_for('user.view_profile', user_id=upvote_user.id) }}>{{ upvote_user.username }}</a>{% endfor %}
-                                                    </p>
-                                                </div>
-                                            {% endif %}
+                                                            {% for upvote_user in review.upvote_users %}
+                                                                {% if upvote_user != review.upvote_users[0] %}、
+                                                                {% endif %}
+                                                                <a href={{ url_for('user.view_profile', user_id=upvote_user.id) }}>{{ upvote_user.username }}</a>{% endfor %}
+                                                        </p>
+                                                    </div>
+                                                {% endif %}
 
-                                            {% include 'review-comments.html' %}
+                                                {% include 'review-comments.html' %}
+                                                <!-- ... -->
+                                            </div>
                                         </div>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
+                    <hr>
+
                     {% endif %}
                 </div>
 
@@ -718,80 +743,85 @@
 
                 <div class="col-md-4 rl-pd-lg">
 
-                {% for teacher in course.teachers %}
-                            <div class="card my-3 shadow-sm">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <img class="avatar-lg circle" alt="teacher avatar" src="{{ teacher.image }}"/>
-                                            <h3 class="blue mt-2"><a href="{{ url_for('teacher.view_profile', teacher_id=teacher.id) }}" class="text-decoration-none">{{ teacher.name }}</a></h3>
-                                            <p>{{ teacher.dept.name }}</p>
-                                            <p>{% if teacher.homepage and teacher.homepage != 'http://' %}
-                                                <a href="{{ teacher.homepage }}" class="text-decoration-none" target="_blank"><span class="fa fa-link" aria-hidden="true"></span> 教师主页</a>
-                                            {% else %}暂无教师主页{% endif %}</p>
-                                        </div>
-                                        <div class="col-md-4 text-end">
-                                            {% if current_user.is_authenticated %}
-                                                {% if not teacher.info_locked %}
-                                                    <a href="{{ url_for('teacher.edit_profile', teacher_id=teacher.id) }}" class="btn btn-link btn-sm blue">编辑教师信息</a>
-                                                {% else %}
-                                                    <span class="btn btn-grey">教师信息已被锁定</span>
-                                                    {% if current_user.is_admin %}
-                                                        <a href="{{ url_for('teacher.unlock_profile', teacher_id=teacher.id) }}" class="btn btn-danger">解锁教师信息</a>
-                                                    {% endif %}
+                    {% for teacher in course.teachers %}
+                        <div class="card my-3 shadow-sm">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <img class="avatar-lg circle" alt="teacher avatar" src="{{ teacher.image }}"/>
+                                        <h3 class="blue mt-2"><a
+                                                href="{{ url_for('teacher.view_profile', teacher_id=teacher.id) }}"
+                                                class="text-decoration-none">{{ teacher.name }}</a></h3>
+                                        <p>{{ teacher.dept.name }}</p>
+                                        <p>{% if teacher.homepage and teacher.homepage != 'http://' %}
+                                            <a href="{{ teacher.homepage }}" class="text-decoration-none"
+                                               target="_blank"><span class="fa fa-link" aria-hidden="true"></span> 教师主页</a>
+                                        {% else %}暂无教师主页{% endif %}</p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        {% if current_user.is_authenticated %}
+                                            {% if not teacher.info_locked %}
+                                                <a href="{{ url_for('teacher.edit_profile', teacher_id=teacher.id) }}"
+                                                   class="btn btn-link btn-sm blue">编辑教师信息</a>
+                                            {% else %}
+                                                <span class="btn btn-grey">教师信息已被锁定</span>
+                                                {% if current_user.is_admin %}
+                                                    <a href="{{ url_for('teacher.unlock_profile', teacher_id=teacher.id) }}"
+                                                       class="btn btn-danger">解锁教师信息</a>
                                                 {% endif %}
                                             {% endif %}
-                                        </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                        {% if course.teachers_count == 0 %}
-                            <div class="card my-3 shadow-sm">
-                                <div class="card-body">
-                                    <img class="avatar-lg circle" alt="teacher avatar" src="/static/image/teacher.jpg"/>
-                                    <h3 class="blue">老师甲</h3>
-                                </div>
+                        </div>
+                    {% endfor %}
+                    {% if course.teachers_count == 0 %}
+                        <div class="card my-3 shadow-sm">
+                            <div class="card-body">
+                                <img class="avatar-lg circle" alt="teacher avatar" src="/static/image/teacher.jpg"/>
+                                <h3 class="blue">老师甲</h3>
                             </div>
-                        {% endif %}
+                        </div>
+                    {% endif %}
 
 
-{#                    {% for teacher in course.teachers %}#}
-{#                        <div class="ud-pd-md dashed">#}
-{#                            <img class="avatar-lg circle" alt="teacher avatar" src="{{ teacher.image }}"/>#}
-{#                            {% if current_user.is_authenticated %}#}
-{#                                {% if not teacher.info_locked %}#}
-{#                                    <btn class="btn btn-link float-right"><a#}
-{#                                            href="{{ url_for('teacher.edit_profile', teacher_id=teacher.id) }}">编辑教师信息</a>#}
-{#                                    </btn>#}
-{#                                {% else %}#}
-{#                                    <a class="btn btn-grey float-right">教师信息已被锁定</a>#}
-{#                                    {% if current_user.is_admin %}#}
-{#                                        <a class="btn btn-danger float-right"#}
-{#                                           href="{{ url_for('teacher.unlock_profile', teacher_id=teacher.id) }}">解锁教师信息</a>#}
-{#                                    {% endif %}#}
-{#                                {% endif %}#}
-{#                            {% endif %}#}
-{#                            <h3 class="blue"><a#}
-{#                                    href="{{ url_for('teacher.view_profile', teacher_id=teacher.id) }}">{{ teacher.name }}</a>#}
-{#                            </h3>#}
-{#                            <p>{{ teacher.dept.name }}</p>#}
-{#                            <p>教师主页：#}
-{#                                {% if teacher.homepage and teacher.homepage != 'http://' %}#}
-{#                                    <a href="{{ teacher.homepage }}" target="_blank"><span#}
-{#                                            class="fa fa-link" aria-hidden="true"></span> 戳这里</a>#}
-{#                                {% else %}暂无{% endif %}#}
-{#                            </p>#}
-{#                        </div>#}
-{#                    {% endfor %}#}
-{#                    {% if course.teachers_count == 0 %}#}
-{#                        <div class="ud-pd-md dashed">#}
-{#                            <img class="avatar-lg circle" alt="teacher avatar" src="/static/image/teacher.jpg"/>#}
-{#                            <h3 class="blue">老师甲</h3>#}
-{#                        </div>#}
-{#                    {% endif %}#}
+                    {#                    {% for teacher in course.teachers %}#}
+                    {#                        <div class="ud-pd-md dashed">#}
+                    {#                            <img class="avatar-lg circle" alt="teacher avatar" src="{{ teacher.image }}"/>#}
+                    {#                            {% if current_user.is_authenticated %}#}
+                    {#                                {% if not teacher.info_locked %}#}
+                    {#                                    <btn class="btn btn-link float-right"><a#}
+                    {#                                            href="{{ url_for('teacher.edit_profile', teacher_id=teacher.id) }}">编辑教师信息</a>#}
+                    {#                                    </btn>#}
+                    {#                                {% else %}#}
+                    {#                                    <a class="btn btn-grey float-right">教师信息已被锁定</a>#}
+                    {#                                    {% if current_user.is_admin %}#}
+                    {#                                        <a class="btn btn-danger float-right"#}
+                    {#                                           href="{{ url_for('teacher.unlock_profile', teacher_id=teacher.id) }}">解锁教师信息</a>#}
+                    {#                                    {% endif %}#}
+                    {#                                {% endif %}#}
+                    {#                            {% endif %}#}
+                    {#                            <h3 class="blue"><a#}
+                    {#                                    href="{{ url_for('teacher.view_profile', teacher_id=teacher.id) }}">{{ teacher.name }}</a>#}
+                    {#                            </h3>#}
+                    {#                            <p>{{ teacher.dept.name }}</p>#}
+                    {#                            <p>教师主页：#}
+                    {#                                {% if teacher.homepage and teacher.homepage != 'http://' %}#}
+                    {#                                    <a href="{{ teacher.homepage }}" target="_blank"><span#}
+                    {#                                            class="fa fa-link" aria-hidden="true"></span> 戳这里</a>#}
+                    {#                                {% else %}暂无{% endif %}#}
+                    {#                            </p>#}
+                    {#                        </div>#}
+                    {#                    {% endfor %}#}
+                    {#                    {% if course.teachers_count == 0 %}#}
+                    {#                        <div class="ud-pd-md dashed">#}
+                    {#                            <img class="avatar-lg circle" alt="teacher avatar" src="/static/image/teacher.jpg"/>#}
+                    {#                            <h3 class="blue">老师甲</h3>#}
+                    {#                        </div>#}
+                    {#                    {% endif %}#}
 
-                <!--其他老师的「xxx」课-->
+                    <!--其他老师的「xxx」课-->
                     <div class="card my-3 shadow-sm">
                         <div class="card-header">
                             <h4 class="blue">其他老师的「{{ course.name }}」课</h4>
@@ -802,7 +832,8 @@
                                     <li class="list-group-item">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <a href="{{ url_for('course.view_course', course_id=rel_course.id) }}" class="text-decoration-none">
+                                                <a href="{{ url_for('course.view_course', course_id=rel_course.id) }}"
+                                                   class="text-decoration-none">
                                                     {{ rel_course.teacher_names_display|name_display_short }}
                                                 </a>
                                             </div>
@@ -813,9 +844,10 @@
                                                 {% endif %}
                                             </div>
                                         </div>
-                                                {% if rel_course.courseries %}
-                                                <!-- <span class="badge badge-black-white mono-font">{{ rel_course.courseries }}</span> -->
-                                                {% endif %}<small class="text-body-secondary"> {{ rel_course.term_ids|term_display_short }}</small>
+                                        {% if rel_course.courseries %}
+                                            <!-- <span class="badge badge-black-white mono-font">{{ rel_course.courseries }}</span> -->
+                                        {% endif %}<small
+                                            class="text-body-secondary"> {{ rel_course.term_ids|term_display_short }}</small>
                                     </li>
                                 {% endif %}
                             {% endfor %}
@@ -823,8 +855,7 @@
                     </div>
 
 
-
-                <!--xxx老师的其他课-->
+                    <!--xxx老师的其他课-->
                     {% for teacher in course.teachers %}
                         <div class="card my-3 shadow-sm">
                             <div class="card-header">
@@ -836,7 +867,8 @@
                                         <li class="list-group-item">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div>
-                                                    <a href="{{ url_for('course.view_course', course_id=rel_course.id) }}" class="text-decoration-none">
+                                                    <a href="{{ url_for('course.view_course', course_id=rel_course.id) }}"
+                                                       class="text-decoration-none">
                                                         {{ rel_course.name|name_display_short }}
                                                     </a>
                                                 </div>
@@ -847,9 +879,10 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                                    {% if rel_course.courseries %}
-                                                    <span class="badge badge-black-white mono-font">{{ rel_course.courseries }}</span>
-                                                    {% endif %}<small class="text-body-secondary"> {{ rel_course.term_ids|term_display_short }}</small>
+                                            {% if rel_course.courseries %}
+                                                <span class="badge badge-black-white mono-font">{{ rel_course.courseries }}</span>
+                                            {% endif %}<small
+                                                class="text-body-secondary"> {{ rel_course.term_ids|term_display_short }}</small>
                                         </li>
                                     {% endif %}
                                 {% endfor %}

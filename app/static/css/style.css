@@ -504,3 +504,13 @@ a.nounderline:active { text-decoration: none; }
     font-family: 'Noto Sans Mono', 'Noto Sans SC', 'Open Sans', Helvetica, Arial, sans-serif;
     font-weight: 600;
 }
+
+
+.no-underline a {
+    text-decoration: none;
+}
+
+/* 减小卡片主体的内边距 */
+.small-padding-card .card-body {
+    padding: 10px; /* 减少卡片主体的内边距 */
+}
