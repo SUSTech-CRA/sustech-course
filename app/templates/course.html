@@ -212,7 +212,7 @@
                         {% if (current_user.is_authenticated and current_user.identity == 'Student') and course.latest_score and (not course.score_type_pf) %}
                         <div class="ud-pd-md">
                                 <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse" data-bs-target="#plotly-div" aria-expanded="false" aria-controls="plotly-div">
-                                    <i class="fa-solid fa-chart-simple"></i> 成绩分布估计
+                                    <i class="fa-solid fa-chart-simple"></i> 成绩分布估计（%）
                                 </button>
                             <div>
                                     <div id="plotly-div" class="collapse"></div>

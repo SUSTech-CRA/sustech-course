@@ -2,92 +2,95 @@
 {% block content %}
 
 <div class="container">
-  <div class="row float-element shadow">
+  <div class="row">
 
-    <div class="col-md-8">
-      <div class="bm-pd-lg">
-	<div class="inline-h3">
-          <span class="blue h3">课程</span>
-	  {% if courses.total == 0 %}
-          <span class="text-body-secondary small">还没有课程哦！</span>
-          {% else %}
-          <span class="text-body-secondary">(共 {{ courses.total }} 门)</span>
-	</div>
-
-	{% for course in courses.items %}
-	<div class="ud-pd-md dashed">
-	  <span class="blue">
-	  <a class="px16" href="{{ url_for('course.view_course', course_id=course.id) }}">{{ course.name }}</a>
-	  </span>
-
-	  {% if course.introduction %}
-	  <span class="badge rounded-pill bg-info">课程简介</span>
-	  {% endif %}
-	  {% if current_user.is_authenticated and course in current_user.courses_joined %}
-	  <span class="badge rounded-pill bg-info">已学过</span>
-	  {% endif %}
-	  {% if course.reviewed %}
-	  <span class="badge rounded-pill bg-success">已点评</span>
-	  {% endif %}
-	  <span class="small grey align-bottom float-right">{{ course.term_ids|term_display_short(5) }} &nbsp;课程号：{{ course.courseries }}</span>
-      <span class="clearfix"></span>
-          {% if course.review_count %}
-          <div class="ud-pd-sm blue">
-            {% for star in range(0,5) %}
-              {% if course.rate.average_rate >= 1.5 + star * 2 %}
-              <span class="fa-sharp fa-solid fa-star" aria-hidden="true"></span>
-              {% elif course.rate.average_rate >= 0.5 + star * 2 %}
-              <span class="fa-sharp fa-regular fa-star-half-stroke" aria-hidden="true"></span>
-              {% else %}
-              <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
+<!-- 主要内容区域 -->
+<div class="col-md-8">
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header">
+      <span class="blue h3">{{ teacher.name }} 老师的课程</span>
+      {% if courses.total == 0 %}
+      <span class="text-muted small">还没有课程哦！</span>
+      {% else %}
+      <span class="text-muted small">(共 {{ courses.total }} 门)</span>
+      {% endif %}
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for course in courses.items %}
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-9">
+            <a class="text-decoration-none h6 blue" href="{{ url_for('course.view_course', course_id=course.id) }}">{{ course.name }} {% if course.courseries %}<span class="badge badge-black-white mono-font">{{ course.courseries }}</span>{% endif %}</a>
+            &nbsp;<span class="small text-muted">{{ course.term_ids|term_display_short(5) }}</span>
+            <div>
+              {% if course.introduction %}
+              <span class="badge rounded-pill bg-info">课程简介</span>
               {% endif %}
-            {% endfor %}
-            <span class="rl-pd-sm h4 mono-font">{{ course.rate.average_rate }}</span><span class="text-body-secondary px12">({{ course.review_count }} 人评价)</span>
+              {% if current_user.is_authenticated and course in current_user.courses_joined %}
+              <span class="badge rounded-pill bg-info">已学过</span>
+              {% endif %}
+              {% if course.reviewed %}
+              <span class="badge rounded-pill bg-success">已点评</span>
+              {% endif %}
+            </div>
           </div>
-          {% else %}
-          <div class="ud-pd-sm blue">
-            {% for star in range(0,5) %}
-              <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
-            {% endfor %}
-            <span class="rl-pd-sm h4"><span class="text-body-secondary px12">暂无评价</span></span>
+          <div class="col-3 text-end">
+            {% if course.review_count %}
+            <div class="d-flex align-items-center justify-content-end mb-2 blue">
+              {% for star in range(0,5) %}
+                {% if course.rate.average_rate >= 1.5 + star * 2 %}
+                <span class="fa-sharp fa-solid fa-star" aria-hidden="true"></span>
+                {% elif course.rate.average_rate >= 0.5 + star * 2 %}
+                <span class="fa-sharp fa-regular fa-star-half-stroke" aria-hidden="true"></span>
+                {% else %}
+                <span class="fa-sharp fa-regular fa-star" aria-hidden="true"></span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="text-nowrap">
+                <span class="mono-font blue h6">{{ course.rate.average_rate }}</span>
+                <span class="small text-muted ms-1 mono-font">({{ course.review_count }})</span>
+            </div>
+            {% else %}
+            <span class="text-muted small">暂无评价</span>
+            {% endif %}
           </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+
+    <!-- 侧边栏区域 -->
+    <div class="col-md-4">
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <img class="avatar-lg circle" alt="teacher avatar" src="{{ teacher.image }}"/>
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('teacher.edit_profile', teacher_id=teacher.id) }}" class="btn btn-link float-end">编辑教师信息</a>
           {% endif %}
-	</div> <!-- end course.item -->	
-	{% endfor %}
-      </div><!-- bm-pd-lg -->
-    </div><!-- end col-md-8 -->
-
-    {% endif %}   
-
-    <div class="col-md-4 right-col">
-      <div class="ud-pd-md dashed">
-	<img class="avatar-lg circle" alt="teacher avatar" src="{{ teacher.image }}"/>
-	{% if current_user.is_authenticated %}
-	<btn class="btn btn-link float-right"><a href="{{ url_for('teacher.edit_profile', teacher_id=teacher.id) }}">编辑教师信息</a></btn>
-	{% endif %}
-	<h3 class="blue">{{ teacher.name }}</h3>
-	<p>{{ teacher.dept.name }}</p>
-        {% if teacher.homepage and teacher.homepage != 'http://' %}
-	<p>教师主页：<a href="{{ teacher.homepage }}" target="_blank"><span class="fa fa-link" aria-hidden="true"></span> 戳这里</a></p>
-	{% endif %}
-	{% if teacher.research_interest %}
-	<p>研究方向：{{ teacher.research_interest }}</p>
-	{% endif %}
+          <h3 class="blue">{{ teacher.name }}</h3>
+          <p>{{ teacher.dept.name }}</p>
+          {% if teacher.homepage and teacher.homepage != 'http://' %}
+          <p>教师主页：<a href="{{ teacher.homepage }}" target="_blank" class="text-decoration-none"><span class="fa fa-link" aria-hidden="true"></span> 戳这里</a></p>
+          {% endif %}
+          {% if teacher.research_interest %}
+          <p>研究方向：{{ teacher.research_interest }}</p>
+          {% endif %}
+        <hr>
+        <ul class="list-unstyled">
+            <li class="mb-2">共 <span class="mono-font blue"><strong>{{ courses.total }}</strong></span> 门课</li>
+            <li class="mb-2">共 <span class="mono-font blue"><strong>{{ stats['num_rating'] }}</strong></span> 个点评</li>
+            <li class="mb-2">平均分: <span class="mono-font blue"><strong>{{ '%.2f' % stats['avg_rating'] }}</strong></span></li>
+            <li>归一化平均分: <span class="mono-font blue"><strong>{{ '%.2f' % stats['normalized_rating'] }}</strong></span></li>
+          </ul>
+        </div>
       </div>
 
-
-      <div class="ud-pd-md dashed">
-        <ul class="list-unstyled dark-grey">
-            <li class="ud-pd-sm">共 <span class="blue mono-font"><strong>{{ courses.total }}</strong></span> 门课</li>
-            <li class="ud-pd-sm">共 <span class="blue mono-font"><strong>{{ stats['num_rating'] }}</strong></span> 个点评</li>
-            <li class="ud-pd-sm">平均分: <span class="blue mono-font"><strong>{{ '%.2f' % stats['avg_rating'] }}</strong></span></li>
-            <li class="ud-pd-sm">归一化平均分: <span class="blue mono-font"><strong>{{ '%.2f' % stats['normalized_rating'] }}</strong></span></li>
-        </ul>
-      </div>
-
-
-    </div><!-- end col-md-4 -->
-  </div><!-- end float-element -->
-</div><!-- end container -->
+    </div>
+  </div>
+</div>
 
 {% endblock %}
