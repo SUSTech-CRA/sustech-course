@@ -518,8 +518,11 @@
 
                                         function drawPlot_review() {
                                             // 从 Flask 模板获取数据
-                                            var categories = [{% for row in course.review_per_term_dist() %}'
-                                                {{ row[0]|term_display }}',{% endfor %}];
+                                            var categories = [
+                                              {% for row in course.review_per_term_dist() %}
+                                                '{{ row[0]|term_display }}',
+                                              {% endfor %}
+                                            ];
                                             var averages = [{% for row in course.review_per_term_dist() %}{{ '%.1f' % row[2] }}, {% endfor %}];
                                             var reviewCounts = [{% for row in course.review_per_term_dist() %}{{ row[1] }}, {% endfor %}];
 
@@ -591,6 +594,8 @@
                                         <div class="card small-padding-card mb-3 shadow-sm review review-content"
                                              id="review-{{ review.id }}">
                                             <div class="card-header blue">
+                        <img class="avatar-ssm circle" alt="user avatar" src="{% if review.is_anonymous %}{{ "/static/image/user.png" }}{% else %}{{ review.author.avatar }}{% endif %}"/>
+                        &nbsp;
                         <span class="px16 no-underline">
                             {% if review.is_anonymous %}
                                 匿名用户
@@ -644,7 +649,9 @@
                                                 </ul>
                                                 <!-- 评价内容 -->
                                                 <p>{{ review.content|my_urlize(nofollow=true)|safe }}</p>
-                                                <!-- 评价的底部操作区，例如点赞、评论等 -->
+                                            </div>
+                                        <!-- 评价的底部操作区，例如点赞、评论等 -->
+                                        <div class="card-footer">
                                                 <div class="bm-pd-md grey review" id="review-{{ review.id }}">
                                                 <span class="small localtime"
                                                       style="display: none;">{{ review.publish_time|utctime }}</span>

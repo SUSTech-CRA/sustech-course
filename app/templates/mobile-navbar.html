@@ -13,7 +13,7 @@
 
 {% if this_module and this_module!='home.search' and this_module!='home.search_reviews' %}
 {% if this_module and this_module!='home.search' and this_module!='home.search_reviews' %}
-<ul class="nav nav-tabs d-block d-md-none d-flex flex-row">
+<ul class="nav nav-underline d-block d-md-none d-flex flex-row">
   <li class="nav-item">
     <a class="nav-link {% if this_module == 'home.latest_reviews' %}active{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a>
   </li>
@@ -25,7 +25,7 @@
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
       筛选课程
     </a>
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu shadow-sm">
       <li><span class="dropdown-item disabled">排序方式</span></li>
       <li><a class="dropdown-item {% if sort_by!='popular' %}active{% endif %}" href="{{ url_for('course.index', sort_by='rating', course_type=course_type) }}">课程评分</a></li>
       <li><a class="dropdown-item {% if sort_by=='popular' %}active{% endif %}" href="{{ url_for('course.index', sort_by='popular', course_type=course_type) }}">点评数量</a></li>

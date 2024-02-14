@@ -1,28 +1,21 @@
 <div class="select-box desktop mb-2 course-type-select-desktop">
   {% if course_type_dict %}
-  <div class="d-flex align-items-center">
-    <strong>课程类别：</strong>
-    <ul class="list-inline mb-0 ms-2">
-      <li class="list-inline-item {% if not course_type %}active{% endif %}">
-        <a class="py-1 px-2" href="{{ url_for(this_module, q=keyword, sort_by=sort_by) }}">全部</a>
-      </li>
+  <nav>
+    <div class="nav nav-pills" id="nav-tab" role="tablist">
+    <a class="nav-link disabled fw-bold" aria-disabled="true">课程类别：</a>
+      <a class="nav-link {% if not course_type %}active{% endif %}" href="{{ url_for(this_module, q=keyword, sort_by=sort_by) }}">全部</a>
       {% for type, course_type_label in course_type_dict.items() %}
-      <li class="list-inline-item {% if type==course_type %}active{% endif %}">
-        <a class="py-1 px-2" href="{{ url_for(this_module, q=keyword, course_type=type, sort_by=sort_by) }}">{{ course_type_label[0] }}</a>
-      </li>
+      <a class="nav-link {% if type==course_type %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=type, sort_by=sort_by) }}">{{ course_type_label[0] }}</a>
       {% endfor %}
-    </ul>
-  </div>
+    </div>
+  </nav>
   {% endif %}
-  <div class="d-flex align-items-center mt-2">
-    <strong>排序方式：</strong>
-    <ul class="list-inline mb-0 ms-2">
-      <li class="list-inline-item {% if sort_by!='popular' %}active{% endif %}">
-        <a class="py-1 px-2" href="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='rating') }}">课程评分</a>
-      </li>
-      <li class="list-inline-item {% if sort_by=='popular' %}active{% endif %}">
-        <a class="py-1 px-2" href="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='popular') }}">点评数量</a>
-      </li>
-    </ul>
-  </div>
+
+  <nav class="mt-2">
+    <div class="nav nav-pills" id="nav-tab-sort" role="tablist">
+      <a class="nav-link disabled fw-bold" aria-disabled="true">排序方式：</a>
+      <a class="nav-link {% if sort_by!='popular' %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='rating') }}">课程评分</a>
+      <a class="nav-link {% if sort_by=='popular' %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='popular') }}">点评数量</a>
+    </div>
+  </nav>
 </div>

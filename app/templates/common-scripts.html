@@ -35,55 +35,45 @@ $(document).ready(function() {
      }
  });
 
- // display local time
- function toHourMinutes(pubTime) {
-   var hours = pubTime.getHours().toString();
-   if (hours.length == 1) {
-     hours = '0' + hours;
-   }
-   var minutes = pubTime.getMinutes().toString();
-   if (minutes.length == 1) {
-     minutes = '0' + minutes;
-   }
-   return hours + ':' + minutes;
- }
+function toHourMinutes(date) {
+  let hours = date.getHours().toString().padStart(2, '0');
+  let minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
 
- function toYearMonthDate(pubTime) {
-   var year = pubTime.getFullYear().toString();
-   var month = (pubTime.getMonth() + 1).toString();
-   var day = pubTime.getDate().toString();
-   return year + '年' + month + '月' + day + '日';
- }
- 
- function updateLocalTime() {
-   $('.localtime').each(function(index) {
-     if ($(this).css('display') != 'none') {
-       return;
-     }
-     var utcTime = $(this).text();
-     var pubTime = new Date(utcTime + ' UTC');
-     if (!pubTime) {
-       $(this).text(pubTime);
-       $(this).show();
-       return;
-     }
-     var now = new Date();
-     if (pubTime.getFullYear() == now.getFullYear() && pubTime.getMonth() == now.getMonth() && pubTime.getDate() == now.getDate()) {
-       $(this).text('今天 ' + toHourMinutes(pubTime));
-     } else {
-       var yesterday = new Date();
-       yesterday.setDate(yesterday.getDate() - 1); // JavaScript can handle date roll overs
-       if (pubTime.getFullYear() == yesterday.getFullYear() && pubTime.getMonth() == yesterday.getMonth() && pubTime.getDate() == yesterday.getDate()) {
-         $(this).text('昨天 ' + toHourMinutes(pubTime));
-       } else {
-         $(this).text(toYearMonthDate(pubTime) + ' ' + toHourMinutes(pubTime));
-       }
-     }
-     $(this).show();
-   });
- }
+function toYearMonthDate(date) {
+  let year = date.getFullYear();
+  let month = (date.getMonth() + 1).toString().padStart(2, '0');
+  let day = date.getDate().toString().padStart(2, '0');
+  return `${year}年${month}月${day}日`;
+}
 
- updateLocalTime();
+function updateLocalTime() {
+  const now = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(now.getDate() - 1);
+
+  $('.localtime').each(function() {
+    const utcTime = $(this).text();
+    const pubTime = new Date(utcTime + ' UTC');
+
+    if (isNaN(pubTime.getTime())) {
+      return;
+    }
+
+    if (pubTime.toDateString() === now.toDateString()) {
+      $(this).text('今天 ' + toHourMinutes(pubTime));
+    } else if (pubTime.toDateString() === yesterday.toDateString()) {
+      $(this).text('昨天 ' + toHourMinutes(pubTime));
+    } else {
+      $(this).text(toYearMonthDate(pubTime) + ' ' + toHourMinutes(pubTime));
+    }
+    $(this).show();
+  });
+}
+
+updateLocalTime();
+
 
 
 // Initialize ClipboardJS
