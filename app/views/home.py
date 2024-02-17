@@ -16,6 +16,7 @@ from oauthlib import oauth2
 import uuid
 import faker
 from cachelib import SimpleCache
+import time
 
 home = Blueprint('home',__name__)
 OAUTH = app.config['OAUTH']
@@ -467,6 +468,7 @@ class MyPagination(object):
 @home.route('/search-reviews/')
 def search_reviews():
     ''' 搜索点评内容 '''
+    start_time = time.time()
     query_str = request.args.get('q')
     if not query_str:
         return redirect_to_index()
@@ -517,15 +519,75 @@ def search_reviews():
     search_log.module = 'search_reviews'
     search_log.page = page
     search_log.save()
+    print(f"search_reviews: {time.time() - start_time} seconds")
 
     return render_template('search-reviews.html', reviews=reviews_paged,
                 title=title,
                 this_module='home.search_reviews', keyword=query_str)
 
+@home.route('/search-reviews-meilisearch/')
+def search_reviews_meilisearch():
+    ''' meilisearch搜索点评内容 '''
+    start_time = time.time()
+    # 用户可控制的参数
+    query = request.args.get('q', '')  # 默认为空字符串
+    page = request.args.get('page', 1,  type=int)  # 默认为第一页
+    per_page = request.args.get('per_page', 10, type=int)
+
+    # 构建搜索请求
+    search_params = {
+        "q": query,
+        "limit": 100,
+        "page": 1,
+        "hitsPerPage": 100,
+        "attributesToSearchOn": ["content"]
+    }
+
+    meilisearch_api_key = "MASTER_KEY"
+    headers = {
+        "Authorization": f"Bearer {meilisearch_api_key}",
+        "Content-Type": "application/json"
+    }
+
+    # 向MeiliSearch发送请求
+    response = requests.post('http://127.0.0.1:7700/indexes/reviews_mysql/search', json=search_params, headers=headers)
+
+    query_result_json = response.json()
+
+    # extract id of review from response
+    review_ids = [hit['id'] for hit in query_result_json['hits']]
+    reviews_paged = Review.query.filter(Review.id.in_(review_ids)).order_by(Review.update_time.desc()).paginate(page=page, per_page=per_page)
+    # use id to query the name & teacher of the course
+    # for review_id in review_ids:
+    #     review = Review.query.get(review_id)
+    #     # append course name & teacher name to the list
+    #     query_result_json['hits'][review_ids.index(review_id)]['course_name'] = review.course.name
+    #     # may have multiple teachers
+    #     query_result_json['hits'][review_ids.index(review_id)]['teacher_name'] = '、'.join([teacher.name for teacher in review.course.teachers])
+
+    if reviews_paged.total > 0:
+        title = '搜索点评「' + query + '」'
+    else:
+        title = '您的搜索「' + query + '」没有匹配到任何点评'
+
+    search_log = SearchLog()
+    search_log.keyword = query
+    if current_user.is_authenticated:
+        search_log.user_id = current_user.id
+    search_log.module = 'search_reviews'
+    search_log.page = page
+    search_log.save()
+    print(f"search_reviews_meilisearch: {time.time() - start_time} seconds")
+
+    return render_template('search-reviews.html', reviews=reviews_paged,
+                title=title,
+                this_module='home.search_reviews_meilisearch', keyword=query)
+
 
 @home.route('/search/')
 def search():
     ''' 搜索 '''
+    start_time = time.time()
     query_str = request.args.get('q')
     if not query_str:
         return redirect_to_index()
@@ -632,7 +694,9 @@ def search():
     elif noredirect:
         title = '您的搜索「' + query_str + '」没有匹配到任何课程或老师'
     else:
-        return search_reviews()
+        # return search_reviews()
+        print("no result in name sec")
+        return search_reviews_meilisearch()
 
     search_log = SearchLog()
     search_log.keyword = query_str
@@ -642,6 +706,7 @@ def search():
     search_log.page = page
     search_log.save()
 
+    print(f"search_course: {time.time() - start_time} seconds")
     return render_template('search.html', keyword=query_str, courses=pagination,
                 dept=department, deptlist=deptlist,
                 title=title,
