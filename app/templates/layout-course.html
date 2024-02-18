@@ -61,7 +61,7 @@
         </ul>
 
 	{% if this_module == 'home.search_reviews' %}
-        <form class="navbar-form navbar-left desktop" action="{{ url_for('home.search_reviews') }}" method="get" role="search">
+        <form class="navbar-form navbar-left desktop" action="{{ url_for('home.search_reviews_meilisearch') }}" method="get" role="search">
 	{% else %}
         <form class="navbar-form navbar-left desktop" action="{{ url_for('home.search') }}" method="get" role="search">
 	{% endif %}

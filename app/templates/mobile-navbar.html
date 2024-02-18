@@ -51,15 +51,17 @@
   {% if this_module and this_module=='home.search' %}
 <nav>
   <div class="nav nav-pills" id="nav-tab" role="tablist">
-      <a class="nav-link active" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程</a>
+      <a class="nav-link active" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程/老师</a>
       <a class="nav-link" href="{{ url_for('home.search_reviews_meilisearch', q=keyword) }}">搜点评</a>
+      <a class="nav-link disabled" href="#">精确搜索请用引号(")</a>
   </div>
 </nav>
   {% elif this_module and this_module=='home.search_reviews_meilisearch' %}
 <nav>
   <div class="nav nav-pills" id="nav-tab" role="tablist">
-      <a class="nav-link" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程</a>
+      <a class="nav-link" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程/老师</a>
       <a class="nav-link active" href="{{ url_for('home.search_reviews_meilisearch', q=keyword) }}">搜点评</a>
+      <a class="nav-link disabled" href="#">精确搜索请用引号(")</a>
   </div>
 </nav>
   {% elif this_module and this_module=='home.follow_reviews' and follow_type=='course' %}
