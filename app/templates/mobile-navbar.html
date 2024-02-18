@@ -1,5 +1,5 @@
-{% if this_module == 'home.search_reviews_meilisearch' %}
-<form class="ud-pd-sm" action="{{ url_for('home.search_reviews_meilisearch') }}" method="get">
+{% if this_module == 'home.search_reviews_meilisearch_api_html' %}
+<form class="ud-pd-sm" action="{{ url_for('home.search_reviews_meilisearch_api_html') }}" method="get">
 {% else %}
 <form class="ud-pd-sm" action="{{ url_for('home.search') }}" method="get">
 {% endif %}
@@ -11,8 +11,8 @@
 </div>
 </form>
 
-{% if this_module and this_module!='home.search' and this_module!='home.search_reviews_meilisearch' %}
-{% if this_module and this_module!='home.search' and this_module!='home.search_reviews_meilisearch' %}
+{% if this_module and this_module!='home.search' and this_module!='home.search_reviews_meilisearch_api_html' %}
+{% if this_module and this_module!='home.search' and this_module!='home.search_reviews_meilisearch_api_html' %}
 <ul class="nav nav-underline d-block d-md-none d-flex flex-row">
   <li class="nav-item">
     <a class="nav-link {% if this_module == 'home.latest_reviews' %}active{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a>
@@ -52,16 +52,16 @@
 <nav>
   <div class="nav nav-pills" id="nav-tab" role="tablist">
       <a class="nav-link active" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程/老师</a>
-      <a class="nav-link" href="{{ url_for('home.search_reviews_meilisearch', q=keyword) }}">搜点评</a>
-      <a class="nav-link disabled" href="#">精确搜索请用引号(")</a>
+      <a class="nav-link" href="{{ url_for('home.search_reviews_meilisearch_api_html', q=keyword) }}">搜点评</a>
+{#      <a class="nav-link disabled" href="#">精确搜索评论请用引号(")</a>#}
   </div>
 </nav>
-  {% elif this_module and this_module=='home.search_reviews_meilisearch' %}
+  {% elif this_module and this_module=='home.search_reviews_meilisearch_api_html' %}
 <nav>
   <div class="nav nav-pills" id="nav-tab" role="tablist">
       <a class="nav-link" href="{{ url_for('home.search', q=keyword, noredirect=True) }}">搜课程/老师</a>
-      <a class="nav-link active" href="{{ url_for('home.search_reviews_meilisearch', q=keyword) }}">搜点评</a>
-      <a class="nav-link disabled" href="#">精确搜索请用引号(")</a>
+      <a class="nav-link active" href="{{ url_for('home.search_reviews_meilisearch_api_html', q=keyword) }}">搜点评</a>
+{#      <a class="nav-link disabled" href="#">精确搜索评论请用引号(")包裹关键词</a>#}
   </div>
 </nav>
   {% elif this_module and this_module=='home.follow_reviews' and follow_type=='course' %}

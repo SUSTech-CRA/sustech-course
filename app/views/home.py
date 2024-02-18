@@ -534,6 +534,15 @@ def search_reviews_meilisearch():
     page = request.args.get('page', 1,  type=int)  # 默认为第一页
     per_page = request.args.get('per_page', 10, type=int)
 
+    # keywords = re.sub(r'''[~`!@#$%^&*{}[]|\\:";'<>?,./]''', ' ', query).split()
+    # if not keywords:
+    #     return render_template('search-reviews.html', keyword=query,
+    #                            reviews=MyPagination(page=0, per_page=0, total=0, items=[]),
+    #                            title="无效的搜索关键词")
+    # # add quotes to each keyword, and join them with space
+    # query_with_quotes = ' '.join([f'"{keyword}"' for keyword in keywords])
+
+
     # 构建搜索请求
     search_params = {
         "q": query,
@@ -543,7 +552,7 @@ def search_reviews_meilisearch():
         "attributesToSearchOn": ["content"]
     }
 
-    meilisearch_api_key = "MASTER_KEY"
+    meilisearch_api_key = app.config['MEILISEARCH_KEY']
     headers = {
         "Authorization": f"Bearer {meilisearch_api_key}",
         "Content-Type": "application/json"
@@ -556,14 +565,32 @@ def search_reviews_meilisearch():
 
     # extract id of review from response
     review_ids = [hit['id'] for hit in query_result_json['hits']]
-    reviews_paged = Review.query.filter(Review.id.in_(review_ids)).order_by(Review.update_time.desc()).paginate(page=page, per_page=per_page)
-    # use id to query the name & teacher of the course
-    # for review_id in review_ids:
-    #     review = Review.query.get(review_id)
-    #     # append course name & teacher name to the list
-    #     query_result_json['hits'][review_ids.index(review_id)]['course_name'] = review.course.name
-    #     # may have multiple teachers
-    #     query_result_json['hits'][review_ids.index(review_id)]['teacher_name'] = '、'.join([teacher.name for teacher in review.course.teachers])
+    # print(f"search_reviews_meilisearch get id: {time.time() - start_time} seconds")
+    from sqlalchemy.sql.expression import case
+
+    # 确保 review_ids 不为空
+    if review_ids:
+        # 构建一个 case 语句用于排序
+        order_by_case = case(
+            {id: index for index, id in enumerate(review_ids)},
+            value=Review.id
+        )
+
+        reviews = Review.query.filter(Review.id.in_(review_ids)) \
+            .order_by(order_by_case)
+
+        # 其余的筛选条件
+        if not current_user.is_authenticated or current_user.identity != 'Student':
+            if current_user.is_authenticated:
+                reviews = reviews.filter(or_(Review.only_visible_to_student == False, Review.author == current_user))
+            else:
+                reviews = reviews.filter(Review.only_visible_to_student == False)
+
+        # 应用分页
+        reviews_paged = reviews.paginate(page=page, per_page=per_page)
+    else:
+        # 处理 review_ids 为空的情况
+        reviews_paged = MyPagination(page=0, per_page=0, total=0, items=[])
 
     if reviews_paged.total > 0:
         title = '搜索点评「' + query + '」'
@@ -577,12 +604,203 @@ def search_reviews_meilisearch():
     search_log.module = 'search_reviews'
     search_log.page = page
     search_log.save()
-    print(f"search_reviews_meilisearch: {time.time() - start_time} seconds")
+    # print(f"search_reviews_meilisearch complete: {time.time() - start_time} seconds")
 
     return render_template('search-reviews.html', reviews=reviews_paged,
                 title=title,
                 this_module='home.search_reviews_meilisearch', keyword=query)
 
+@home.route('/search-reviews-meilisearch-api/')
+def search_reviews_meilisearch_api():
+    ''' meilisearch搜索点评内容，纯前端模式（返回点评内容json） '''
+    start_time = time.time()
+    # 用户可控制的参数
+    query = request.args.get('q', '')  # 默认为空字符串
+    page = request.args.get('page', 1,  type=int)  # 默认为第一页
+    per_page = request.args.get('per_page', 10, type=int)
+
+    # 构建搜索请求
+    search_params = {
+          "q": query,
+          "limit": per_page,
+          "page": page,
+          "hitsPerPage": per_page,
+          "highlightPreTag": "<span class = \"search-result-highlight\" style=\"color:#B22222;font-weight:bold;\">",
+          "highlightPostTag": "</span>",
+        "attributesToHighlight": [
+            "content"
+        ],
+        "attributesToSearchOn": [
+            "content"
+        ],
+        "attributesToRetrieve": [
+            "id",
+            "content",
+            "update_time",
+            "author_id",
+            "course_id",
+            "is_anonymous",
+            "only_visible_to_student",
+            "is_hidden",
+            "is_blocked"
+        ]
+    }
+
+    meilisearch_api_key = app.config['MEILISEARCH_KEY']
+    headers = {
+        "Authorization": f"Bearer {meilisearch_api_key}",
+        "Content-Type": "application/json"
+    }
+
+    # 向MeiliSearch发送请求
+    response = requests.post('http://127.0.0.1:7700/indexes/reviews_mysql/search', json=search_params, headers=headers)
+
+    query_result_json = response.json()
+
+    # extract id of review from response
+    review_ids = [hit['id'] for hit in query_result_json['hits']]
+    # print(f"search_reviews_meilisearch get id: {time.time() - start_time} seconds")
+    reviews = Review.query.filter(Review.id.in_(review_ids)).order_by(Review.update_time.desc())
+
+    # use id to query the name & teacher of the course
+    for review_id in review_ids:
+        review = Review.query.get(review_id)
+        # append course name & teacher name to the list
+        query_result_json['hits'][review_ids.index(review_id)]['course_name'] = review.course.name
+        # may have multiple teachers
+        query_result_json['hits'][review_ids.index(review_id)]['teacher_name'] = '、'.join([teacher.name for teacher in review.course.teachers])
+        # append author_name to the list, use author_id to query User table
+        if not query_result_json['hits'][review_ids.index(review_id)]['is_anonymous']:
+            query_result_json['hits'][review_ids.index(review_id)]['author_name'] = User.query.get(review.author_id).username
+        else:
+            query_result_json['hits'][review_ids.index(review_id)]['author_name'] = '匿名用户'
+            query_result_json['hits'][review_ids.index(review_id)]['author_id'] = '-1'
+
+    # user auth state
+    user_authed = current_user.is_authenticated
+    user_student = current_user.identity == 'Student' if user_authed else False
+    # check if the review is visible to the user, if not delete it from the list
+    for hit in query_result_json['hits']:
+        if hit['only_visible_to_student'] and not user_student:
+            query_result_json['hits'].remove(hit)
+        elif hit['is_hidden'] or hit['is_blocked']:
+            query_result_json['hits'].remove(hit)
+        # remove "is_anonymous","only_visible_to_student","is_hidden","is_blocked" from each hit
+        del hit['is_anonymous']
+        del hit['only_visible_to_student']
+        del hit['is_hidden']
+        del hit['is_blocked']
+
+    return jsonify(query_result_json)
+
+@home.route('/search-reviews-meilisearch-api-html/')
+def search_reviews_meilisearch_api_html():
+    ''' 渲染html用的，参数都用js处理 '''
+    return render_template('search-reviews-meilisearch-api.html',this_module='home.search_reviews_meilisearch_api_html')
+
+@home.route('/search-meilisearch-api/')
+def search_meilisearch_api():
+    ''' meilisearch聚合搜索（可以搜课名，老师，评论），纯前端模式（返回点评内容json） '''
+    start_time = time.time()
+    # 用户可控制的参数
+    query = request.args.get('q', '')  # 默认为空字符串
+    page = request.args.get('page', 1,  type=int)  # 默认为第一页
+    per_page = request.args.get('per_page', 10, type=int)
+
+    # 构建搜索请求
+    search_params = {
+          "queries": [
+            {
+              "indexUid": "courses_mysql",
+              "q": query,
+              "attributesToSearchOn": [
+                "name",
+                "course_code"
+              ],
+              "highlightPreTag": "<span class=\"highlight\">",
+              "highlightPostTag": "</span>",
+              "attributesToHighlight": [
+                "name",
+                "course_code"
+              ],
+              "limit": 100
+            },
+            {
+              "indexUid": "teachers_mysql",
+              "q": query,
+              "attributesToSearchOn": [
+                "name",
+                "email"
+              ],
+              "highlightPreTag": "<span class=\"highlight\">",
+              "highlightPostTag": "</span>",
+              "attributesToHighlight": [
+                "name"
+              ],
+              "limit": 100
+            },
+            {
+              "indexUid": "reviews_mysql",
+              "q": query,
+              "attributesToSearchOn": [
+                "content"
+              ],
+              "highlightPreTag": "<span class=\"highlight\">",
+              "highlightPostTag": "</span>",
+              "attributesToHighlight": [
+                "content"
+              ],
+              "limit": 20
+            }
+          ]
+        }
+
+    meilisearch_api_key = app.config['MEILISEARCH_KEY']
+    headers = {
+        "Authorization": f"Bearer {meilisearch_api_key}",
+        "Content-Type": "application/json"
+    }
+
+    # 向MeiliSearch发送请求
+    response = requests.post('http://127.0.0.1:7700/multi-search', json=search_params, headers=headers)
+
+    query_result_json = response.json()
+    course_hit_json = query_result_json['results'][0]
+    teacher_hit_json = query_result_json['results'][1]
+    review_hit_json = query_result_json['results'][2]
+
+    # print time
+    print(f"search_meilisearch_api get id: {time.time() - start_time} seconds")
+    start_time = time.time()
+
+    # extract course id from response
+    course_ids = [hit['id'] for hit in course_hit_json['hits']]
+    # find courserate for each course
+    for course_id in course_ids:
+        # create a new json object to store course rate
+        course = Course.query.get(course_id)
+        # append course rate to the list
+        rate = course._course_rate
+        query_result_json['results'][0]['hits'][course_ids.index(course_id)]['course_rate_score'] = rate._rate_average
+        query_result_json['results'][0]['hits'][course_ids.index(course_id)]['course_rate_total'] = rate._rate_total
+        query_result_json['results'][0]['hits'][course_ids.index(course_id)]['course_rate_difficulty'] = rate._difficulty_total
+        query_result_json['results'][0]['hits'][course_ids.index(course_id)]['course_rate_homework'] = rate._homework_total
+        query_result_json['results'][0]['hits'][course_ids.index(course_id)]['course_rate_gain'] = rate._gain_total
+
+        # in each query_result_json['results'][0]['hits'][course_ids.index(course_id)], only preserve id name course_code
+
+    # extract id of review from response
+    review_ids = [hit['id'] for hit in review_hit_json['hits']]
+    # use id to query the name & teacher of the course
+    for review_id in review_ids:
+        review = Review.query.get(review_id)
+        # append course name & teacher name to the list
+        query_result_json['results'][2]['hits'][review_ids.index(review_id)]['course_name'] = review.course.name
+        # may have multiple teachers
+        query_result_json['results'][2]['hits'][review_ids.index(review_id)]['teacher_name'] = '、'.join([teacher.name for teacher in review.course.teachers])
+
+    print(f"search_reviews_meilisearch done search: {time.time() - start_time} seconds")
+    return jsonify(query_result_json)
 
 @home.route('/search/')
 def search():
@@ -691,12 +909,13 @@ def search():
 
     if pagination.total > 0:
         title = '搜索课程「' + query_str + '」'
-    elif noredirect:
-        title = '您的搜索「' + query_str + '」没有匹配到任何课程或老师'
+    # elif noredirect:
     else:
+        title = '您的搜索「' + query_str + '」没有匹配到任何课程或老师'
+    # else:
         # return search_reviews()
-        print("no result in name sec")
-        return search_reviews_meilisearch()
+        # print("no result in name sec")
+        # return search_reviews_meilisearch()
 
     search_log = SearchLog()
     search_log.keyword = query_str
@@ -706,11 +925,147 @@ def search():
     search_log.page = page
     search_log.save()
 
-    print(f"search_course: {time.time() - start_time} seconds")
+    # print(f"search_course: {time.time() - start_time} seconds")
     return render_template('search.html', keyword=query_str, courses=pagination,
                 dept=department, deptlist=deptlist,
                 title=title,
                 this_module='home.search')
+
+@home.route('/search-meilisearch/')
+def search_meilisearch():
+    ''' meilisearch搜索(仅搜索课程，使用multisearch） '''
+    start_time = time.time()
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    if page <= 1:
+        page = 1
+    query_str = request.args.get('q')
+    if not query_str:
+        return redirect_to_index()
+    noredirect = request.args.get('noredirect')
+
+    course_type = request.args.get('type',None,type=int)
+    department = request.args.get('dept',None,type=int)
+    campus = request.args.get('campus',None,type=str)
+
+    # 构建搜索请求
+    # 强制精确搜索教师
+    search_params = {
+      "queries": [
+        {
+          "indexUid": "teachers_mysql",
+          "q": "\"" + query_str + "\"",
+          "attributesToSearchOn": ["name", "email"]
+        },
+        {
+          "indexUid": "courses_mysql",
+          "q": query_str,
+          "attributesToSearchOn": ["name","course_code"],
+          "limit": 100
+        },
+        {
+          "indexUid": "course_terms_mysql",
+          "q": query_str,
+          "attributesToSearchOn": ["description", "description_eng"]
+        }
+      ]
+    }
+
+    # send search request to MeiliSearch
+    meilisearch_api_key = app.config['MEILISEARCH_KEY']
+    headers = {
+        "Authorization": f"Bearer {meilisearch_api_key}",
+        "Content-Type": "application/json"
+    }
+
+    # 向MeiliSearch发送请求
+    response = requests.post('http://127.0.0.1:7700/multi-search', json=search_params, headers=headers)
+
+    # return the response json
+    query_result_json = response.json()
+
+    # extract teacher / course from result
+
+    ## teacher: extract by id in results - hits
+    teacher_ids = [hit['id'] for hit in query_result_json['results'][0]['hits']]
+    teachers = Teacher.query.filter(Teacher.id.in_(teacher_ids)).all()
+    # print(teachers)
+    # extract course taught by teacher
+    course_ids_from_teacher_search = [course.id for teacher in teachers for course in teacher.courses]
+    # course_from_teacher_search = Course.query.filter(Course.id.in_(course_ids_from_teacher_search)).all()
+    # print(course_from_teacher_search)
+
+    ## course: extract by id in results - hits
+    course_ids_from_name_search = [hit['id'] for hit in query_result_json['results'][1]['hits']]
+    # print(course_ids_from_name_search)
+    # course_from_name_search = Course.query.filter(Course.id.in_(course_ids_from_name_search)).all()
+    # print(course_from_name_search)
+
+    ## course: extract by id in results - hits
+    course_ids_from_desc_search = [hit['course_id'] for hit in query_result_json['results'][2]['hits']]
+    course_ids_from_desc_search = list(set(course_ids_from_desc_search))
+    # course_from_desc_search = Course.query.filter(Course.id.in_(course_ids_from_desc_search)).all()
+    # print(course_from_desc_search)
+
+    # merge course ids from 3 search results
+    course_ids = course_ids_from_teacher_search + course_ids_from_name_search
+    # course_ids = list(set(course_ids))
+
+
+    # print(course_ids)
+
+    def calculate_normalized_rate(course_rate, avg_rate, avg_rate_count):
+        normalized_rate = (course_rate._rate_total + avg_rate * avg_rate_count) / (
+                    course_rate.review_count + avg_rate_count)
+        return normalized_rate
+
+    # 首先获取平均评分和平均评分次数
+    avg_rate = db.session.query(db.func.avg(Review.rate)).scalar()
+    avg_rate_count = db.session.query(
+        db.func.count(Review.id) / db.func.count(db.func.distinct(Review.course_id))).scalar()
+
+    # 获取课程和评分数据
+    merged_courses = Course.query.filter(Course.id.in_(course_ids)).all()
+    course_rates = CourseRate.query.filter(CourseRate.id.in_(course_ids)).all()
+
+    # 将 course_rates 转换为字典方便查找
+    course_rates_dict = {cr.id: cr for cr in course_rates}
+
+    # 对课程进行排序
+    # 先按照归一化评分排序，如果相等，则按照 course_ids 的顺序排序
+    merged_courses.sort(key=lambda x: (
+    -calculate_normalized_rate(course_rates_dict.get(x.id, None), avg_rate, avg_rate_count), course_ids.index(x.id)))
+
+    merged_courses_page = merged_courses[(page - 1) * per_page: page * per_page]
+
+    pagination = MyPagination(page=page, per_page=per_page, total=len(merged_courses), items=merged_courses_page)
+
+    if pagination.total > 0:
+        title = '搜索课程「' + query_str + '」'
+    elif noredirect:
+        title = '您的搜索「' + query_str + '」没有匹配到任何课程或老师'
+    else:
+        # return search_reviews()
+        # print("no result in name sec")
+        return search_reviews_meilisearch()
+
+    search_log = SearchLog()
+    search_log.keyword = query_str
+    if current_user.is_authenticated:
+        search_log.user_id = current_user.id
+    search_log.module = 'search_course'
+    search_log.page = page
+    search_log.save()
+    print(f"search_course_meilisearch: {time.time() - start_time} seconds")
+    return render_template('search.html', keyword=query_str, courses=pagination,
+                dept=department, deptlist=deptlist,
+                title=title,
+                this_module='home.search')
+
+
+
+
+    # return jsonify(query_result_json)
 
 
 @home.route('/announcements/')
