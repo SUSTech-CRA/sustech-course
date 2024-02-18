@@ -1,0 +1,287 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container mt-2">
+  <div class="row float-element shadow">
+     <div class="bm-pd-md">
+        <div class="mb-2 input-group">
+            <input type="text" id="searchInput" name="q" class="form-control" placeholder="搜索点评" aria-label="Search">
+            <button class="btn btn-secondary" id="search-button-down">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
+        <div class="nav nav-pills" id="nav-tab" role="tablist">
+            <a class="nav-link" id="search-course-tab" href="#">搜课程/老师</a>
+            <a class="nav-link active" id="search-review-tab" href="#">搜点评</a>
+        </div>
+
+        <div class="pt-3 pb-2">
+            <span class="blue h5">搜索点评「<span id="search-query-param-display-title"></span>」</span>
+        </div>
+        <div id="review-results" class="mt-3"></div>
+
+
+
+        <!-- pagnation -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="pagnavigation-search-result">
+                <!-- <li class="page-item"><a class="page-link" href="#">1</a></li> -->
+            </ul>
+        </nav>
+
+    </div>
+  </div>
+
+
+</div>
+
+
+<script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- 自定义脚本 -->
+    <script>
+
+
+        $(document).ready(function () {
+
+            let debounceTimeout;
+
+            function getQueryParam(name) {
+                return new URLSearchParams(window.location.search).get(name);
+            }
+
+            // 初始化
+            var initialQuery = getQueryParam('q') || '';
+            var initialPage = parseInt(getQueryParam('page')) || 1;
+            $('#searchInput').val(initialQuery);
+            if (initialQuery) search(initialQuery, initialPage);
+
+            $('#searchInput').on('input', function () {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(function () {
+                    // check if search bar is empty, only when not empty, then search
+                    if ($('#searchInput').val().length > 0) {
+                        search($('#searchInput').val(), 1);
+                    } else {
+                        $('#review-results').empty();
+                        $('#pagnavigation-search-result').empty();
+                    }
+                }, 1000);
+            });
+
+            function search(query, page) {
+                var query = $('#searchInput').val();
+
+                // 更新 URL
+                var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?q=' + encodeURIComponent(query) + '&page=' + page;
+                window.history.replaceState({ path: newUrl }, '', newUrl);
+
+                //update href in id="search-course-tab" and id="search-review-tab"
+                var searchCourseTab = document.getElementById('search-course-tab');
+                var searchReviewTab = document.getElementById('search-review-tab');
+                searchCourseTab.href = '/search/?q=' + encodeURIComponent(query);
+                searchReviewTab.href = '/search-reviews-meilisearch-api-html/?q=' + encodeURIComponent(query);
+
+                //update search-query-param-display-title
+                var searchQueryParamDisplayTitle = document.getElementById('search-query-param-display-title');
+                searchQueryParamDisplayTitle.innerText = query;
+
+                // 使用 jQuery AJAX 发送 GET 请求
+                $.ajax({
+                    url: '/search-reviews-meilisearch-api/',
+                    type: 'GET',
+                    data: {
+                        q: query,
+                        page: page
+                    },
+                    success: function (data) {
+                        displayResults(data.hits);
+                        createPagination(page, data.totalPages);
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+
+            // 使用 jQuery 绑定 click 事件
+            $('#search-button-down').on('click', function() {
+                search($('#searchInput').val(), 1);
+            });
+
+            function formatUnixTimestamp(unixTimestamp) {
+                // 将 Unix 时间戳（秒）转换为毫秒
+                var date = new Date(unixTimestamp * 1000);
+
+                // 构建日期和时间的字符串
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString().padStart(2, '0'); // 月份从0开始，所以+1
+                var day = date.getDate().toString().padStart(2, '0');
+
+                var hour = date.getHours().toString().padStart(2, '0');
+                var minute = date.getMinutes().toString().padStart(2, '0');
+
+                // 拼接为最终格式
+                return `${year}-${month}-${day} ${hour}:${minute}`;
+        }
+
+        function findSearchResultElementPositions() {
+            var positions = [];
+            $('.search-result-highlight').each(function(index) {
+                // 获取当前元素在其同级元素中的位置
+                var position = $(this).index();
+                positions.push(position);
+            });
+            return positions;
+        }
+
+
+
+
+
+            function displayResults(hits) {
+                var resultsDiv = document.getElementById('review-results');
+                resultsDiv.innerHTML = '';
+                hits.forEach(hit => {
+                    var resultItem = document.createElement('div');
+                    resultItem.classList.add('card', 'mb-3', 'shadow-sm','no-underline');
+
+                    var cardHeader = document.createElement('div');
+                    cardHeader.classList.add('card-header');
+                    // 添加带有链接的作者名
+                    if (hit.author_name === '匿名用户') {
+                        var authorLink = $('<span>').text(hit.author_name);
+                    } else {
+                        var authorLink = $('<a>')
+                            .attr('href', '/user/' + hit.author_id) // 假设这是作者的链接格式
+                            .text(hit.author_name);
+                    }
+
+                    // 添加时间，用small类包裹
+                    var updateTime = $('<span>')
+                        .addClass('small')
+                        .addClass('text-muted')
+                        .text(formatUnixTimestamp(hit.update_time));
+
+                    // 添加课程名和教师名，用链接包裹
+                    var courseLink = $('<a>')
+                        .attr('href', '/course/' + hit.course_id) // 假设这是课程的链接格式
+                        .text(hit.course_name + '（' + hit.teacher_name + '）');
+
+                    cardHeader.innerHTML = authorLink[0].outerHTML + ' 点评了 ' + courseLink[0].outerHTML
+
+                    resultItem.appendChild(cardHeader);
+
+                    var cardBody = document.createElement('div');
+                    cardBody.classList.add('card-body');
+                    // cardBody.setAttribute('data-needs-expand-check', 'true'); // 添加标记(未检查）
+
+                    cardBody.innerHTML = hit._formatted.content;
+
+                    //remove img tag
+                    var imgReg = /<img.*?(?:>|\/>)/gi;
+                    cardBody.innerHTML = cardBody.innerHTML.replace(imgReg, "");
+
+                    resultItem.appendChild(cardBody);
+
+                    var cardFooter = document.createElement('div');
+                    cardFooter.classList.add('card-footer', 'd-flex', 'align-items-center');
+                    resultItem.appendChild(cardFooter);
+
+                    // 时间容器
+                    var timeContainer = document.createElement('div');
+                    timeContainer.classList.add('me-auto'); // Margin end auto
+                    timeContainer.innerHTML = updateTime[0].outerHTML;
+                    cardFooter.appendChild(timeContainer);
+
+                    // 按钮容器
+                    var buttonContainer = document.createElement('div');
+                    buttonContainer.classList.add('ms-auto'); // Margin start auto
+
+
+                    // 先将 resultItem 添加到 DOM
+                    resultsDiv.appendChild(resultItem);
+
+                    cardBody.style.overflow = 'hidden';
+                    //set height to min(100px, scrollHeight)
+                    cardBody.style.height = Math.min(cardBody.scrollHeight, 100) + 'px';
+
+                    // 检查内容高度是否超过100px
+                    if (cardBody.scrollHeight > 100) {
+                        var expandButton = document.createElement('button');
+                        expandButton.classList.add('btn', 'btn-link', 'btn-sm');
+                        expandButton.innerText = 'Expand';
+                        expandButton.addEventListener('click', function() {
+                            if (cardBody.style.height === '100px') {
+                                cardBody.style.height = 'auto';
+                                expandButton.innerText = 'Collapse';
+                            } else {
+                                cardBody.style.height = '100px';
+                                expandButton.innerText = 'Expand';
+                            }
+                        });
+                        buttonContainer.appendChild(expandButton);
+                    }
+
+
+
+                    var moreButton = document.createElement('button');
+                    moreButton.innerText = '查看评论...';
+                    moreButton.classList.add('btn', 'btn-primary', 'btn-sm');
+                    moreButton.onclick = function (e) {
+                        e.stopPropagation();
+                        window.location.href = '/course/' + hit.course_id + '#review-' + hit.id;
+                    };
+                    buttonContainer.appendChild(moreButton);
+
+                    cardFooter.appendChild(buttonContainer);
+
+                    resultsDiv.appendChild(resultItem);
+                });
+            }
+
+
+
+
+            function createPagination(currentPage, totalPages) {
+                var container = $('#pagnavigation-search-result');
+                container.empty();
+
+                var range = 2; // 当前页码前后显示的页码数
+                var startPage = Math.max(1, currentPage - range);
+                var endPage = Math.min(totalPages, currentPage + range);
+
+                // 如果页码数太多，则使用 "..."
+                if (startPage > 1) {
+                    container.append(createPageItem(1));
+                    if (startPage > 2) container.append($('<li class="page-item"><span>...</span></li>'));
+                }
+
+                for (var i = startPage; i <= endPage; i++) {
+                    container.append(createPageItem(i, i === currentPage));
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) container.append($('<li class="page-item"><span>...</span></li>'));
+                    container.append(createPageItem(totalPages));
+                }
+            }
+
+            function createPageItem(page, isActive) {
+                return $('<li class="page-item' + (isActive ? ' active' : '') + '"><a class="page-link" href="#">' + page + '</a></li>').on('click', function(e) {
+                    e.preventDefault();
+                    search($('#searchInput').val(), page);
+                });
+            }
+
+        });
+    </script>
+
+
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+
