@@ -4,7 +4,7 @@
 <form class="ud-pd-sm" action="{{ url_for('home.search') }}" method="get">
 {% endif %}
 <div class="mb-1 input-group">
-    <input type="text" name="q" class="form-control" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
+    <input type="text" name="q" class="form-control" id="searchInput" placeholder="搜索课程、老师、点评，按Ctrl(Command)+K 聚焦" aria-label="Search" value="{{ keyword or '' }}">
     <button type="submit" class="btn btn-secondary" id="search-button-down">
         <i class="fa fa-search"></i>
     </button>

@@ -26,6 +26,14 @@ $(document).ready(function() {
 
     // 设置监听器以在暗色模式变化时更新
     window.matchMedia('(prefers-color-scheme: dark)').addListener(updateDarkMode);
+
+    //focus search bar by command + K
+    $(document).on('keydown', function (e) {
+        if (e.metaKey && e.key === 'k') {
+            e.preventDefault();
+            $('#searchInput').focus();
+        }
+    });
 });
  $.ajaxSetup({
      beforeSend: function(xhr, settings) {
