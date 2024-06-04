@@ -680,16 +680,27 @@ def search_reviews_meilisearch_api():
     user_authed = current_user.is_authenticated
     user_student = current_user.identity == 'Student' if user_authed else False
     # check if the review is visible to the user, if not delete it from the list
-    for hit in query_result_json['hits']:
-        if hit['only_visible_to_student'] and not user_student:
-            query_result_json['hits'].remove(hit)
-        elif hit['is_hidden'] or hit['is_blocked']:
-            query_result_json['hits'].remove(hit)
-        # remove "is_anonymous","only_visible_to_student","is_hidden","is_blocked" from each hit
-        del hit['is_anonymous']
-        del hit['only_visible_to_student']
-        del hit['is_hidden']
-        del hit['is_blocked']
+    # Filter the hits based on user authentication and role
+    filtered_hits = [
+        hit for hit in query_result_json['hits']
+        if not (
+                (hit.get('only_visible_to_student') and not user_student) or
+                hit.get('is_hidden') or
+                hit.get('is_blocked')
+        )
+    ]
+
+    # Clean up each hit in the filtered list
+    for hit in filtered_hits:
+        for key in ['is_anonymous', 'only_visible_to_student', 'is_hidden', 'is_blocked']:
+            hit.pop(key, None)  # Use pop to safely remove the key, None ensures no error if key is missing
+            hit['_formatted'].pop(key, None)
+            # also pop author_id from _formatted
+            hit['_formatted'].pop('author_id', None)
+
+    # Now, update the original hits list
+    query_result_json['hits'] = filtered_hits
+
 
     return jsonify(query_result_json)
 
