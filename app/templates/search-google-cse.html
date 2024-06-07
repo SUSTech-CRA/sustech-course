@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+    <div class="container mt-2">
+        <div class="row float-element shadow">
+            <div class="bm-pd-md">
+                <div class="nav nav-pills" id="nav-tab" role="tablist">
+                    <a class="nav-link" id="search-course-tab" href="#">搜课程/老师</a>
+                    <a class="nav-link" id="search-review-tab" href="#">搜点评</a>
+                    <a class="nav-link active" id="search-gcse-tab" href="#">Google CSE</a>
+                </div>
+                <script async src="https://cse.google.com/cse.js?cx=37232f0e046d44459">
+                </script>
+                <div class="gcse-search"></div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+

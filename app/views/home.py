@@ -813,6 +813,11 @@ def search_meilisearch_api():
     print(f"search_reviews_meilisearch done search: {time.time() - start_time} seconds")
     return jsonify(query_result_json)
 
+@home.route('/search-google-cse/')
+def search_google_cse():
+    return render_template('search-google-cse.html',this_module='home.search_google_cse')
+
+
 @home.route('/search/')
 def search():
     ''' 搜索 '''
