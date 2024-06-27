@@ -1139,3 +1139,7 @@ def songshu():
 @home.route('/robots.txt')
 def robots():
     return current_app.send_static_file('robots.txt')
+
+@home.route('/ads.txt')
+def google_ads_txt():
+    return current_app.send_static_file('ads.txt')
