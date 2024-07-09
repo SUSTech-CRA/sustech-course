@@ -28,7 +28,7 @@
 	      {% else %}
 	      {{ review.content|abstract }}
 	      {% endif %}
-	      <a href="{{ url_for('course.view_course', course_id=review.course.id) }}#review-{{ review.id }}">&gt;&gt;更多</a>
+            <a href="{{ url_for('course.view_course', course_id=review.course.id) }}#review-{{ review.id }}" class="btn btn-white btn-sm" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .25rem; --bs-btn-font-size: .75rem;">更多 <i class="fa-solid fa-ellipsis"></i></a>
 	    </p>
           </div><!-- ./col-md-8 -->
         </div><!-- ./row -->
