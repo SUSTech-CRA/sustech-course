@@ -50,6 +50,20 @@
           </div>
         </div>
         {% endfor %}
+        <!-- add a dropdown to select grade: A B C D F -->
+        <div class="ud-pd-sm">
+            <span class="right-pd-sm weight-heavy">你的成绩（可选）</span>
+            <select name="grade-survey">
+            <option value="U">选项</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="F">F</option>
+            </select>
+            <span class="clearfix"></span>
+        </div>
+      </div>
         <link href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/bootstrap-star-rating/4.1.2/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
         <link href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/bootstrap-star-rating/4.1.2/themes/krajee-svg/theme.min.css" media="all" rel="stylesheet" type="text/css" />
         <div class="ud-pd-sm">
@@ -57,7 +71,6 @@
           <input id="rate-star" name="rate" value="{{ review.rate / 2.0 if review.rate else 0 }}">
           <span class="clearfix"></span>
         </div>
-      </div>
 
       <div class="container-md" style="width:100%">
         <h4 class="grey">说几句吧！</h4>
