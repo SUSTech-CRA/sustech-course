@@ -71,7 +71,13 @@
           {% if current_user.is_authenticated %}
           <a href="{{ url_for('teacher.edit_profile', teacher_id=teacher.id) }}" class="btn btn-link float-end">编辑教师信息</a>
           {% endif %}
-          <h3 class="blue">{{ teacher.name }}</h3>
+          <h1 class="h3 blue">{{ teacher.name }}</h1>
+          {% if current_user.is_authenticated %}
+          <!-- email -->
+            {% if teacher.email %}
+            <p><i class="fa-regular fa-envelope"></i> <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a></p>
+            {% endif %}
+          {% endif %}
           <p>{{ teacher.dept.name }}</p>
           {% if teacher.homepage and teacher.homepage != 'http://' %}
           <p>教师主页：<a href="{{ teacher.homepage }}" target="_blank" class="text-decoration-none"><span class="fa fa-link" aria-hidden="true"></span> 戳这里</a></p>

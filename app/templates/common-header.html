@@ -50,8 +50,10 @@
       }
     }
     </script>
+    {% elif teacher %}
+    <meta name="description" property="og:description" content="Courses taught by {{ teacher.name }} on Niuwa Curriculum Evaluation System">
     {% else %}
-    <meta name="description" property="og:description" content="评课是为了更好地选课！">
+    <meta name="description" property="og:description" content="评课是为了更好地选课！促进南科大校内课程信息公开，帮助学生找到更适合自己的课程。">
     {% endif %}
     <meta name="keywords" content="SUSTECH,评课,课程">
     <meta name="author" content="">

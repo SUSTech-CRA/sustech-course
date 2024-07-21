@@ -83,11 +83,11 @@
 
 <div class="pt-3 pb-2">
   {% if title %}
-  <span class="blue h4 d-none d-md-block">{{ title }}
+  <h1 class="blue h2 d-none d-md-block">{{ title }}
     {% if this_module == 'course.index' and course_type_dict and course_type %}
     「{{ course_type_dict[course_type][0] }}」
     {% endif %}
-  </span>
+  </h1>
   <span class="blue h5 d-block d-md-none">
     {% if this_module == 'course.index' and course_type_dict and course_type %}
       「{{ course_type_dict[course_type][0] }}」

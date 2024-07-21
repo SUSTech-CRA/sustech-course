@@ -12,7 +12,7 @@
 <div class="container">
   <div class="row">
     {{ error }}
-    <h3 class="text-primary mb-3">注册</h3>
+    <h1 class="blue mb-3">注册 Register Account</h1>
     <hr>
     <form class="row g-3" method="post" action="{{ url_for('home.signup') }}" novalidate>
       <input  hidden name="csrf_token" value="{{ csrf_token() }}">
