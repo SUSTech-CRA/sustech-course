@@ -142,7 +142,7 @@
                         {% if (current_user.is_authenticated and current_user.identity == 'Student') %}
                             <b id="course-materials-link">
                                 <a href="./material" target="_blank" class="btn btn-white"><i
-                                        class="fa-solid fa-folder"></i> 课件</a>
+                                        class="fa-solid fa-folder"></i>课程公开课件/试卷</a>
                             </b>
                         {% endif %}
                     </div>
@@ -233,19 +233,19 @@
                     {% endif %}
 
                     {#    put score here  #}
-                    {% if (current_user.is_authenticated and current_user.identity == 'Student') and course.latest_score and (not course.score_type_pf) %}
-                        <div class="ud-pd-md">
-                            <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#plotly-div" aria-expanded="false" aria-controls="plotly-div">
-                                <i class="fa-solid fa-chart-simple"></i> Grade Survey（%）
-                            </button>
-                            <div>
-                                <div id="plotly-div" class="collapse"></div>
-                                {% include 'scripts/plotly-survey.html' %}
-                            </div>
-
-                        </div>
-                    {% endif %}
+{#                    {% if (current_user.is_authenticated and current_user.identity == 'Student') and course.latest_score and (not course.score_type_pf) %}#}
+{#                        <div class="ud-pd-md">#}
+{#                            <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse"#}
+{#                                    data-bs-target="#plotly-div" aria-expanded="false" aria-controls="plotly-div">#}
+{#                                <i class="fa-solid fa-chart-simple"></i> Grade Survey（%）#}
+{#                            </button>#}
+{#                            <div>#}
+{#                                <div id="plotly-div" class="collapse"></div>#}
+{#                                {% include 'scripts/plotly-survey.html' %}#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{#                    {% endif %}#}
                     <!-- 显示课程评论统计 -->
                     {#                        <div class="ud-pd-md">#}
                     {##}

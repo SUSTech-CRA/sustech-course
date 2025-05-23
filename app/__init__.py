@@ -17,6 +17,8 @@ from flask_minify import minify
 import json
 
 app = Flask(__name__)
+# disable ensure ascii
+app.json.ensure_ascii = False
 # minify app (may need to turn off when debug)
 minify(app=app, html=True, js=True, cssless=True)
 

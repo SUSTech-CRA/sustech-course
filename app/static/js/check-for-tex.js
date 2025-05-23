@@ -19,7 +19,7 @@
       };
 
       var script = document.createElement('script');
-      script.src = 'https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js';
+      script.src = 'https://s4.zstatic.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js';
       document.head.appendChild(script);
     }
   }

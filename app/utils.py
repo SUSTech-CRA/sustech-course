@@ -30,7 +30,7 @@ def rand_str():
 
 
 def send_confirm_mail(email):
-    subject = '[NCES评课系统] Confirm your email.'
+    subject = '[NCES] Confirm your email.'
     token = ts.dumps(email, salt=app.config['EMAIL_CONFIRM_SECRET_KEY'])
 
     confirm_url = url_for(
@@ -46,7 +46,7 @@ def send_confirm_mail(email):
     mail.send(msg)
 
 def send_reset_password_mail(email):
-    subject = '[NCES评课系统] Reset your password'
+    subject = '[NCES] Reset your password'
     token = ts.dumps(email, salt=app.config['PASSWORD_RESET_SECRET_KEY'])
 
     reset_url = url_for(
@@ -62,14 +62,14 @@ def send_reset_password_mail(email):
 
 def send_block_review_email(review):
     email = review.author.email
-    subject = '[NCES评课系统] 您在课程「' + review.course.name + '」中的点评因违反社区规范，已被屏蔽'
+    subject = '[NCES] 您在课程「' + review.course.name + '」中的点评因违反社区规范，已被屏蔽'
     html = render_template('email/block-review.html', review=review)
     msg = Message(subject=subject, html=html, recipients=[email])
     mail.send(msg)
 
 def send_unblock_review_email(review):
     email = review.author.email
-    subject = '[NCES评课系统] 您在课程「' + review.course.name + '」中的点评已被解除屏蔽'
+    subject = '[NCES] 您在课程「' + review.course.name + '」中的点评已被解除屏蔽'
     html = render_template('email/unblock-review.html', review=review)
     msg = Message(subject=subject, html=html, recipients=[email])
     mail.send(msg)
