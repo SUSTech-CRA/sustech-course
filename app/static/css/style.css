@@ -496,6 +496,42 @@ a.nounderline:active { text-decoration: none; }
   font-style: italic;
 }
 
+/*!* --- 用于评论折叠的样式 --- *!*/
+
+/*!* 包裹评论正文的容器 *!*/
+/*.review-body-content {*/
+/*    position: relative; !* 为 ::after 伪元素定位 *!*/
+/*    transition: max-height 0.4s ease-out; !* 平滑的展开/收起动画 *!*/
+/*}*/
+
+/*!* 默认折叠状态 *!*/
+/*.review-body-content.is-collapsible {*/
+/*    max-height: 250px; !* 评论内容的最大高度，超过则折叠。你可以调整这个值 *!*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*!* 折叠时，在底部创建一个渐变蒙层，提示下面还有内容 *!*/
+/*.review-body-content.is-collapsible::after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    bottom: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    height: 80px;*/
+/*    background: linear-gradient(to bottom, transparent, var(--bs-body-bg)); !* 使用 Bootstrap 的背景色变量，完美适配亮色/暗色模式 *!*/
+/*    pointer-events: none; !* 允许点击穿透蒙层 *!*/
+/*}*/
+
+/*!* 展开后的状态 *!*/
+/*.review-body-content.is-collapsible.is-expanded {*/
+/*    max-height: 5000px; !* 一个足够大的值，确保能完全展开 *!*/
+/*}*/
+
+/*!* 展开后，隐藏蒙层 *!*/
+/*.review-body-content.is-collapsible.is-expanded::after {*/
+/*    display: none;*/
+/*}*/
+
 /* 黑白 badge */
 .badge-black-white {
     background-color: #f8f9fa;

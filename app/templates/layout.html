@@ -138,6 +138,10 @@
       {% if banner.desktop %}
       <div class="text-center banner desktop">{{ banner.desktop|safe }}</div>
       {% endif %}
+    {% if current_user.is_authenticated and current_user.email.startswith("125")%}
+              <div class="text-center banner">欢迎25级同学加入学业发展QQ群：414552119（牛娃卷饼屋Pro）</div>
+    {% endif %}
+
     </div>
     <!-- end banner -->
     {% endif %}
