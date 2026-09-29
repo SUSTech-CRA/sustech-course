@@ -1,0 +1,13 @@
+[project]
+name = "ncesnext-backend"
+version = "0.1.0"
+description = "FastAPI backend for the modernized NCES course review community"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

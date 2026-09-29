@@ -1,0 +1,13 @@
+[Unit]
+Description=NCES Next search index rebuild (MySQL -> Meilisearch, read-only from MySQL)
+# 索引是纯派生数据：本任务失败不影响线上（后端自动回落 SQL 搜索），重跑即可恢复
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+# 建议以专用的非 root 用户运行，并按实际 checkout 与虚拟环境路径调整
+User=ncesnext
+WorkingDirectory=/opt/ncesnext/backend
+ExecStart=/opt/ncesnext/.venv/bin/python scripts/reindex_search.py
+# MEILISEARCH_KEY 等配置从 WorkingDirectory 下的 .env 读取（pydantic-settings）；
+# 也可改用 systemd Environment=/EnvironmentFile= 注入

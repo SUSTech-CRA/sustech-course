@@ -1,0 +1,17 @@
+[Unit]
+Description=NCES Next public course review AI summary generation
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# 建议以专用的非 root 用户运行，并按实际 checkout 与虚拟环境路径调整
+User=ncesnext
+WorkingDirectory=/opt/ncesnext/backend
+ExecStart=/opt/ncesnext/.venv/bin/python scripts/generate_summaries.py --commit --prune-stale
+# LLM_* 从 WorkingDirectory/.env 读取，也可以改用 EnvironmentFile/Environment 注入。
+
+# 降低批处理对在线服务和数据库的调度影响。
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7

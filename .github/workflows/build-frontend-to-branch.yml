@@ -1,0 +1,78 @@
+name: Build frontend to branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: Branch that will receive the built frontend files
+        required: true
+        default: frontend-build
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-frontend-to-${{ inputs.target_branch }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    name: Build and publish frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
+        # 统计/监控 ID 来自仓库 Actions Variables；未配置时构建产物不加载对应服务
+        env:
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          VITE_GA_MEASUREMENT_ID: ${{ vars.VITE_GA_MEASUREMENT_ID }}
+          VITE_ADSENSE_CLIENT: ${{ vars.VITE_ADSENSE_CLIENT }}
+          VITE_ADSENSE_SLOT: ${{ vars.VITE_ADSENSE_SLOT }}
+        run: npm run build
+
+      - name: Publish build output to branch
+        env:
+          BUILD_DIR: frontend/dist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_BRANCH: ${{ inputs.target_branch }}
+        run: |
+          set -euo pipefail
+
+          git check-ref-format --branch "$TARGET_BRANCH" >/dev/null
+
+          deploy_dir="$(mktemp -d)"
+          cp -a "$BUILD_DIR"/. "$deploy_dir"/
+          touch "$deploy_dir/.nojekyll"
+          {
+            echo "Built from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+            echo "Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo "Generated at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          } > "$deploy_dir/BUILD_INFO.txt"
+
+          git -C "$deploy_dir" init
+          git -C "$deploy_dir" checkout -b "$TARGET_BRANCH"
+          git -C "$deploy_dir" config user.name "github-actions[bot]"
+          git -C "$deploy_dir" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$deploy_dir" add -A
+          git -C "$deploy_dir" commit -m "Build frontend from ${GITHUB_SHA::7}"
+          git -C "$deploy_dir" push --force \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            "HEAD:refs/heads/${TARGET_BRANCH}"

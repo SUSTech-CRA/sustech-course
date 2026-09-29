@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>NCES | Niuwa Curriculum Evaluation System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- 与老站同款字体；media=print+onload 使其不阻塞首帧渲染，加载完成后 swap -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=Noto+Sans+Mono:wght@400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=Noto+Sans+Mono:wght@400;600&display=swap"
+      />
+    </noscript>
+    <script>
+      // 首帧前按系统偏好预设主题，避免暗色模式刷新闪白；React 挂载后由 App.tsx 接管
+      (function () {
+        try {
+          var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) {
+          /* noop */
+        }
+      })();
+    </script>
+    <style>
+      /* 关键首帧样式：CSS/JS 包到达前保证背景与主题一致（颜色与 styles.css 变量保持同步） */
+      html {
+        background: #f5f7f9;
+        color-scheme: light;
+      }
+      html[data-theme='dark'] {
+        background: #141414;
+        color-scheme: dark;
+      }
+      .boot-shell {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', Helvetica, Arial, sans-serif;
+      }
+      .boot-bar {
+        display: flex;
+        align-items: center;
+        min-height: 64px;
+        background: rgba(255, 255, 255, 0.96);
+        border-bottom: 1px solid #e6ebf0;
+      }
+      html[data-theme='dark'] .boot-bar {
+        background: rgba(20, 20, 20, 0.96);
+        border-bottom-color: #303030;
+      }
+      .boot-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        font-weight: 800;
+        color: #1f2933;
+      }
+      html[data-theme='dark'] .boot-brand {
+        color: #f5f5f5;
+      }
+      .boot-brand-mark {
+        display: inline-grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        color: #ffffff;
+        background: #337ab7;
+        border-radius: 4px;
+      }
+      .boot-spin-area {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .boot-spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid rgba(51, 122, 183, 0.25);
+        border-top-color: #337ab7;
+        border-radius: 50%;
+        animation: boot-rotate 0.9s linear infinite;
+      }
+      @keyframes boot-rotate {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- gtag.js 推迟到 window.load 后下载，冷启动时不与关键 JS 抢带宽；
+         dataLayer 队列先行建立，期间的事件带原始时间戳，脚本到达后照常上报。
+         测量 ID 由构建期 VITE_GA_MEASUREMENT_ID 注入；未配置时占位符不会被替换，校验失败即不加载 -->
+    <script>
+      (function () {
+        var gaId = '%VITE_GA_MEASUREMENT_ID%';
+        if (!/^G-[A-Z0-9]+$/.test(gaId)) return;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+        window.gtag('js', new Date());
+        window.gtag('config', gaId);
+        window.addEventListener('load', function () {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+          document.head.appendChild(s);
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <div class="boot-shell">
+        <div class="boot-bar">
+          <span class="boot-brand"><span class="boot-brand-mark">N</span>Niuwa Curriculum Evaluation System</span>
+        </div>
+        <div class="boot-spin-area">
+          <div class="boot-spinner" role="status" aria-label="页面加载中"></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

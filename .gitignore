@@ -1,0 +1,21 @@
+# Python
+__pycache__
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Local configuration and data (never commit secrets)
+backend/.env
+meilisearch/.env
+meilisearch/data/
+
+# Maintainer-only notes (separate private repository) and local agent settings
+/.internal/
+/CLAUDE.local.md
+.claude/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store

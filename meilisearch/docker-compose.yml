@@ -1,0 +1,16 @@
+# NCES Next 搜索引擎（详见本目录 README.md）
+# - 只绑 127.0.0.1:7701，仅供本机 FastAPI 后端与 reindex 脚本访问，绝不对外
+# - 7700 是老应用当年的 Meilisearch 实例端口，勿混用
+# - ./data 是纯派生数据（可随时删除后用 reindex_search.py 重建），不进 git
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.49.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7701:7700"
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:?请先在本目录 .env 中设置 MEILI_MASTER_KEY（参考 .env.example）}
+      MEILI_ENV: production
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - ./data:/meili_data

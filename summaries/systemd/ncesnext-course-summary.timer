@@ -1,0 +1,10 @@
+[Unit]
+Description=Generate NCES Next course review AI summaries daily
+
+[Timer]
+OnCalendar=*-*-* 03:35:00
+Persistent=true
+RandomizedDelaySec=20min
+
+[Install]
+WantedBy=timers.target
