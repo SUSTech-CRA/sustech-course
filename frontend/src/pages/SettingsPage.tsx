@@ -18,6 +18,7 @@ export function SettingsPage() {
   const queryClient = useQueryClient();
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
+  const setTokens = useAuthStore((state) => state.setTokens);
   const [passwordForm] = Form.useForm<ChangePasswordRequest>();
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   // 表单必须回填当前资料，否则保存时会把 homepage/简介/隐私开关清空
@@ -45,8 +46,10 @@ export function SettingsPage() {
   });
   const passwordMutation = useMutation({
     mutationFn: (payload: ChangePasswordRequest) => authApi.changePassword(payload),
-    onSuccess: () => {
-      message.success('密码已修改');
+    onSuccess: (tokens) => {
+      // 改密后其他设备的登录全部失效，当前设备换用服务端新签发的令牌
+      setTokens(tokens.access_token, tokens.refresh_token);
+      message.success('密码已修改，其他设备需重新登录');
       passwordForm.resetFields();
     },
     onError: (error) => message.error(getApiErrorMessage(error)),

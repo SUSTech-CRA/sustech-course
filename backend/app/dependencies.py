@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.core.security import decode_token
+from app.core.security import decode_token, token_matches_password
 from app.models import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
@@ -28,6 +28,8 @@ def _user_from_access_token(token: str, db: Session) -> User:
         raise _credentials_exception(invalid_token=True)
     user = db.get(User, user_id)
     if user is None or user.is_deleted or user.active is False:
+        raise _credentials_exception(invalid_token=True)
+    if not token_matches_password(payload, user.password):
         raise _credentials_exception(invalid_token=True)
     return user
 

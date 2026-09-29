@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import hmac
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
@@ -37,21 +39,34 @@ def _create_token(user_id: int, expires_delta: timedelta, token_type: str, *, ex
     return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 
-def create_access_token(user_id: int) -> str:
+def password_stamp(password_hash: str | None) -> str:
+    # 令牌绑定密码哈希：改密或重置后哈希（含新盐）变化，已签发的 access/refresh 随之失效。
+    # JWT payload 可被任何人解码，因此只放带密钥的 HMAC 截断值，不暴露哈希本身
+    digest = hmac.new(settings.SECRET_KEY.encode("utf-8"), (password_hash or "").encode("utf-8"), hashlib.sha256)
+    return digest.hexdigest()[:16]
+
+
+def token_matches_password(payload: dict[str, Any], password_hash: str | None) -> bool:
+    stamp = payload.get("pwd_stamp")
+    return isinstance(stamp, str) and hmac.compare_digest(stamp, password_stamp(password_hash))
+
+
+def create_access_token(user_id: int, password_hash: str | None, remember: bool = False) -> str:
     return _create_token(
         user_id,
         timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
         "access",
+        extra={"pwd_stamp": password_stamp(password_hash), "remember": remember},
     )
 
 
-def create_refresh_token(user_id: int, remember: bool = False) -> str:
+def create_refresh_token(user_id: int, password_hash: str | None, remember: bool = False) -> str:
     days = settings.REMEMBER_REFRESH_TOKEN_EXPIRE_DAYS if remember else settings.REFRESH_TOKEN_EXPIRE_DAYS
     return _create_token(
         user_id,
         timedelta(days=days),
         "refresh",
-        extra={"remember": remember},
+        extra={"pwd_stamp": password_stamp(password_hash), "remember": remember},
     )
 
 

@@ -8,7 +8,8 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.dependencies import get_current_active_user, get_optional_user
+from app.core.security import decode_token
+from app.dependencies import get_current_active_user, get_optional_user, oauth2_scheme
 from app.models import User
 from app.schemas.auth import (
     AuthPublicConfig,
@@ -102,7 +103,7 @@ async def parse_login_request(request: Request) -> LoginRequest:
 async def login(request: Request, db: Session = Depends(get_db)) -> TokenResponse:
     payload = await parse_login_request(request)
     user = authenticate_user(db, payload.username, payload.password)
-    return issue_tokens(user.id, remember=payload.remember)
+    return issue_tokens(user, remember=payload.remember)
 
 
 @router.post("/register", response_model=UserResponse, status_code=201)
@@ -132,14 +133,16 @@ def me(current_user: User = Depends(get_current_active_user)) -> UserResponse:
     return serialize_user(current_user)
 
 
-@router.post("/change-password", response_model=MessageResponse)
+@router.post("/change-password", response_model=TokenResponse)
 def change_password_endpoint(
     payload: ChangePasswordRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> MessageResponse:
-    change_password(db, current_user, payload.old_password, payload.new_password)
-    return MessageResponse(ok=True, message="密码已修改")
+    token: str | None = Depends(oauth2_scheme),
+) -> TokenResponse:
+    # get_current_active_user 已校验过该 access token，这里只取 remember 以沿用当前会话时长
+    remember = bool((decode_token(token or "", expected_type="access") or {}).get("remember"))
+    return change_password(db, current_user, payload.old_password, payload.new_password, remember=remember)
 
 
 @router.post("/confirm-email", response_model=MessageResponse)

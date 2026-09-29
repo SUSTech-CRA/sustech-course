@@ -60,7 +60,7 @@ export const authApi = {
   },
 
   async changePassword(payload: ChangePasswordRequest) {
-    const { data } = await apiClient.post<MessageResponse>('/auth/change-password', payload);
+    const { data } = await apiClient.post<TokenResponse>('/auth/change-password', payload);
     return data;
   },
 

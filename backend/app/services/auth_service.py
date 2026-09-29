@@ -18,6 +18,7 @@ from app.core.security import (
     create_refresh_token,
     create_timed_token,
     decode_token,
+    token_matches_password,
     verify_timed_token,
 )
 from app.models import RevokedToken, Teacher, ThirdPartySigninHistory, User
@@ -68,19 +69,23 @@ async def verify_turnstile(token: str | None) -> bool:
         return False
 
 
-def issue_tokens(user_id: int, remember: bool = False) -> TokenResponse:
+def issue_tokens(user: User, remember: bool = False) -> TokenResponse:
     return TokenResponse(
-        access_token=create_access_token(user_id),
-        refresh_token=create_refresh_token(user_id, remember=remember),
+        access_token=create_access_token(user.id, user.password, remember=remember),
+        refresh_token=create_refresh_token(user.id, user.password, remember=remember),
     )
 
 
-def change_password(db: Session, user: User, old_password: str, new_password: str) -> None:
+def change_password(
+    db: Session, user: User, old_password: str, new_password: str, *, remember: bool = False
+) -> TokenResponse:
     if not user.check_password(old_password):
         raise HTTPException(status_code=400, detail="原密码不正确")
     user.set_password(new_password)
     db.add(user)
     db.commit()
+    # 新哈希使其他设备上的令牌全部失效；为当前设备换发一对新令牌，保持登录
+    return issue_tokens(user, remember=remember)
 
 
 def authenticate_user(db: Session, login: str, password: str) -> User:
@@ -244,8 +249,10 @@ def refresh_access_token(db: Session, refresh_token: str) -> TokenResponse:
     user = db.get(User, int(payload["sub"]))
     if not user or user.is_deleted or user.active is False:
         raise HTTPException(status_code=401, detail="用户不存在或已停用")
+    if not token_matches_password(payload, user.password):
+        raise HTTPException(status_code=401, detail="登录状态已失效，请重新登录")
     revoke_token(db, refresh_token)
-    return issue_tokens(user.id, remember=bool(payload.get("remember")))
+    return issue_tokens(user, remember=bool(payload.get("remember")))
 
 
 def create_oauth_authorize_url(state: str) -> str:
@@ -330,7 +337,7 @@ async def handle_oauth_callback(db: Session, code: str) -> TokenResponse:
     user.last_login_time = datetime.utcnow()
     db.add(user)
     db.commit()
-    return issue_tokens(user.id)
+    return issue_tokens(user)
 
 
 def verify_3rdparty_credentials(

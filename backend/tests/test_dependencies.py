@@ -29,9 +29,9 @@ def test_optional_user_allows_missing_token() -> None:
 
 
 def test_optional_user_returns_valid_active_user() -> None:
-    user = User(id=42, active=True, is_deleted=False)
+    user = User(id=42, active=True, is_deleted=False, password="hash")
 
-    assert get_optional_user(token=create_access_token(user.id), db=FakeSession({user.id: user})) is user
+    assert get_optional_user(token=create_access_token(user.id, user.password), db=FakeSession({user.id: user})) is user
 
 
 def test_optional_user_rejects_expired_or_malformed_token() -> None:
@@ -39,11 +39,11 @@ def test_optional_user_rejects_expired_or_malformed_token() -> None:
 
     assert_invalid_token(expired_token, FakeSession())
     assert_invalid_token("not-a-jwt", FakeSession())
-    assert_invalid_token(create_refresh_token(42), FakeSession())
+    assert_invalid_token(create_refresh_token(42, "hash"), FakeSession())
 
 
 def test_optional_user_rejects_missing_or_inactive_subject() -> None:
-    inactive_user = User(id=42, active=False, is_deleted=False)
+    inactive_user = User(id=42, active=False, is_deleted=False, password="hash")
 
-    assert_invalid_token(create_access_token(404), FakeSession())
-    assert_invalid_token(create_access_token(inactive_user.id), FakeSession({inactive_user.id: inactive_user}))
+    assert_invalid_token(create_access_token(404, "hash"), FakeSession())
+    assert_invalid_token(create_access_token(inactive_user.id, inactive_user.password), FakeSession({inactive_user.id: inactive_user}))
