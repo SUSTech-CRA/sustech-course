@@ -128,10 +128,13 @@ class Settings(BaseSettings):
 
     # 课程公开点评 AI 总结。只有离线脚本使用这些配置；API 请求本身绝不调用 LLM。
     # LLM_API_KEY 为空时生成任务直接正常退出，现有站点功能不受影响。
+    # Chat Completions API 前缀，自动追加 /chat/completions；需包含服务商要求的中间路径。
     LLM_BASE_URL: str = "https://api.deepseek.com"
     LLM_API_KEY: str = ""
     LLM_MODEL: str = "deepseek-v4-pro"
     LLM_TIMEOUT_SECONDS: float = 180.0
+    # 开启后为每次摘要生成发送 OpenCode session ID，同一次生成的重试复用。
+    OPENCODE_SESSION_ID: bool = False
     COURSE_SUMMARY_MIN_PUBLIC_REVIEWS: int = 10
 
     S3_ENDPOINT_URL: str = ""

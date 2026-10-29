@@ -87,6 +87,7 @@ def test_deepseek_request_enables_thinking_and_json_mode():
     seen_payload = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
+        assert "x-opencode-session" not in request.headers
         seen_payload.update(json.loads(request.content))
         return httpx.Response(
             200,
@@ -160,3 +161,45 @@ def test_deepseek_retries_documented_empty_json_content(monkeypatch):
     ) as client:
         assert client.generate("system", "user").content.overview == "可用总结"
     assert calls == 2
+
+
+@pytest.mark.parametrize("opencode_session_id", [False, True])
+def test_opencode_session_header_flag_and_retry_reuse(monkeypatch, opencode_session_id):
+    sessions = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert str(request.url) == "https://opencode.ai/inference/go/openai/v1/chat/completions"
+        sessions.append(request.headers.get("x-opencode-session"))
+        if len(sessions) % 2:
+            return httpx.Response(503)
+        return httpx.Response(
+            200,
+            json={
+                "choices": [{"finish_reason": "stop", "message": {"content": json.dumps(
+                    {"overview": "可用总结", "strengths": [], "caveats": [], "assessment": []},
+                    ensure_ascii=False,
+                )}}],
+                "usage": {},
+            },
+        )
+
+    monkeypatch.setattr(summary_service.time, "sleep", lambda _seconds: None)
+    with DeepSeekSummaryClient(
+        base_url="https://opencode.ai/inference/go/openai/v1",
+        api_key="test-key",
+        model="deepseek-v4-pro",
+        timeout=10,
+        opencode_session_id=opencode_session_id,
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        for _ in range(2):
+            assert client.generate("system", "user").content.overview == "可用总结"
+
+    assert len(sessions) == 4
+    if opencode_session_id:
+        assert sessions[0] and sessions[2]
+        assert sessions[0] == sessions[1]
+        assert sessions[2] == sessions[3]
+        assert sessions[0] != sessions[2]
+    else:
+        assert sessions == [None] * 4

@@ -21,10 +21,27 @@
    LLM_API_KEY=<DeepSeek API key>
    LLM_MODEL=deepseek-v4-pro
    COURSE_SUMMARY_MIN_PUBLIC_REVIEWS=10
+   OPENCODE_SESSION_ID=false
    # 可选：LLM_TIMEOUT_SECONDS=180
    ```
 
    `LLM_API_KEY` 为空时任务正常退出且不写库，站点其余功能不受影响。
+
+   `LLM_BASE_URL` 填 Chat Completions API 的完整前缀，程序保留其中的路径并自动追加
+   `/chat/completions`，不要填入包含该后缀的完整请求地址。例如：
+
+   | 服务 | `LLM_BASE_URL` | 最终请求地址 |
+   | --- | --- | --- |
+   | DeepSeek | `https://api.deepseek.com` | `https://api.deepseek.com/chat/completions` |
+   | OpenCode Go | `https://opencode.ai/inference/go/openai/v1` | `https://opencode.ai/inference/go/openai/v1/chat/completions` |
+
+   [OpenCode 的 Go 基础地址](https://opencode.ai/v2/docs/console/harnesses/#base-urls)
+   `https://opencode.ai/inference/go` 还需补上协议路径 `/openai/v1` 才是此处所需的前缀；
+   只填基础地址会请求 `/inference/go/chat/completions` 并收到 404。模型仍通过 `LLM_MODEL` 指定。
+
+   使用 OpenCode Go 时还需设 `OPENCODE_SESSION_ID=true`，自动发送其要求的
+   `x-opencode-session` 请求头。该布尔开关默认 `false`；开启后每次摘要生成会创建独立的
+   session ID，同一摘要的重试复用该 ID，无需手动填写 ID。
 
 3. 先 dry-run 检查候选，再少量生成。`--commit` 才会调用 API/写库：
 

@@ -2,6 +2,8 @@
 """离线生成热门课程的公开点评 AI 总结。
 
 默认只读预览；必须显式传 ``--commit`` 才会调用 DeepSeek 并写派生表。
+``LLM_BASE_URL`` 填 Chat Completions API 前缀，脚本自动追加 ``/chat/completions``；
+例如 OpenCode Go 填 ``https://opencode.ai/inference/go/openai/v1``。
 
 例：先预览并仅测试公开点评不少于 41 条的课程：
     python scripts/generate_summaries.py --min-reviews 41
@@ -143,6 +145,7 @@ def main() -> int:
             api_key=settings.LLM_API_KEY,
             model=settings.LLM_MODEL,
             timeout=settings.LLM_TIMEOUT_SECONDS,
+            opencode_session_id=settings.OPENCODE_SESSION_ID,
         ) as client:
             for course, reviews, fingerprint in pending:
                 try:

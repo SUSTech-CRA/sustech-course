@@ -101,6 +101,7 @@ npm run build               # 自带 tsc -b；vendor chunk >500KB 为已知告�
 - 搜索配置为 `SEARCH_ENGINE=sql|meilisearch`。Meilisearch 只负责召回 ID，结果回 MySQL hydrate 并重新经过可见性过滤；引擎异常自动回落 SQL。索引由 `backend/scripts/reindex_search.py` 定时全量重建，部署见 `meilisearch/README.md`。
 - 点评索引禁止包含作者字段，blocked/hidden 点评不得入索引；`only_visible_to_student` 必须在查询时预过滤，不能依赖前端隐藏。
 - AI 课程总结只由 `backend/scripts/generate_summaries.py` 离线生成，用户请求不得同步调用 LLM。输入只包含游客可见的公开点评且不加载作者字段；输出需通过 schema 与安全规则。部署、隐藏和回滚见 `summaries/README.md`。
+- 摘要的 `LLM_BASE_URL` 填 Chat Completions API 前缀，客户端自动追加 `/chat/completions`。OpenCode Go 使用 `https://opencode.ai/inference/go/openai/v1`，并设置 `OPENCODE_SESSION_ID=true`（默认 `false`），为每次摘要生成发送独立 session ID，同一摘要重试复用。
 - 用户 UGC 使用独立的 `UGC_S3_*` R2 配置；课程资料继续使用独立的 `S3_*` 配置，不要混用桶或凭据。
 - 新上传的 JPG/JPEG 大于 `UGC_JPEG_COMPRESS_THRESHOLD_BYTES`（默认 2 MiB）时，在写入 R2 前按原像素尺寸以 `UGC_JPEG_QUALITY`（默认 70）重新编码为 progressive JPEG；不按最长边缩放，以免破坏长截图可读性。压缩不足 10% 时保留原文件，阈值设为 0 可关闭。
 

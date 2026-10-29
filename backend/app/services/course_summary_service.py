@@ -13,6 +13,7 @@ import time
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
+from uuid import uuid4
 
 import httpx
 from pydantic import ValidationError
@@ -264,9 +265,11 @@ class DeepSeekSummaryClient:
         api_key: str,
         model: str,
         timeout: float,
+        opencode_session_id: bool = False,
         transport: httpx.BaseTransport | None = None,
     ) -> None:
         self.model = model
+        self._opencode_session_id = opencode_session_id
         self._client = httpx.Client(
             base_url=base_url.rstrip("/"),
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
@@ -296,10 +299,13 @@ class DeepSeekSummaryClient:
             "max_tokens": SUMMARY_MAX_TOKENS,
             "stream": False,
         }
+        headers = {}
+        if self._opencode_session_id:
+            headers["x-opencode-session"] = f"ses_{uuid4().hex}"
         last_error: Exception | None = None
         for attempt in range(3):
             try:
-                response = self._client.post("/chat/completions", json=payload)
+                response = self._client.post("/chat/completions", json=payload, headers=headers)
                 response.raise_for_status()
                 data = response.json()
                 choice = data["choices"][0]
